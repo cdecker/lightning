@@ -86,8 +86,10 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         testnet=1
-        whitelist=0.0.0.0/0
         server=1
+        rpcallowip=0.0.0.0/0
+        rpcbind=127.0.0.1
+        rpcbind=bitcoind
         rpcuser=rpcuser
         rpcpassword=rpcpass
     expose:
