@@ -1042,6 +1042,10 @@ def test_funding_external_wallet_corners(node_factory, bitcoind):
     l1.rpc.close(l2.info['id'])
 
 
+@unittest.skipIf(
+    os.environ.get('SLOW_MACHINE', None) == 1,
+    "Too slow on CI slow machines, and is a bad neighbor for other tests"
+)
 def test_funding_cancel_race(node_factory, bitcoind, executor):
     l1 = node_factory.get_node()
 
