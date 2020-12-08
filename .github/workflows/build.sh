@@ -53,7 +53,7 @@ if [ "$NO_PYTHON" != 1 ]; then
 
    cat > pytest.ini << EOF
 [pytest]
-addopts=-p no:logging --color=no --reruns=2 -x
+addopts=-p no:logging --color=no --reruns=2
 EOF
 fi
 
