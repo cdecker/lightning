@@ -1,3 +1,4 @@
+---
 task:
   clone_script: |
     if [ -z "$CIRRUS_PR" ]; then
@@ -65,7 +66,7 @@ task:
     export TIMEOUT=300
 
     mkdir -p dependencies/bin || true
-      
+
     # Download bitcoind, elementsd, bitcoin-cli and elements-cli
     if [ ! -f dependencies/bin/bitcoind ]; then
       wget -q https://storage.googleapis.com/c-lightning-tests/bitcoin-0.20.1-x86_64-linux-gnu.tar.bz2
@@ -83,7 +84,6 @@ task:
 
     export TEST_CMD=${TEST_CMD:-"make -j $PYTEST_PAR pytest"}
     pip3 install --user -U --progress-bar off \
-      pip \
       pytest-test-groups==1.0.3
 
     pip3 install --user -U --progress-bar off \
