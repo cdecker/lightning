@@ -20,6 +20,7 @@ RUN apt-get -qq update && \
 	autoconf \
 	locales \
 	libtool \
+	libpq-dev \
 	libprotobuf-c-dev \
 	libsqlite3-dev \
 	libgmp-dev \
