@@ -99,6 +99,8 @@ task:
       pytest-sentry \
       pytest-rerunfailures==9.1
 
+    git clone https://github.com/lightningnetwork/lightning-rfc.git ../lightning-rfc
+
     git submodule init
     git submodule update
     (cd external/libwally-core/src/; git submodule init; git submodule update)
