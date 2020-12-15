@@ -3,6 +3,7 @@ MAINTAINER Christian Decker <decker.christian@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV BITCOIN_VERSION 0.20.1
+ENV ELEMENTS_VERSION 0.18.1.8
 
 WORKDIR /build
 
@@ -28,6 +29,7 @@ RUN apt-get -qq update && \
 	python3 \
 	valgrind \
 	net-tools \
+	postgresql-10 \
 	python3-mako \
 	python3-pip \
 	python3-setuptools \
@@ -46,10 +48,17 @@ ENV LC_ALL=en_US.UTF-8
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
 RUN cd /tmp/ && \
-    wget https://bitcoin.org/bin/bitcoin-core-$BITCOIN_VERSION/bitcoin-$BITCOIN_VERSION-x86_64-linux-gnu.tar.gz -O bitcoin.tar.gz && \
-    tar -xvzf bitcoin.tar.gz && \
-    mv /tmp/bitcoin-$BITCOIN_VERSION/bin/bitcoin* /usr/local/bin/ && \
-    rm -rf bitcoin.tar.gz /tmp/bitcoin-$BITCOIN_VERSION
+	wget https://storage.googleapis.com/c-lightning-tests/bitcoin-$BITCOIN_VERSION-x86_64-linux-gnu.tar.bz2 && \
+	wget -q https://storage.googleapis.com/c-lightning-tests/elements-$ELEMENTS_VERSION-x86_64-linux-gnu.tar.bz2 && \
+	tar -xjf bitcoin-$BITCOIN_VERSION-x86_64-linux-gnu.tar.bz2 && \
+	tar -xjf elements-$ELEMENTS_VERSION-x86_64-linux-gnu.tar.bz2 && \
+	mv bitcoin-$BITCOIN_VERSION/bin/* /usr/local/bin && \
+	mv elements-$ELEMENTS_VERSION/bin/* /usr/local/bin && \
+	rm -rf \
+	  bitcoin-$BITCOIN_VERSION-x86_64-linux-gnu.tar.gz \
+          bitcoin-$BITCOIN_VERSION \
+          elements-$ELEMENTS_VERSION-x86_64-linux-gnu.tar.bz2 \
+          elements-$ELEMENTS_VERSION
 
 RUN pip3 install --upgrade pip && \
     python3 -m pip install \
