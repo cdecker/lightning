@@ -39,6 +39,7 @@ RUN apt-get -qq update && \
 	python-pkg-resources \
 	shellcheck \
 	libxml2-utils \
+	unzip \
 	wget \
 	gettext \
 	xsltproc \
