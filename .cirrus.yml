@@ -10,7 +10,7 @@ task:
       git reset --hard $CIRRUS_CHANGE_IN_REPO
     fi
   container:
-    dockerfile: contrib/Dockerfile.builder
+    dockerfile: contrib/Dockerfile.tester
     cpu: 4
     memory: 8G
   env:
@@ -47,6 +47,7 @@ task:
       - {VALGRIND: 0, ARCH: 64, DEVELOPER: 1, COMPILER: gcc, EXPERIMENTAL_FEATURES: 1}
 
   tests_script: |
+    echo Running in $(pwd)
     export SLOW_MACHINE=1
     export CC=${COMPILER:-gcc}
     export DEVELOPER=${DEVELOPER:-1}
