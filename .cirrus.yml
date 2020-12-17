@@ -66,6 +66,8 @@ task:
     export TIMEOUT=300
     export VALGRIND=${VALGRIND:-0}
 
+    env
+
     pip3 install --user -U --progress-bar off \
       -r requirements.txt \
       -r contrib/pyln-client/requirements.txt \
