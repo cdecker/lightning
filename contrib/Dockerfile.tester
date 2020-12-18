@@ -12,36 +12,45 @@ WORKDIR /build
 RUN apt-get -qq update && \
     apt-get -qq install --no-install-recommends --allow-unauthenticated -yy \
 	autoconf \
+	autoconf \
 	automake \
+	binfmt-support \
+	build-essential \
 	clang \
 	cppcheck \
 	docbook-xml \
-	shellcheck \
 	eatmydata \
-	software-properties-common \
-	build-essential \
-	autoconf \
-	locales \
-	libtool \
+	gcc-aarch64-linux-gnu \
+	gcc-arm-linux-gnueabihf \
+	gcc-arm-none-eabi \
+	gettext \
+	git \
+	libc6-dev-arm64-cross \
+	libc6-dev-armhf-cross \
+	libgmp-dev \
 	libpq-dev \
 	libprotobuf-c-dev \
 	libsqlite3-dev \
-	libgmp-dev \
-	git \
-	python3 \
-	python3-dev \
-	valgrind \
+	libtool \
+	libxml2-utils \
+	locales \
 	net-tools \
 	postgresql-10 \
-	python3-mako \
+	python-pkg-resources \
+	python3 \
+	python3-dev \
 	python3-pip \
 	python3-setuptools \
-	python-pkg-resources \
+	qemu \
+	qemu-system-arm \
+	qemu-user-static \
 	shellcheck \
-	libxml2-utils \
+	software-properties-common \
+	sudo \
+	tcl \
 	unzip \
+	valgrind \
 	wget \
-	gettext \
 	xsltproc \
 	zlib1g-dev && \
 	rm -rf /var/lib/apt/lists/*
@@ -50,6 +59,8 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+RUN echo "tester ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/tester && \
+    chmod 0440 /etc/sudoers.d/tester
 
 RUN cd /tmp/ && \
 	wget https://storage.googleapis.com/c-lightning-tests/bitcoin-$BITCOIN_VERSION-x86_64-linux-gnu.tar.bz2 && \

@@ -129,9 +129,9 @@ task:
         && sudo make install
         cd .. && rm gmp-6.1.2.tar.xz && rm -rf gmp-6.1.2
 
-      ./configure --enable-static
+      ./configure CC="$TARGET_HOST-gcc" --enable-static
 
-      make -j32 > /dev/null
+      make -j32 CC="$TARGET_HOST-gcc" > /dev/null
     else
       make -j32
       $TEST_CMD
