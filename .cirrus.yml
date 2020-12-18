@@ -133,6 +133,6 @@ task:
 
       make -j32 CC="$TARGET_HOST-gcc" > /dev/null
     else
-      make -j32
-      $TEST_CMD
+      eatmydata make -j32
+      eatmydata $TEST_CMD
     fi
