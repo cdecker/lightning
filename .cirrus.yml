@@ -56,7 +56,7 @@ task:
     export DEVELOPER=${DEVELOPER:-1}
     export EXPERIMENTAL_FEATURES=${EXPERIMENTAL_FEATURES:-0}
     export PATH=$CWD/dependencies/bin:"$HOME"/.local/bin:"$PATH"
-    export PYTEST_OPTS="--maxfail=5 ${PYTEST_OPTS}"
+    export PYTEST_OPTS="--maxfail=5 --reruns=3 --suppress-no-test-exit-code ${PYTEST_OPTS}"
     export PYTEST_PAR=${PYTEST_PAR:-10}
     export PYTEST_SENTRY_ALWAYS_REPORT=1
     export SLOW_MACHINE=1
@@ -68,7 +68,7 @@ task:
 
     env
 
-    pip3 install --user -U --progress-bar off \
+    pip3 install --user -U \
       -r requirements.txt \
       -r contrib/pyln-client/requirements.txt \
       -r contrib/pyln-proto/requirements.txt \
