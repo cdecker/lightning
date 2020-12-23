@@ -15,29 +15,29 @@ task:
     memory: 8G
   env:
     matrix:
-      - {TEST_CMD: "make", NO_PYTHON: 1}
-      - {TEST_CMD: "make check-source check-units installcheck", COPTFLAGS: "-O3"}
-      - {ARCH: 32, TEST_CMD: "make check-source check-units installcheck", DEVELOPER: 0}
-      - {TEST_CMD: "make check-source check-units installcheck", EXPERIMENTAL_FEATURES: 1}
+      # - {TEST_CMD: "make", NO_PYTHON: 1}
+      # - {TEST_CMD: "make check-source check-units installcheck", COPTFLAGS: "-O3"}
+      # - {ARCH: 32, TEST_CMD: "make check-source check-units installcheck", DEVELOPER: 0}
+      # - {TEST_CMD: "make check-source check-units installcheck", EXPERIMENTAL_FEATURES: 1}
 
-      # All of the following will just run `make pytest`
-      - {COMPILER: clang}
-      - {COMPILER: gcc, TEST_CHECK_DBSTMTS: 1}
-      - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 1, TEST_GROUP_COUNT: 2}
-      - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 2, TEST_GROUP_COUNT: 2}
+      # # All of the following will just run `make pytest`
+      # - {COMPILER: clang}
+      # - {COMPILER: gcc, TEST_CHECK_DBSTMTS: 1}
+      # - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 1, TEST_GROUP_COUNT: 2}
+      # - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 2, TEST_GROUP_COUNT: 2}
 
-      ## All of these are pretty slo since they run under valgrind
-      - {VALGRIND: 1, TEST_GROUP: 1, TEST_GROUP_COUNT: 11, PYTEST_PAR: 3}
-      - {VALGRIND: 1, TEST_GROUP: 2, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 3, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 4, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 5, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 6, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 7, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 8, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 9, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 10, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      - {VALGRIND: 1, TEST_GROUP: 11, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # ## All of these are pretty slo since they run under valgrind
+      # - {VALGRIND: 1, TEST_GROUP: 1, TEST_GROUP_COUNT: 11, PYTEST_PAR: 3}
+      # - {VALGRIND: 1, TEST_GROUP: 2, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 3, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 4, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 5, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 6, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 7, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 8, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 9, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 10, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # - {VALGRIND: 1, TEST_GROUP: 11, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
 
       # Various other configurations
       - {NETWORK: liquid-regtest}
