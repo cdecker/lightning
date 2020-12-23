@@ -11,8 +11,8 @@ task:
     fi
   container:
     dockerfile: contrib/Dockerfile.tester
-    cpu: 4
-    memory: 8G
+    cpu: 8
+    memory: 16G
   env:
     matrix:
       # - {TEST_CMD: "make", NO_PYTHON: 1}
