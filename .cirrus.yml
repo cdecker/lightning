@@ -1,5 +1,6 @@
 ---
 task:
+  timeout_in: 120m
   clone_script: |
     if [ -z "$CIRRUS_PR" ]; then
       git clone --recursive --branch=$CIRRUS_BRANCH https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
@@ -11,9 +12,12 @@ task:
     fi
   container:
     dockerfile: contrib/Dockerfile.tester
-    cpu: 8
-    memory: 16G
+    cpu: $CPU
+    memory: $MEMORY
+    use_in_memory_disk: true
   env:
+    CPU: 4
+    MEMORY: 4G
     matrix:
       # - {TEST_CMD: "make", NO_PYTHON: 1}
       # - {TEST_CMD: "make check-source check-units installcheck", COPTFLAGS: "-O3"}
@@ -26,24 +30,24 @@ task:
       # - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 1, TEST_GROUP_COUNT: 2}
       # - {DEVELOPER: 0, COMPAT: 0, TEST_GROUP: 2, TEST_GROUP_COUNT: 2}
 
-      # ## All of these are pretty slo since they run under valgrind
-      # - {VALGRIND: 1, TEST_GROUP: 1, TEST_GROUP_COUNT: 11, PYTEST_PAR: 3}
-      # - {VALGRIND: 1, TEST_GROUP: 2, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 3, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 4, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 5, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 6, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 7, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 8, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 9, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 10, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
-      # - {VALGRIND: 1, TEST_GROUP: 11, TEST_GROUP_COUNT: 11, PYTEST_PAR 3}
+      # All of these are pretty slo since they run under valgrind
+      - {VALGRIND: 1, TEST_GROUP: 1, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 2, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 3, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 4, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 5, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 6, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 7, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 8, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 9, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
+      - {VALGRIND: 1, TEST_GROUP: 10, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
 
       # Various other configurations
-      - {NETWORK: liquid-regtest}
-      - {DB: postgres}
-      - {ARCH: arm32v7, TARGET_HOST: arm-linux-gnueabihf}
-      - {ARCH: arm64v8, TARGET_HOST: aarch64-linux-gnu}
+      - {NETWORK: liquid-regtest, MEMORY: 8G}
+      - {DB: postgres, MEMORY: 8G, PYTEST_PAR: 5}
+      # The cross-compiled versions fail on the configurator
+      #- {ARCH: arm32v7, TARGET_HOST: arm-linux-gnueabihf}
+      #- {ARCH: arm64v8, TARGET_HOST: aarch64-linux-gnu}
       - {EXPERIMENTAL_FEATURES: 1}
 
   tests_script: |
@@ -56,14 +60,14 @@ task:
     export DEVELOPER=${DEVELOPER:-1}
     export EXPERIMENTAL_FEATURES=${EXPERIMENTAL_FEATURES:-0}
     export PATH=$CWD/dependencies/bin:"$HOME"/.local/bin:"$PATH"
-    export PYTEST_OPTS="--maxfail=5 --reruns=3 --suppress-no-test-exit-code ${PYTEST_OPTS}"
+    export PYTEST_OPTS="--maxfail=5 --reruns=2 --suppress-no-test-exit-code ${PYTEST_OPTS}"
     export PYTEST_PAR=${PYTEST_PAR:-10}
     export PYTEST_SENTRY_ALWAYS_REPORT=1
     export SLOW_MACHINE=1
     export TEST_CMD=${TEST_CMD:-"make -j $PYTEST_PAR pytest"}
     export TEST_DB_PROVIDER=${DB:-"sqlite3"}
     export TEST_NETWORK=${NETWORK:-"regtest"}
-    export TIMEOUT=300
+    export TIMEOUT=900
     export VALGRIND=${VALGRIND:-0}
 
     env
@@ -84,7 +88,7 @@ task:
       pytest-custom-exit-code==0.3.0
 
     git clone https://github.com/lightningnetwork/lightning-rfc.git ../lightning-rfc
-      
+
     git submodule init
     git submodule update
     (cd external/libwally-core/src/; git submodule init; git submodule update)

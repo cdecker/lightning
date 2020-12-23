@@ -78,7 +78,7 @@ endif
 
 # Timeout shortly before the 600 second travis silence timeout
 # (method=thread to support xdist)
-PYTEST_OPTS := -v --timeout=550 --timeout_method=thread -p no:logging $(PYTEST_OPTS)
+PYTEST_OPTS := -v -p no:logging $(PYTEST_OPTS)
 PYTHONPATH=$(shell pwd)/contrib/pyln-client:$(shell pwd)/contrib/pyln-testing:$(shell pwd)/contrib/pyln-proto/
 
 # This is where we add new features as bitcoin adds them.
