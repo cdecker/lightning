@@ -505,6 +505,7 @@ def test_gossip_no_empty_announcements(node_factory, bitcoind):
 def test_routing_gossip(node_factory, bitcoind):
     nodes = node_factory.get_nodes(5)
 
+    sync_blockheight(bitcoind, nodes)
     for i in range(len(nodes) - 1):
         src, dst = nodes[i], nodes[i + 1]
         src.rpc.connect(dst.info['id'], 'localhost', dst.port)
