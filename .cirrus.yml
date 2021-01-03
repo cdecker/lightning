@@ -14,7 +14,7 @@ task:
     dockerfile: contrib/Dockerfile.tester
     cpu: $CPU
     memory: $MEMORY
-    use_in_memory_disk: true
+    use_in_memory_disk: false
   env:
     CPU: 4
     MEMORY: 4G
