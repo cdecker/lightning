@@ -44,7 +44,7 @@ task:
 
       # Various other configurations
       - {NETWORK: liquid-regtest, MEMORY: 8G}
-      - {DB: postgres, MEMORY: 8G, PYTEST_PAR: 3}
+      - {DB: postgres, MEMORY: 8G, PYTEST_PAR: 2}
       # The cross-compiled versions fail on the configurator
       #- {ARCH: arm32v7, TARGET_HOST: arm-linux-gnueabihf}
       #- {ARCH: arm64v8, TARGET_HOST: aarch64-linux-gnu}
