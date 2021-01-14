@@ -43,12 +43,12 @@ task:
       - {VALGRIND: 1, TEST_GROUP: 10, TEST_GROUP_COUNT: 10, PYTEST_PAR: 4, CPU: 16, MEMORY: 16G}
 
       # Various other configurations
-      - {NETWORK: liquid-regtest, MEMORY: 8G}
-      - {DB: postgres, MEMORY: 8G, PYTEST_PAR: 2}
+      #- {NETWORK: liquid-regtest, MEMORY: 8G}
+      #- {DB: postgres, MEMORY: 8G, PYTEST_PAR: 2}
       # The cross-compiled versions fail on the configurator
       #- {ARCH: arm32v7, TARGET_HOST: arm-linux-gnueabihf}
       #- {ARCH: arm64v8, TARGET_HOST: aarch64-linux-gnu}
-      - {EXPERIMENTAL_FEATURES: 1}
+      #- {EXPERIMENTAL_FEATURES: 1}
 
   tests_script: |
     echo Running in $(pwd)
