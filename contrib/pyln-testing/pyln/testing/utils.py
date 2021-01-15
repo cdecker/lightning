@@ -1082,7 +1082,7 @@ class Throttler(object):
     tests, which could cause more timeouts.
 
     """
-    def __init__(self, target: float = 75):
+    def __init__(self, target: float = 90):
         """If specified we try to stick to a load of target (in percent).
         """
         self.target = target
@@ -1096,7 +1096,7 @@ class Throttler(object):
             # We just got the lock, assume someone else just released it
             self.current_load = 100
             memusage = psutil.virtual_memory().percent
-            while self.load() >= self.target or memusage > self.taget:
+            while self.load() >= self.target or memusage > self.target:
                 time.sleep(1)
 
             delay = time.time() - start_time
