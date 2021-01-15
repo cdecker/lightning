@@ -1095,7 +1095,8 @@ class Throttler(object):
         with self.lock.acquire(poll_intervall=0.250):
             # We just got the lock, assume someone else just released it
             self.current_load = 100
-            while self.load() >= self.target:
+            memusage = psutil.virtual_memory().percent
+            while self.load() >= self.target or memusage > self.taget:
                 time.sleep(1)
 
             delay = time.time() - start_time
