@@ -53,6 +53,10 @@ def benchmark_throughput(benchmark, num_events: int):
     m.update(time() - start_time)
 
 
+# Common options to optimize throughput
+opts = {"log-level": "broken", "max-concurrent-htlcs": 483}
+
+
 @pytest.fixture
 def executor():
     ex = futures.ThreadPoolExecutor(max_workers=num_workers)
@@ -60,36 +64,84 @@ def executor():
     ex.shutdown(wait=False)
 
 
-def test_single_hop(node_factory, executor):
-    l1 = node_factory.get_node()
-    l2 = node_factory.get_node()
+def line_graph(node_factory, num_nodes, opts):
+    """Custom line_graph that doesn't rely on logs to proceed."""
+    bitcoind = node_factory.bitcoind
+    nodes = []
+    for _ in range(num_nodes):
+        n = node_factory.get_node(options=opts, start=False)
+        n.daemon.start(wait_for_initialized=False)
+        nodes.append(n)
 
-    l1.rpc.connect(l2.rpc.getinfo()['id'], 'localhost:%d' % l2.port)
-    l1.openchannel(l2, 4000000)
+    sleep(1)
+
+    # Annotate nodes with their info
+    for n in nodes:
+        n.info = n.rpc.getinfo()
+        n.port = n.info["binding"][0]["port"]
+
+    connections = list(zip(nodes[:-1], nodes[1:]))
+    # Give each node some funds
+    for src, dst in connections:
+        addr = src.rpc.newaddr()["bech32"]
+        bitcoind.rpc.sendtoaddress(addr, 5)
+
+    bitcoind.generate_block(1, wait_for_mempool=num_nodes - 1)
+    sync_blockheight(bitcoind, nodes)
+
+    # Now fund the channels:
+    for src, dst in connections:
+        src.rpc.connect(dst.rpc.getinfo()["id"], "localhost:%d" % dst.port)
+        src.rpc.fundchannel(dst.info["id"], "all")
+
+    bitcoind.generate_block(6, wait_for_mempool=num_nodes - 1)
+    sync_blockheight(bitcoind, nodes)
+    return nodes
+
+
+def test_throughput_single_hop(node_factory, bitcoind, executor, benchmark):
+    """Test a payment between two peers.
+
+    Quite a bit of trickery is required to push the limits from the
+    testing framework.
+
+     - Disable printing to stdout (syscalls are expensive)
+       - Can't use out `wait_for_log` helpers, hence the sleeps
+
+    """
+    l1, l2 = line_graph(node_factory, 2, opts=opts)
+
+    route = l1.rpc.getroute(l2.rpc.getinfo()["id"], 1000, 1)["route"]
 
     print("Collecting invoices")
     fs = []
     invoices = []
     for i in tqdm(range(num_payments)):
-        invoices.append(l2.rpc.invoice(1000, 'invoice-%d' % (i), 'desc')['payment_hash'])
+        invoices.append(
+            l2.rpc.invoice(1000, "invoice-%d" % (i), "desc")["payment_hash"]
+        )
 
-    route = l1.rpc.getroute(l2.rpc.getinfo()['id'], 1000, 1)['route']
     print("Sending payments")
     start_time = time()
 
     def do_pay(i):
         p = l1.rpc.sendpay(route, i)
-        r = l1.rpc.waitsendpay(p['payment_hash'])
+        r = l1.rpc.waitsendpay(p["payment_hash"])
         return r
 
     for i in invoices:
         fs.append(executor.submit(do_pay, i))
 
-    for f in tqdm(futures.as_completed(fs), total=len(fs)):
-        f.result()
+    with benchmark_throughput(benchmark, num_payments):
+        for f in tqdm(futures.as_completed(fs), total=len(fs)):
+            f.result()
 
     diff = time() - start_time
-    print("Done. %d payments performed in %f seconds (%f payments per second)" % (num_payments, diff, num_payments / diff))
+    sys.stderr.write(
+        "Done. {} payments performed in {} seconds ({} payments per second)\n".format(
+            num_payments, diff, num_payments / diff
+        )
+    )
 
 
 def test_single_payment(node_factory, benchmark):
