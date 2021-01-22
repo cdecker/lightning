@@ -144,11 +144,15 @@ def test_throughput_single_hop(node_factory, bitcoind, executor, benchmark):
     )
 
 
-def test_single_payment(node_factory, benchmark):
-    l1, l2 = node_factory.line_graph(2)
+def test_payment_latency(node_factory, benchmark):
+    """Test how long it takes a node to perform a payment to its neighbor."""
+    l1, l2 = line_graph(node_factory, 2, opts=opts)
+
+    invoice = l2.rpc.invoice(1000, "invoice-{}".format(random.random()), "desc")[
+        "bolt11"
+    ]
 
     def do_pay(l1, l2):
-        invoice = l2.rpc.invoice(1000, 'invoice-{}'.format(random.random()), 'desc')['bolt11']
         l1.rpc.pay(invoice)
 
     benchmark(do_pay, l1, l2)
@@ -158,7 +162,9 @@ def test_forward_payment(node_factory, benchmark):
     l1, l2, l3 = node_factory.line_graph(3, wait_for_announce=True)
 
     def do_pay(src, dest):
-        invoice = dest.rpc.invoice(1000, 'invoice-{}'.format(random.random()), 'desc')['bolt11']
+        invoice = dest.rpc.invoice(1000, "invoice-{}".format(random.random()), "desc")[
+            "bolt11"
+        ]
         src.rpc.pay(invoice)
 
     benchmark(do_pay, l1, l3)
@@ -168,7 +174,9 @@ def test_long_forward_payment(node_factory, benchmark):
     nodes = node_factory.line_graph(21, wait_for_announce=True)
 
     def do_pay(src, dest):
-        invoice = dest.rpc.invoice(1000, 'invoice-{}'.format(random.random()), 'desc')['bolt11']
+        invoice = dest.rpc.invoice(1000, "invoice-{}".format(random.random()), "desc")[
+            "bolt11"
+        ]
         src.rpc.pay(invoice)
 
     benchmark(do_pay, nodes[0], nodes[-1])
@@ -178,17 +186,19 @@ def test_invoice(node_factory, benchmark):
     l1 = node_factory.get_node()
 
     def bench_invoice():
-        l1.rpc.invoice(1000, 'invoice-{}'.format(time()), 'desc')
+        l1.rpc.invoice(1, "invoice-{}".format(time()), "desc")
 
     benchmark(bench_invoice)
 
 
 def test_pay(node_factory, benchmark):
-    l1, l2 = node_factory.line_graph(2)
+    l1, l2 = line_graph(node_factory, 2, opts=opts)
 
     invoices = []
-    for _ in range(1, 100):
-        invoice = l2.rpc.invoice(1000, 'invoice-{}'.format(random.random()), 'desc')['bolt11']
+    for _ in range(1, 1000):
+        invoice = l2.rpc.invoice(1000, "invoice-{}".format(random.random()), "desc")[
+            "bolt11"
+        ]
         invoices.append(invoice)
 
     def do_pay(l1, l2):
