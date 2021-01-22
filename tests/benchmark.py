@@ -1,15 +1,56 @@
 from concurrent import futures
 from fixtures import *  # noqa: F401,F403
-from time import time
+from time import time, sleep
 from tqdm import tqdm
+from pyln.testing.utils import sync_blockheight
+from pytest_benchmark.stats import Metadata
+from contextlib import contextmanager
 
-
+import logging
 import pytest
 import random
+import sys
+import os
 
 
-num_workers = 480
+num_workers = 75
 num_payments = 10000
+
+
+# To ensure optimal performance we need to run without the developer
+# options.
+assert os.environ.get("DEVELOPER", "0") == "0"
+
+
+@contextmanager
+def benchmark_throughput(benchmark, num_events: int):
+    """Context manager to benchmark throughput.
+
+    Repeated timed function calls measures latency, but throughput,
+    with many parallel calls is better measured by dividing the time
+    to completion, and divide it by the number of parallel calls.
+
+    This results in a synthetic benchmark with no variance, but
+    repeating can amend that.
+
+    """
+    m = Metadata(
+        fixture=benchmark,
+        iterations=num_events,
+        options={
+            "disable_gc": False,
+            "timer": benchmark._timer,
+            "min_rounds": 1,
+            "max_time": benchmark._max_time,
+            "min_time": benchmark._min_time,
+            "warmup": False,
+        },
+    )
+    benchmark._add_stats(m)
+    benchmark._mode = "with benchmark_throughput(...)"
+    start_time = time()
+    yield
+    m.update(time() - start_time)
 
 
 @pytest.fixture
