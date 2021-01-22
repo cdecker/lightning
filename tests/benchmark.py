@@ -2,10 +2,11 @@ from concurrent import futures
 from fixtures import *  # noqa: F401,F403
 from time import time, sleep
 from tqdm import tqdm
-from pyln.testing.utils import sync_blockheight
+from pyln.testing.utils import sync_blockheight, wait_for
 from pytest_benchmark.stats import Metadata
 from contextlib import contextmanager
 
+import itertools
 import logging
 import pytest
 import random
@@ -68,10 +69,12 @@ def line_graph(node_factory, num_nodes, opts):
     """Custom line_graph that doesn't rely on logs to proceed."""
     bitcoind = node_factory.bitcoind
     nodes = []
+    logging.debug(f"Starting {num_nodes} nodes")
     for _ in range(num_nodes):
         n = node_factory.get_node(options=opts, start=False)
         n.daemon.start(wait_for_initialized=False)
         nodes.append(n)
+        logging.debug(f"Node {n.daemon.prefix} started")
 
     sleep(1)
 
@@ -80,8 +83,8 @@ def line_graph(node_factory, num_nodes, opts):
         n.info = n.rpc.getinfo()
         n.port = n.info["binding"][0]["port"]
 
-    connections = list(zip(nodes[:-1], nodes[1:]))
     # Give each node some funds
+    connections = list(zip(nodes[:-1], nodes[1:]))
     for src, dst in connections:
         addr = src.rpc.newaddr()["bech32"]
         bitcoind.rpc.sendtoaddress(addr, 5)
@@ -89,13 +92,27 @@ def line_graph(node_factory, num_nodes, opts):
     bitcoind.generate_block(1, wait_for_mempool=num_nodes - 1)
     sync_blockheight(bitcoind, nodes)
 
+    # Fully connect the graph to speed up the gossip:
+    for src, dst in itertools.combinations(nodes, 2):
+        src.rpc.connect(dst.rpc.getinfo()["id"], "localhost:%d" % dst.port)
+
     # Now fund the channels:
     for src, dst in connections:
-        src.rpc.connect(dst.rpc.getinfo()["id"], "localhost:%d" % dst.port)
         src.rpc.fundchannel(dst.info["id"], "all")
 
     bitcoind.generate_block(6, wait_for_mempool=num_nodes - 1)
     sync_blockheight(bitcoind, nodes)
+
+    print("Waiting for channels to be synced")
+    for n in nodes:
+        while True:
+            num_chans = len(n.rpc.listchannels()['channels'])
+            expected = 2 * len(connections)
+            if num_chans == expected:
+                break
+            print(f"Node {n.daemon.prefix} has {num_chans} channels vs {expected} expected")
+            sleep(1)
+
     return nodes
 
 
@@ -170,8 +187,9 @@ def test_forward_payment(node_factory, benchmark):
     benchmark(do_pay, l1, l3)
 
 
-def test_long_forward_payment(node_factory, benchmark):
-    nodes = node_factory.line_graph(21, wait_for_announce=True)
+def test_long_forward_payment(node_factory, benchmark, bitcoind):
+    bitcoind.generate_block(50)  # Need some more funds
+    nodes = line_graph(node_factory, 21, opts=opts)
 
     def do_pay(src, dest):
         invoice = dest.rpc.invoice(1000, "invoice-{}".format(random.random()), "desc")[
