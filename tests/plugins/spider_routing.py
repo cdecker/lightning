@@ -7,7 +7,7 @@ settled/forwarded/
 """
 
 
-from lightning import Plugin
+from pyln.client import Plugin, Millisatoshi
 from threading import Thread
 from collections import deque
 import time
@@ -71,7 +71,13 @@ def clear_pending(plugin):
             newest_request = request_queue[0][0]
             available = sum([int(x["our_amount_msat"]) for x in funds["channels"] \
                 if x["short_channel_id"] == channel_id])
-            if available < newest_request.params['htlc']["forward_amt"]:
+            available = Millisatoshi(available)
+
+            forward_amt = newest_request.params['onion']["forward_amount"]
+            if isinstance(forward_amt, str):
+                forward_amt = Millisatoshi(forward_amt)
+
+            if available < forward_amt:
                 continue
 
             # Pick the most recent payment (LIFO works best for deadlines)
