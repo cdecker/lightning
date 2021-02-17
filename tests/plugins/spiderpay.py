@@ -83,7 +83,7 @@ def handle_sendpay_success(plugin, sendpay_success, **kwargs):
     # set result
     try:
         plugin.payment_hash_to_request[payment_hash].set_result(sendpay_success)
-        del payment_hash_to_request[payment_hash]
+        del plugin.payment_hash_to_request[payment_hash]
     except KeyError:
         plugin.log("unable to set result for payment hash: {}".format(
                 payment_hash
