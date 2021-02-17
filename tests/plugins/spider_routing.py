@@ -50,7 +50,7 @@ def clear_pending(plugin):
                 oldest_entry_time = request_queue[-1][1]
                 elapsed_time = time.time() - oldest_entry_time 
 
-                if elapsed_time.minutes > MAX_TIME:
+                if elapsed_time // 60 > MAX_TIME:
                     oldest_request = request_queue.popleft()[0]
                     plugin.log("Failing HTLC {} through (request {})".format(
                         oldest_request.params['htlc']['payment_hash'],
