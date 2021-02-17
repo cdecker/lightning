@@ -19,7 +19,7 @@ root.addHandler(handler)
 
 dirname = os.path.dirname(__file__)
 opts = {
-    "plugin": os.path.join(dirname, "plugins", "spiderpay.py")
+    "important-plugin": os.path.join(dirname, "plugins", "spiderpay.py")
 }
 
 
