@@ -9,8 +9,8 @@ export TEST_CHECK_DBSTMTS=${TEST_CHECK_DBSTMTS:-0}
 export DEVELOPER=${DEVELOPER:-1}
 export EXPERIMENTAL_FEATURES=${EXPERIMENTAL_FEATURES:-0}
 export PATH=$CWD/dependencies/bin:"$HOME"/.local/bin:"$PATH"
-export PYTEST_OPTS="--maxfail=5 --suppress-no-test-exit-code ${PYTEST_OPTS}"
-export PYTEST_PAR=${PYTEST_PAR:-10}
+export PYTEST_OPTS="--suppress-no-test-exit-code ${PYTEST_OPTS}"
+export PYTEST_PAR=${PYTEST_PAR:-5}
 export PYTEST_SENTRY_ALWAYS_REPORT=1
 export SLOW_MACHINE=1
 export TEST_CMD=${TEST_CMD:-"make -j $PYTEST_PAR pytest"}
