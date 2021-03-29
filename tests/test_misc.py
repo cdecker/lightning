@@ -2464,7 +2464,9 @@ def test_listforwards(node_factory, bitcoind):
 
     # Wait until channels are active
     bitcoind.generate_block(5)
+    l1.wait_channel_active(c12)
     l1.wait_channel_active(c23)
+    l1.wait_channel_active(c24)
 
     # successful payments
     i31 = l3.rpc.invoice(1000, 'i31', 'desc')
