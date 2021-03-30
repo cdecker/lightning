@@ -988,7 +988,7 @@ def test_transaction_annotations(node_factory, bitcoind):
 @unittest.skipIf(not sys.stdout.isatty(), "Cannot")
 def test_hsm_secret_encryption(node_factory):
     l1 = node_factory.get_node(may_fail=True)  # May fail when started without key
-    password = "reckful\n"
+    password = "reckful" + os.linesep
     # We need to simulate a terminal to use termios in `lightningd`.
     master_fd, slave_fd = os.openpty()
 
@@ -1041,7 +1041,7 @@ class HsmTool(TailableProc):
 @unittest.skipIf(VALGRIND, "It does not play well with prompt and key derivation.")
 def test_hsmtool_secret_decryption(node_factory):
     l1 = node_factory.get_node()
-    password = "reckless\n"
+    password = "reckless" + os.linesep
     hsm_path = os.path.join(l1.daemon.lightning_dir, TEST_NETWORK, "hsm_secret")
     # We need to simulate a terminal to use termios in `lightningd`.
     master_fd, slave_fd = os.openpty()
