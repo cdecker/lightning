@@ -4280,7 +4280,6 @@ gives a routehint straight to us causes an issue
         l2.rpc.pay(inv)
 
 
-@pytest.mark.xfail(strict=True)
 def test_sendpay_grouping(node_factory, bitcoind):
     """Paying an invoice multiple times, listpays should list them individually
     """
