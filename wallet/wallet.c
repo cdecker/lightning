@@ -3156,7 +3156,8 @@ wallet_payment_list(const tal_t *ctx,
 						  ", local_offer_id"
 						  ", groupid"
 						  " FROM payments"
-						  " WHERE payment_hash = ?;"));
+						  " WHERE payment_hash = ?"
+						  " ORDER BY timestamp ASC;"));
 		db_bind_sha256(stmt, 0, payment_hash);
 	} else {
 		stmt = db_prepare_v2(wallet->db, SQL("SELECT"
@@ -3179,7 +3180,7 @@ wallet_payment_list(const tal_t *ctx,
 						     ", local_offer_id"
 						     ", groupid"
 						     " FROM payments"
-						     " ORDER BY id;"));
+						     " ORDER BY timestamp ASC;"));
 	}
 	db_query_prepared(stmt);
 

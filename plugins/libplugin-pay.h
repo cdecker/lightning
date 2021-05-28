@@ -186,6 +186,7 @@ struct payment {
 
 	u32 partid;
 	u32 next_partid;
+	u64 groupid;
 
 	/* Destination we should ask `getroute` for. This might differ from
 	 * the above destination if we use rendez-vous routing of blinded
