@@ -1551,9 +1551,9 @@ struct db_query db_postgres_queries[] = {
          .readonly = false,
     },
     {
-         .name = "SELECT status FROM payments WHERE payment_hash=? AND partid = ?;",
-         .query = "SELECT status FROM payments WHERE payment_hash=$1 AND partid = $2;",
-         .placeholders = 2,
+         .name = "SELECT status FROM payments WHERE payment_hash=? AND partid = ? AND groupid = ?;",
+         .query = "SELECT status FROM payments WHERE payment_hash=$1 AND partid = $2 AND groupid = $3;",
+         .placeholders = 3,
          .readonly = true,
     },
     {
@@ -1575,9 +1575,9 @@ struct db_query db_postgres_queries[] = {
          .readonly = false,
     },
     {
-         .name = "SELECT  id, status, destination, msatoshi, payment_hash, timestamp, payment_preimage, path_secrets, route_nodes, route_channels, msatoshi_sent, description, bolt11, failonionreply, total_msat, partid, local_offer_id, groupid FROM payments WHERE payment_hash = ? AND partid = ?",
-         .query = "SELECT  id, status, destination, msatoshi, payment_hash, timestamp, payment_preimage, path_secrets, route_nodes, route_channels, msatoshi_sent, description, bolt11, failonionreply, total_msat, partid, local_offer_id, groupid FROM payments WHERE payment_hash = $1 AND partid = $2",
-         .placeholders = 2,
+         .name = "SELECT  id, status, destination, msatoshi, payment_hash, timestamp, payment_preimage, path_secrets, route_nodes, route_channels, msatoshi_sent, description, bolt11, failonionreply, total_msat, partid, local_offer_id, groupid FROM payments WHERE payment_hash = ? AND partid = ? AND groupid=?",
+         .query = "SELECT  id, status, destination, msatoshi, payment_hash, timestamp, payment_preimage, path_secrets, route_nodes, route_channels, msatoshi_sent, description, bolt11, failonionreply, total_msat, partid, local_offer_id, groupid FROM payments WHERE payment_hash = $1 AND partid = $2 AND groupid=$3",
+         .placeholders = 3,
          .readonly = true,
     },
     {
@@ -1599,9 +1599,9 @@ struct db_query db_postgres_queries[] = {
          .readonly = false,
     },
     {
-         .name = "SELECT failonionreply, faildestperm, failindex, failcode, failnode, failchannel, failupdate, faildetail, faildirection  FROM payments WHERE payment_hash=? AND partid=?;",
-         .query = "SELECT failonionreply, faildestperm, failindex, failcode, failnode, failchannel, failupdate, faildetail, faildirection  FROM payments WHERE payment_hash=$1 AND partid=$2;",
-         .placeholders = 2,
+         .name = "SELECT failonionreply, faildestperm, failindex, failcode, failnode, failchannel, failupdate, faildetail, faildirection  FROM payments WHERE payment_hash=? AND partid=? AND groupid=?;",
+         .query = "SELECT failonionreply, faildestperm, failindex, failcode, failnode, failchannel, failupdate, faildetail, faildirection  FROM payments WHERE payment_hash=$1 AND partid=$2 AND groupid=$3;",
+         .placeholders = 3,
          .readonly = true,
     },
     {
@@ -1924,4 +1924,4 @@ struct db_query db_postgres_queries[] = {
 
 #endif /* LIGHTNINGD_WALLET_GEN_DB_POSTGRES */
 
-// SHA256STAMP:b414ca81db93e05ce7ada8cf7bdcef4dde7f61c55cfbb416f3ae55d4206c9fd7
+// SHA256STAMP:9db9c86dfa02944fa4c221006a616ff3095edc49f0e6fbcd2564cd731b9f3cd3
