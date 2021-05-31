@@ -951,6 +951,12 @@ struct db_query db_postgres_queries[] = {
          .readonly = false,
     },
     {
+         .name = "ALTER TABLE channel_htlcs ADD groupid BIGINT NOT NULL DEFAULT 0;",
+         .query = "ALTER TABLE channel_htlcs ADD groupid BIGINT NOT NULL DEFAULT 0;",
+         .placeholders = 0,
+         .readonly = false,
+    },
+    {
          .name = "UPDATE vars SET intval = intval + 1 WHERE name = 'data_version' AND intval = ?",
          .query = "UPDATE vars SET intval = intval + 1 WHERE name = 'data_version' AND intval = $1",
          .placeholders = 1,
@@ -1527,8 +1533,8 @@ struct db_query db_postgres_queries[] = {
          .readonly = true,
     },
     {
-         .name = "SELECT  id, channel_htlc_id, msatoshi, cltv_expiry, hstate, payment_hash, payment_key, routing_onion, failuremsg, malformed_onion, origin_htlc, shared_secret, received_time, partid, localfailmsg FROM channel_htlcs WHERE direction = ? AND channel_id = ? AND hstate != ?",
-         .query = "SELECT  id, channel_htlc_id, msatoshi, cltv_expiry, hstate, payment_hash, payment_key, routing_onion, failuremsg, malformed_onion, origin_htlc, shared_secret, received_time, partid, localfailmsg FROM channel_htlcs WHERE direction = $1 AND channel_id = $2 AND hstate != $3",
+         .name = "SELECT  id, channel_htlc_id, msatoshi, cltv_expiry, hstate, payment_hash, payment_key, routing_onion, failuremsg, malformed_onion, origin_htlc, shared_secret, received_time, partid, localfailmsg, groupid FROM channel_htlcs WHERE direction = ? AND channel_id = ? AND hstate != ?",
+         .query = "SELECT  id, channel_htlc_id, msatoshi, cltv_expiry, hstate, payment_hash, payment_key, routing_onion, failuremsg, malformed_onion, origin_htlc, shared_secret, received_time, partid, localfailmsg, groupid FROM channel_htlcs WHERE direction = $1 AND channel_id = $2 AND hstate != $3",
          .placeholders = 3,
          .readonly = true,
     },
@@ -1575,21 +1581,21 @@ struct db_query db_postgres_queries[] = {
          .readonly = true,
     },
     {
-         .name = "UPDATE payments SET status=? WHERE payment_hash=? AND partid=?",
-         .query = "UPDATE payments SET status=$1 WHERE payment_hash=$2 AND partid=$3",
-         .placeholders = 3,
+         .name = "UPDATE payments SET status=? WHERE payment_hash=? AND partid=? AND groupid=?",
+         .query = "UPDATE payments SET status=$1 WHERE payment_hash=$2 AND partid=$3 AND groupid=$4",
+         .placeholders = 4,
          .readonly = false,
     },
     {
-         .name = "UPDATE payments SET payment_preimage=? WHERE payment_hash=? AND partid=?",
-         .query = "UPDATE payments SET payment_preimage=$1 WHERE payment_hash=$2 AND partid=$3",
-         .placeholders = 3,
+         .name = "UPDATE payments SET payment_preimage=? WHERE payment_hash=? AND partid=? AND groupid=?",
+         .query = "UPDATE payments SET payment_preimage=$1 WHERE payment_hash=$2 AND partid=$3 AND groupid=$4",
+         .placeholders = 4,
          .readonly = false,
     },
     {
-         .name = "UPDATE payments   SET path_secrets = NULL     , route_nodes = NULL     , route_channels = NULL WHERE payment_hash = ? AND partid = ?;",
-         .query = "UPDATE payments   SET path_secrets = NULL     , route_nodes = NULL     , route_channels = NULL WHERE payment_hash = $1 AND partid = $2;",
-         .placeholders = 2,
+         .name = "UPDATE payments   SET path_secrets = NULL     , route_nodes = NULL     , route_channels = NULL WHERE payment_hash = ? AND partid = ? AND groupid=?;",
+         .query = "UPDATE payments   SET path_secrets = NULL     , route_nodes = NULL     , route_channels = NULL WHERE payment_hash = $1 AND partid = $2 AND groupid=$3;",
+         .placeholders = 3,
          .readonly = false,
     },
     {
@@ -1912,10 +1918,10 @@ struct db_query db_postgres_queries[] = {
     },
 };
 
-#define DB_POSTGRES_QUERY_COUNT 317
+#define DB_POSTGRES_QUERY_COUNT 318
 
 #endif /* HAVE_POSTGRES */
 
 #endif /* LIGHTNINGD_WALLET_GEN_DB_POSTGRES */
 
-// SHA256STAMP:0c7df6f2cbccc7b50692b19da6555f1610eac0f7aeaf4de9d824d8f8a56a8d5a
+// SHA256STAMP:b414ca81db93e05ce7ada8cf7bdcef4dde7f61c55cfbb416f3ae55d4206c9fd7

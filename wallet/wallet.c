@@ -2362,6 +2362,7 @@ static bool wallet_stmt2htlc_out(struct wallet *wallet,
 		}
 	} else {
 		out->partid = db_column_u64(stmt, 13);
+		out->groupid = db_column_u64(stmt, 14);
 		out->am_origin = true;
 	}
 
@@ -2472,6 +2473,7 @@ bool wallet_htlcs_load_out_for_channel(struct wallet *wallet,
 					     ", received_time"
 					     ", partid"
 					     ", localfailmsg"
+					     ", groupid"
 					     " FROM channel_htlcs"
 					     " WHERE direction = ?"
 					     " AND channel_id = ?"
@@ -2942,7 +2944,7 @@ wallet_payment_by_hash(const tal_t *ctx, struct wallet *wallet,
 
 void wallet_payment_set_status(struct wallet *wallet,
 			       const struct sha256 *payment_hash,
-			       u64 partid,
+			       u64 partid, u64 groupid,
 			       const enum wallet_payment_status newstatus,
 			       const struct preimage *preimage)
 {
@@ -2959,21 +2961,23 @@ void wallet_payment_set_status(struct wallet *wallet,
 
 	stmt = db_prepare_v2(wallet->db,
 			     SQL("UPDATE payments SET status=? "
-				 "WHERE payment_hash=? AND partid=?"));
+				 "WHERE payment_hash=? AND partid=? AND groupid=?"));
 
 	db_bind_int(stmt, 0, wallet_payment_status_in_db(newstatus));
 	db_bind_sha256(stmt, 1, payment_hash);
 	db_bind_u64(stmt, 2, partid);
+	db_bind_u64(stmt, 3, groupid);
 	db_exec_prepared_v2(take(stmt));
 
 	if (preimage) {
 		stmt = db_prepare_v2(wallet->db,
 				     SQL("UPDATE payments SET payment_preimage=? "
-					 "WHERE payment_hash=? AND partid=?"));
+					 "WHERE payment_hash=? AND partid=? AND groupid=?"));
 
 		db_bind_preimage(stmt, 0, preimage);
 		db_bind_sha256(stmt, 1, payment_hash);
 		db_bind_u64(stmt, 2, partid);
+		db_bind_u64(stmt, 3, groupid);
 		db_exec_prepared_v2(take(stmt));
 	}
 	if (newstatus != PAYMENT_PENDING) {
@@ -2983,9 +2987,10 @@ void wallet_payment_set_status(struct wallet *wallet,
 						  "     , route_nodes = NULL"
 						  "     , route_channels = NULL"
 						  " WHERE payment_hash = ?"
-						  " AND partid = ?;"));
+						  " AND partid = ? AND groupid=?;"));
 		db_bind_sha256(stmt, 0, payment_hash);
 		db_bind_u64(stmt, 1, partid);
+		db_bind_u64(stmt, 2, groupid);
 		db_exec_prepared_v2(take(stmt));
 	}
 }

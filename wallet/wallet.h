@@ -1069,7 +1069,7 @@ wallet_payment_by_hash(const tal_t *ctx, struct wallet *wallet,
  */
 void wallet_payment_set_status(struct wallet *wallet,
 			       const struct sha256 *payment_hash,
-			       u64 partid,
+			       u64 partid, u64 groupid,
 			       const enum wallet_payment_status newstatus,
 			       const struct preimage *preimage);
 
