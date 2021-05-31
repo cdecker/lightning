@@ -1995,6 +1995,7 @@ static struct command_result *json_paymod(struct command *cmd,
 	struct bolt11 *b11;
 	char *b11_fail, *b12_fail;
 	u64 *maxfee_pct_millionths;
+	u64 *groupid;
 	u32 *maxdelay;
 	struct amount_msat *exemptfee, *msat;
 	const char *label;
@@ -2029,11 +2030,17 @@ static struct command_result *json_paymod(struct command *cmd,
 #if DEVELOPER
 		   p_opt_def("use_shadow", param_bool, &use_shadow, true),
 #endif
+		   p_opt("groupid", param_u64, &groupid),
 		      NULL))
 		return command_param_failed();
 
 	p = payment_new(cmd, cmd, NULL /* No parent */, paymod_mods);
 	p->invstring = tal_steal(p, b11str);
+
+	if (groupid)
+		p->groupid = *groupid;
+	else
+		p->groupid = pseudorand_u64();
 
 	if (!bolt12_has_prefix(b11str)) {
 		b11 =
