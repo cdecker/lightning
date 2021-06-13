@@ -8,8 +8,8 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
 
-cwd = pathlib.Path(os.path.dirname(__file__))
-
+#cwd = pathlib.Path(os.path.dirname(__file__))
+cwd = pathlib.Path(".")
 
 class ClExtension(Extension):
     def __init__(self, name, **kwargs):
@@ -59,11 +59,12 @@ class build_ext(build_ext_orig):
 
 # Absolute include dirs which we will later expand to full paths.
 include_dirs = [
-    ".",
     "ccan/",
     f"{external_target}/libbacktrace-build/",
     "external/libbacktrace/",
+    "external/libsodium/src/libsodium/include/",
     "external/libsodium/src/libsodium/include/sodium/",
+    f"{external_target}/libsodium-build/src/libsodium/include/",
     "external/libwally-core/",
     "external/libwally-core/include/",
     "external/libwally-core/src/",
@@ -199,7 +200,7 @@ sources = [
     "wire/wire_sync.c",
 ]
 
-include_dirs = [os.path.join("src", f) for f in include_dirs]
+include_dirs = [".", "src"] + [os.path.join("src", f) for f in include_dirs]
 sources = [os.path.join("src", f) for f in sources]
 
 configtuples = []
