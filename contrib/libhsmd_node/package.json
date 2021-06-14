@@ -1,0 +1,18 @@
+{
+  "name": "libhsmd",
+  "version": "0.0.1",
+  "description": "NodeJS bindings for the c-lightning libhsmd",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "author": "Christian Decker",
+  "license": "ISC",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^3.2.1",
+    "npm": "^7.17.0"
+  }
+}

@@ -4,12 +4,10 @@ import os
 import pathlib
 import subprocess
 
-from setuptools import Extension, setup
+from setuptools import Extension, setup, find_packages
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
-
-#cwd = pathlib.Path(os.path.dirname(__file__))
-cwd = pathlib.Path(".")
+cwd = pathlib.Path(os.path.dirname(__file__))
 
 class ClExtension(Extension):
     def __init__(self, name, **kwargs):
@@ -38,6 +36,7 @@ class build_ext(build_ext_orig):
                 [
                     "git",
                     "clone",
+                    "--depth=1",
                     "--recursive",
                     '--branch=libhsmd-python',
                     "https://github.com/cdecker/lightning.git",
@@ -45,7 +44,7 @@ class build_ext(build_ext_orig):
                 ],
                 cwd=cwd,
             )
-
+        subprocess.check_call(['touch', 'test'], cwd=cwd / "src")
         subprocess.check_call([
             "./configure",
             "--disable-developer",
@@ -173,6 +172,7 @@ sources = [
     "external/libsodium/src/libsodium/sodium/runtime.c",
     "external/libsodium/src/libsodium/sodium/utils.c",
     "external/libwally-core/src/base58.c",
+    "external/libwally-core/src/base64.c",
     "external/libwally-core/src/bip32.c",
     "external/libwally-core/src/ccan/ccan/base64/base64.c",
     "external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
@@ -225,6 +225,7 @@ libhsmd_module = ClExtension(
         ("ENABLE_MODULE_RECOVERY", "1"),
         ("ENABLE_MODULE_SCHNORRSIG", "1"),
         ("ENABLE_MODULE_ECDH", "1"),
+        ("ENABLE_MODULE_ECDSA_S2C", "1"),
     ],
     sources=sources,
 )
@@ -242,6 +243,5 @@ setup(
         "build_ext": build_ext,
     },
     long_description=open(cwd / "README.md", "r").read(),
-    long_description_content_type="text/markdown",
     license="BSD-MIT"
 )

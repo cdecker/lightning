@@ -1,1 +1,2 @@
 global-exclude src
+exclude src
