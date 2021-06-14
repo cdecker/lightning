@@ -26,7 +26,7 @@
 	    ],
 	    "target_name": "libhsmd",
 	    "sources": [
-		"helloworld.cc",
+		"libhsmd_node.cc",
 		"src/bitcoin/block.c",
 		"src/bitcoin/chainparams.c",
 		"src/bitcoin/preimage.c",
@@ -141,7 +141,6 @@
 		"src/hsmd/hsmd_wiregen.c",
 		"src/hsmd/libhsmd.c",
 		"src/hsmd/libhsmd_status.c",
-		"src/contrib/libhsmd_node/libhsmd_node.c",
 		"src/wire/fromwire.c",
 		"src/wire/peer_wire.c",
 		"src/wire/peer_wiregen.c",
