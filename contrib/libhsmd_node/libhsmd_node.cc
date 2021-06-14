@@ -2,7 +2,7 @@
 
 extern "C" {
 #include <ccan/str/hex/hex.h>
-#include <libhsmd_node.h>
+#include <hsmd/libhsmd.h>
 
 char *libhsmd_init(const char *hex_hsm_secret, const char *network_name)
 {
