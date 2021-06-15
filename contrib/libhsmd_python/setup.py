@@ -166,6 +166,12 @@ sources = [
     "external/libsodium/src/libsodium/crypto_stream/salsa20/ref/salsa20_ref.c",
     "external/libsodium/src/libsodium/crypto_stream/salsa20/stream_salsa20.c",
     "external/libsodium/src/libsodium/crypto_verify/sodium/verify.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/crypto_pwhash.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2id.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2i.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-encoding.c",
+    "external/libsodium/src/libsodium/sodium/codecs.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2.c",
     "external/libsodium/src/libsodium/randombytes/randombytes.c",
     "external/libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c",
     "external/libsodium/src/libsodium/sodium/core.c",
@@ -210,7 +216,6 @@ if pathlib.Path('src/config.vars').exists():
 
 libhsmd_module = ClExtension(
     "_libhsmd",
-    libraries=["sodium"],
     include_dirs=include_dirs,
     define_macros=configtuples
     + [
@@ -232,7 +237,7 @@ libhsmd_module = ClExtension(
 
 setup(
     name="libhsmd",
-    version="0.10.0",
+    version="0.10.0.post1",
     author="Christian Decker",
     author_email="cdecker@blockstream.com",
     description="""Python wrapper to the libhsmd library""",
