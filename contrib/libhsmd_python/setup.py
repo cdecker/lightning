@@ -180,6 +180,7 @@ sources = [
     "external/libsodium/src/libsodium/sodium/runtime.c",
     "external/libsodium/src/libsodium/sodium/utils.c",
     "external/libwally-core/src/base58.c",
+    "external/libwally-core/src/base64.c",
     "external/libwally-core/src/bip32.c",
     "external/libwally-core/src/ccan/ccan/base64/base64.c",
     "external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
