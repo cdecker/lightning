@@ -7,6 +7,7 @@ import subprocess
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
+VERSION="0.10.0.post1"
 
 #cwd = pathlib.Path(os.path.dirname(__file__))
 cwd = pathlib.Path(".")
@@ -167,6 +168,12 @@ sources = [
     "external/libsodium/src/libsodium/crypto_stream/salsa20/ref/salsa20_ref.c",
     "external/libsodium/src/libsodium/crypto_stream/salsa20/stream_salsa20.c",
     "external/libsodium/src/libsodium/crypto_verify/sodium/verify.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/crypto_pwhash.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2id.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2i.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-encoding.c",
+    "external/libsodium/src/libsodium/sodium/codecs.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2.c",
     "external/libsodium/src/libsodium/randombytes/randombytes.c",
     "external/libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c",
     "external/libsodium/src/libsodium/sodium/core.c",
@@ -210,7 +217,6 @@ if pathlib.Path('src/config.vars').exists():
 
 libhsmd_module = ClExtension(
     "_libhsmd",
-    libraries=["sodium"],
     include_dirs=include_dirs,
     define_macros=configtuples
     + [
@@ -225,13 +231,14 @@ libhsmd_module = ClExtension(
         ("ENABLE_MODULE_RECOVERY", "1"),
         ("ENABLE_MODULE_SCHNORRSIG", "1"),
         ("ENABLE_MODULE_ECDH", "1"),
+        ("ENABLE_MODULE_ECDSA_S2C", "0"),
     ],
     sources=sources,
 )
 
 setup(
     name="libhsmd",
-    version="0.10.0",
+    version=VERSION,
     author="Christian Decker",
     author_email="cdecker@blockstream.com",
     description="""Python wrapper to the libhsmd library""",
