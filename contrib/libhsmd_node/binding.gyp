@@ -22,9 +22,12 @@
 		"../../external/libwally-core/src/secp256k1/include/",
 		"../../external/libwally-core/src/secp256k1/src",
 		"../../contrib/libhsmd_node/",
-		"../../external/x86_64-pc-linux-gnu/libbacktrace-build/"
+		"../../external/<!(clang -dumpmachine)/libbacktrace-build/"
 	    ],
 	    "target_name": "libhsmd",
+	    "libraries": [
+		"<!(pwd)/../../external/<!(clang -dumpmachine)/libwallycore.a"
+	    ],
 	    "sources": [
 		"libhsmd_node.cc",
 		"../../bitcoin/block.c",
@@ -43,6 +46,7 @@
 		"../../ccan/ccan/breakpoint/breakpoint.c",
 		"../../ccan/ccan/crypto/hkdf_sha256/hkdf_sha256.c",
 		"../../ccan/ccan/crypto/hmac_sha256/hmac_sha256.c",
+		"../../ccan/ccan/crypto/sha256/sha256.c",
 		"../../ccan/ccan/crypto/shachain/shachain.c",
 		"../../ccan/ccan/crypto/siphash24/siphash24.c",
 		"../../ccan/ccan/err/err.c",
@@ -89,7 +93,6 @@
 		"../../common/utils.c",
 		"../../common/utxo.c",
 		"../../common/version.c",
-		"../../contrib/libhsmd_node/shims.c",
 		"../../external/libbacktrace/alloc.c",
 		"../../external/libbacktrace/backtrace.c",
 		"../../external/libbacktrace/fileline.c",
@@ -122,22 +125,6 @@
 		"../../external/libsodium/src/libsodium/sodium/core.c",
 		"../../external/libsodium/src/libsodium/sodium/runtime.c",
 		"../../external/libsodium/src/libsodium/sodium/utils.c",
-		"../../external/libwally-core/src/base58.c",
-		"../../external/libwally-core/src/base64.c",
-		"../../external/libwally-core/src/bip32.c",
-		"../../external/libwally-core/src/ccan/ccan/base64/base64.c",
-		"../../external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
-		"../../external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
-		"../../external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
-		"../../external/libwally-core/src/hex.c",
-		"../../external/libwally-core/src/hmac.c",
-		"../../external/libwally-core/src/internal.c",
-		"../../external/libwally-core/src/psbt.c",
-		"../../external/libwally-core/src/pullpush.c",
-		"../../external/libwally-core/src/script.c",
-		"../../external/libwally-core/src/secp256k1/src/secp256k1.c",
-		"../../external/libwally-core/src/sign.c",
-		"../../external/libwally-core/src/transaction.c",
 		"../../hsmd/hsmd_wiregen.c",
 		"../../hsmd/libhsmd.c",
 		"../../hsmd/libhsmd_status.c",
@@ -148,7 +135,7 @@
 		"../../wire/towire.c",
 		"../../wire/wire_io.c",
 		"../../wire/wire_sync.c"
- 	    ],
+	    ],
 	    "defines": [
 		"NAPI_DISABLE_CPP_EXCEPTIONS",
 		"BUILD_ELEMENTS=1",
