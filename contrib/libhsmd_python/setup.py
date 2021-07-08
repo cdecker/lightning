@@ -7,10 +7,10 @@ import subprocess
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
-VERSION="0.10.0.post1"
+VERSION="0.10.0.post2"
 
-#cwd = pathlib.Path(os.path.dirname(__file__))
 cwd = pathlib.Path(".")
+
 
 class ClExtension(Extension):
     def __init__(self, name, **kwargs):
@@ -51,6 +51,7 @@ class build_ext(build_ext_orig):
             "./configure",
             "--disable-developer",
             "--disable-valgrind",
+            "--disable-experimental-features",
             "CC=gcc"
         ], cwd=cwd / "src")
 
@@ -200,11 +201,11 @@ sources = [
     "hsmd/libhsmd.c",
     "wire/fromwire.c",
     "wire/peer_wire.c",
+    "wire/peer_wiregen.c",
     "wire/tlvstream.c",
     "wire/towire.c",
     "wire/wire_io.c",
     "wire/wire_sync.c",
-    "wire/peer_exp_wiregen.c",
 ]
 
 include_dirs = [".", "src"] + [os.path.join("src", f) for f in include_dirs]
@@ -232,6 +233,7 @@ libhsmd_module = ClExtension(
         ("ENABLE_MODULE_SCHNORRSIG", "1"),
         ("ENABLE_MODULE_ECDH", "1"),
         ("ENABLE_MODULE_ECDSA_S2C", "0"),
+	("EXPERIMENTAL_FEATURES", "0")
     ],
     sources=sources,
 )
