@@ -139,6 +139,7 @@ sources = [
     "common/utils.c",
     "common/utxo.c",
     "common/version.c",
+    "contrib/libhsmd_python/libhsmd_python.c",
     "contrib/libhsmd_python/shims.c",
     "contrib/libhsmd_python/swig_wrap.c",
     "external/libbacktrace/alloc.c",
@@ -197,15 +198,13 @@ sources = [
     "external/libwally-core/src/transaction.c",
     "hsmd/hsmd_wiregen.c",
     "hsmd/libhsmd.c",
-    "hsmd/libhsmd_status.c",
-    "contrib/libhsmd_python/libhsmd_python.c",
     "wire/fromwire.c",
     "wire/peer_wire.c",
-    "wire/peer_wiregen.c",
     "wire/tlvstream.c",
     "wire/towire.c",
     "wire/wire_io.c",
     "wire/wire_sync.c",
+    "wire/peer_exp_wiregen.c",
 ]
 
 include_dirs = [".", "src"] + [os.path.join("src", f) for f in include_dirs]

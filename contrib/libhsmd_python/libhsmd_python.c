@@ -1,6 +1,9 @@
+#include <Python.h>
 #include <ccan/str/hex/hex.h>
-#include <libhsmd_python.h>
 #include <common/setup.h>
+#include <common/status_levels.h>
+#include <hsmd/libhsmd.h>
+#include <libhsmd_python.h>
 
 char *init(char *hex_hsm_secret, char *network_name) {
 	const struct bip32_key_version *key_version;
@@ -71,4 +74,97 @@ char *handle(long long cap, long long dbid, char *peer_id, char *hexmsg) {
 
 	clean_tmpctx();
 	return res;
+}
+
+/* When running as a subdaemon controlled by lightningd the hsmd will
+ * report logging, debugging information and crash reports to
+ * lightningd via the status socket, using the wire protocol used in
+ * LN more generally. This is done so lightningd can print add the
+ * messages to its own logs, presenting a unified view of what is
+ * happening.
+ *
+ * When using libhsmd not as a subdaemon controlled by lightningd we
+ * cannot make use of the communication primitives we used in that
+ * context. For this reason libhsmd defers the selection of actual
+ * primitives to link time, and here we provide simple ones that just
+ * print to stdout, as alternatives to the status wire protocol ones.
+ */
+static void pylog(enum log_level  level, char *msg) {
+
+    static PyObject *logging = NULL;
+    static PyObject *string = NULL;
+
+    // import logging module on demand
+    if (logging == NULL){
+        logging = PyImport_ImportModuleNoBlock("logging");
+        if (logging == NULL)
+            PyErr_SetString(PyExc_ImportError,
+                "Could not import module 'logging'");
+    }
+
+    // build msg-string
+    string = Py_BuildValue("s", msg);
+
+    // call function depending on loglevel
+    switch (level) {
+    case LOG_INFORM:
+	    PyObject_CallMethod(logging, "info", "O", string);
+	    break;
+
+    case LOG_UNUSUAL:
+	    PyObject_CallMethod(logging, "warn", "O", string);
+	    break;
+
+    case LOG_BROKEN:
+	    PyObject_CallMethod(logging, "error", "O", string);
+	    break;
+
+    case LOG_DBG:
+	    PyObject_CallMethod(logging, "debug", "O", string);
+	    break;
+
+    case LOG_IO_IN:
+    case LOG_IO_OUT:
+	    /* Ignore io logging */
+	    break;
+    }
+    Py_DECREF(string);
+}
+
+u8 *hsmd_status_bad_request(struct hsmd_client *client, const u8 *msg, const char *error)
+{
+	pylog(LOG_BROKEN, (char *)error);
+	return NULL;
+}
+
+void hsmd_status_fmt(enum log_level level, const struct node_id *peer,
+		     const char *fmt, ...)
+{
+	va_list ap;
+	char *msg, *peer_msg;
+	va_start(ap, fmt);
+	msg = tal_vfmt(NULL, fmt, ap);
+	va_end(ap);
+
+	if (peer != NULL) {
+		va_start(ap, fmt);
+		peer_msg = tal_fmt(msg, "%s: %s", node_id_to_hexstr(msg, peer), msg);
+		va_end(ap);
+		pylog(level, peer_msg);
+	} else {
+		pylog(level, msg);
+	}
+	tal_free(msg);
+}
+
+void hsmd_status_failed(enum status_failreason reason, const char *fmt, ...)
+{
+	char *msg;
+	va_list ap;
+	va_start(ap, fmt);
+	msg = tal_vfmt(NULL, fmt, ap);
+	va_end(ap);
+	pylog(LOG_BROKEN, msg);
+	tal_free(msg);
+	exit(0x80 | (reason & 0xFF));
 }
