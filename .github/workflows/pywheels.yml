@@ -16,7 +16,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v1.12.0
         env:
-          CIBW_BEFORE_ALL_MAC: "cd contrib/libhsmd_python && git clone ../../ --recursive src"
+          CIBW_BEFORE_ALL_MAC: "cd contrib/libhsmd_python && git clone ../../ --recursive src && brew install automake"
           CIBW_BEFORE_ALL_LINUX: "yum install -y gmp-devel zlib-devel valgrind-devel && cd contrib/libhsmd_python && git clone --recursive ../../ src && sed -i 's/ MAP_ANON / 0 /g' src/external/libwally-core/src/ctest/test_psbt_limits.c"
           CIBW_MANYLINUX_X86_64_IMAGE: "manylinux2014"
           CIBW_BUILD: "cp*"
