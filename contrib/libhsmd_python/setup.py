@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import platform
 import subprocess
 
 from setuptools import Extension, setup
@@ -77,6 +78,25 @@ include_dirs = [
     'contrib/libhsmd_python/',
 ]
 
+linux_sources = [
+    "external/libwally-core/src/base58.c",
+    "external/libwally-core/src/base64.c",
+    "external/libwally-core/src/bip32.c",
+    "external/libwally-core/src/ccan/ccan/base64/base64.c",
+    "external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
+    "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
+    "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
+    "external/libwally-core/src/hex.c",
+    "external/libwally-core/src/hmac.c",
+    "external/libwally-core/src/internal.c",
+    "external/libwally-core/src/psbt.c",
+    "external/libwally-core/src/pullpush.c",
+    "external/libwally-core/src/script.c",
+    "external/libwally-core/src/secp256k1/src/secp256k1.c",
+    "external/libwally-core/src/sign.c",
+    "external/libwally-core/src/transaction.c",
+]
+
 sources = [
     "bitcoin/block.c",
     "bitcoin/chainparams.c",
@@ -141,7 +161,6 @@ sources = [
     "common/utxo.c",
     "common/version.c",
     "contrib/libhsmd_python/libhsmd_python.c",
-    "contrib/libhsmd_python/shims.c",
     "contrib/libhsmd_python/swig_wrap.c",
     "external/libbacktrace/alloc.c",
     "external/libbacktrace/backtrace.c",
@@ -181,22 +200,6 @@ sources = [
     "external/libsodium/src/libsodium/sodium/core.c",
     "external/libsodium/src/libsodium/sodium/runtime.c",
     "external/libsodium/src/libsodium/sodium/utils.c",
-    "external/libwally-core/src/base58.c",
-    "external/libwally-core/src/base64.c",
-    "external/libwally-core/src/bip32.c",
-    "external/libwally-core/src/ccan/ccan/base64/base64.c",
-    "external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
-    "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
-    "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
-    "external/libwally-core/src/hex.c",
-    "external/libwally-core/src/hmac.c",
-    "external/libwally-core/src/internal.c",
-    "external/libwally-core/src/psbt.c",
-    "external/libwally-core/src/pullpush.c",
-    "external/libwally-core/src/script.c",
-    "external/libwally-core/src/secp256k1/src/secp256k1.c",
-    "external/libwally-core/src/sign.c",
-    "external/libwally-core/src/transaction.c",
     "hsmd/hsmd_wiregen.c",
     "hsmd/libhsmd.c",
     "wire/fromwire.c",
@@ -206,7 +209,18 @@ sources = [
     "wire/towire.c",
     "wire/wire_io.c",
     "wire/wire_sync.c",
+    "contrib/libhsmd_python/shims.c",
 ]
+
+libraries = []
+
+if platform.system() == "Linux":
+    sources += linux_sources
+
+if platform.system() == "Darwin":
+    libraries += [
+        f'{external_target}/libwallycore.a'
+    ]
 
 include_dirs = [".", "src"] + [os.path.join("src", f) for f in include_dirs]
 sources = [os.path.join("src", f) for f in sources]
@@ -236,6 +250,7 @@ libhsmd_module = ClExtension(
 	("EXPERIMENTAL_FEATURES", "0")
     ],
     sources=sources,
+    libraries=libraries,
 )
 
 setup(
