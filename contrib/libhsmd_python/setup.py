@@ -2,14 +2,16 @@
 
 import os
 import pathlib
+import platform
 import subprocess
+from shutil import which
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
-VERSION="0.10.0.post2"
-
+VERSION = "0.10.0.post2"
 cwd = pathlib.Path(".")
+compiler = "gcc" if which("clang") is None else "clang"
 
 
 class ClExtension(Extension):
@@ -20,7 +22,7 @@ class ClExtension(Extension):
 
 # The directory we compile external depencies is architecture specific.
 external_target = pathlib.Path("external") / subprocess.check_output(
-    ["gcc", "-dumpmachine"]
+    [compiler, "-dumpmachine"]
 ).strip().decode("ASCII")
 
 
@@ -40,20 +42,23 @@ class build_ext(build_ext_orig):
                     "git",
                     "clone",
                     "--recursive",
-                    '--branch=libhsmd-python',
+                    "--branch=libhsmd-python",
                     "https://github.com/cdecker/lightning.git",
                     "src",
                 ],
                 cwd=cwd,
             )
 
-        subprocess.check_call([
-            "./configure",
-            "--disable-developer",
-            "--disable-valgrind",
-            "--disable-experimental-features",
-            "CC=gcc"
-        ], cwd=cwd / "src")
+        subprocess.check_call(
+            [
+                "./configure",
+                "--disable-developer",
+                "--disable-valgrind",
+                "--disable-experimental-features",
+                f"CC={compiler}",
+            ],
+            cwd=cwd / "src",
+        )
 
         # Selectively build some targets we rely on later
         subprocess.check_call(["make", "lightningd/lightning_hsmd"], cwd=srcdir)
@@ -74,7 +79,25 @@ include_dirs = [
     "external/libwally-core/src/secp256k1/",
     "external/libwally-core/src/secp256k1/include/",
     "external/libwally-core/src/secp256k1/src",
-    'contrib/libhsmd_python/',
+    "contrib/libhsmd_python/",
+]
+
+linux_sources = [
+    "external/libwally-core/src/base58.c",
+    "external/libwally-core/src/base64.c",
+    "external/libwally-core/src/bip32.c",
+    "external/libwally-core/src/hex.c",
+    "external/libwally-core/src/hmac.c",
+    "external/libwally-core/src/internal.c",
+    "external/libwally-core/src/psbt.c",
+    "external/libwally-core/src/pullpush.c",
+    "external/libwally-core/src/script.c",
+    "external/libwally-core/src/secp256k1/src/secp256k1.c",
+    "external/libwally-core/src/sign.c",
+    "external/libwally-core/src/transaction.c",
+    "contrib/libhsmd_python/shims.c",
+    "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
+    "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
 ]
 
 sources = [
@@ -94,6 +117,7 @@ sources = [
     "ccan/ccan/breakpoint/breakpoint.c",
     "ccan/ccan/crypto/hkdf_sha256/hkdf_sha256.c",
     "ccan/ccan/crypto/hmac_sha256/hmac_sha256.c",
+    "ccan/ccan/crypto/ripemd160/ripemd160.c",
     "ccan/ccan/crypto/shachain/shachain.c",
     "ccan/ccan/crypto/siphash24/siphash24.c",
     "ccan/ccan/err/err.c",
@@ -141,7 +165,6 @@ sources = [
     "common/utxo.c",
     "common/version.c",
     "contrib/libhsmd_python/libhsmd_python.c",
-    "contrib/libhsmd_python/shims.c",
     "contrib/libhsmd_python/swig_wrap.c",
     "external/libbacktrace/alloc.c",
     "external/libbacktrace/backtrace.c",
@@ -160,8 +183,13 @@ sources = [
     "external/libsodium/src/libsodium/crypto_onetimeauth/poly1305/donna/poly1305_donna.c",
     "external/libsodium/src/libsodium/crypto_onetimeauth/poly1305/onetimeauth_poly1305.c",
     "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-core.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-encoding.c",
     "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-fill-block-ref.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2.c",
     "external/libsodium/src/libsodium/crypto_pwhash/argon2/blake2b-long.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2i.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2id.c",
+    "external/libsodium/src/libsodium/crypto_pwhash/crypto_pwhash.c",
     "external/libsodium/src/libsodium/crypto_scalarmult/curve25519/ref10/x25519_ref10.c",
     "external/libsodium/src/libsodium/crypto_scalarmult/curve25519/scalarmult_curve25519.c",
     "external/libsodium/src/libsodium/crypto_secretstream/xchacha20poly1305/secretstream_xchacha20poly1305.c",
@@ -170,33 +198,13 @@ sources = [
     "external/libsodium/src/libsodium/crypto_stream/salsa20/ref/salsa20_ref.c",
     "external/libsodium/src/libsodium/crypto_stream/salsa20/stream_salsa20.c",
     "external/libsodium/src/libsodium/crypto_verify/sodium/verify.c",
-    "external/libsodium/src/libsodium/crypto_pwhash/crypto_pwhash.c",
-    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2id.c",
-    "external/libsodium/src/libsodium/crypto_pwhash/argon2/pwhash_argon2i.c",
-    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2-encoding.c",
-    "external/libsodium/src/libsodium/sodium/codecs.c",
-    "external/libsodium/src/libsodium/crypto_pwhash/argon2/argon2.c",
     "external/libsodium/src/libsodium/randombytes/randombytes.c",
     "external/libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c",
+    "external/libsodium/src/libsodium/sodium/codecs.c",
     "external/libsodium/src/libsodium/sodium/core.c",
     "external/libsodium/src/libsodium/sodium/runtime.c",
     "external/libsodium/src/libsodium/sodium/utils.c",
-    "external/libwally-core/src/base58.c",
-    "external/libwally-core/src/base64.c",
-    "external/libwally-core/src/bip32.c",
     "external/libwally-core/src/ccan/ccan/base64/base64.c",
-    "external/libwally-core/src/ccan/ccan/crypto/ripemd160/ripemd160.c",
-    "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
-    "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
-    "external/libwally-core/src/hex.c",
-    "external/libwally-core/src/hmac.c",
-    "external/libwally-core/src/internal.c",
-    "external/libwally-core/src/psbt.c",
-    "external/libwally-core/src/pullpush.c",
-    "external/libwally-core/src/script.c",
-    "external/libwally-core/src/secp256k1/src/secp256k1.c",
-    "external/libwally-core/src/sign.c",
-    "external/libwally-core/src/transaction.c",
     "hsmd/hsmd_wiregen.c",
     "hsmd/libhsmd.c",
     "wire/fromwire.c",
@@ -208,11 +216,24 @@ sources = [
     "wire/wire_sync.c",
 ]
 
+libraries = []
+
+system = platform.system()
+if system == "Linux":
+    sources += linux_sources
+    libraries += ["rt"]
+
+if system == "Darwin":
+    libraries += ["wallycore"]
+    sources += [
+        "ccan/ccan/crypto/sha256/sha256.c",
+    ]
+
 include_dirs = [".", "src"] + [os.path.join("src", f) for f in include_dirs]
 sources = [os.path.join("src", f) for f in sources]
 
 configtuples = []
-if pathlib.Path('src/config.vars').exists():
+if pathlib.Path("src/config.vars").exists():
     configvars = open("src/config.vars", "r").readlines()
     configtuples = [tuple(v.strip().split("=", 1)) for v in configvars]
 
@@ -233,9 +254,11 @@ libhsmd_module = ClExtension(
         ("ENABLE_MODULE_SCHNORRSIG", "1"),
         ("ENABLE_MODULE_ECDH", "1"),
         ("ENABLE_MODULE_ECDSA_S2C", "0"),
-	("EXPERIMENTAL_FEATURES", "0")
+        ("EXPERIMENTAL_FEATURES", "0"),
     ],
     sources=sources,
+    libraries=libraries,
+    library_dirs=[f"src/{external_target}/"],
 )
 
 setup(
@@ -252,5 +275,5 @@ setup(
     },
     long_description=open(cwd / "README.md", "r").read(),
     long_description_content_type="text/markdown",
-    license="BSD-MIT"
+    license="BSD-MIT",
 )
