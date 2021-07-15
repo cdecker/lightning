@@ -214,10 +214,12 @@ sources = [
 
 libraries = []
 
-if platform.system() == "Linux":
+system = platform.system()
+if system == "Linux":
     sources += linux_sources
+    libraries += ['rt']
 
-if platform.system() == "Darwin":
+if system == "Darwin":
     libraries += [
         f'{external_target}/libwallycore.a'
     ]
