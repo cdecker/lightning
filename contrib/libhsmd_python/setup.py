@@ -95,6 +95,7 @@ linux_sources = [
     "external/libwally-core/src/secp256k1/src/secp256k1.c",
     "external/libwally-core/src/sign.c",
     "external/libwally-core/src/transaction.c",
+    "contrib/libhsmd_python/shims.c",
 ]
 
 sources = [
@@ -209,7 +210,6 @@ sources = [
     "wire/towire.c",
     "wire/wire_io.c",
     "wire/wire_sync.c",
-    "contrib/libhsmd_python/shims.c",
 ]
 
 libraries = []
