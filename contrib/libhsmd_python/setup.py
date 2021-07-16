@@ -114,6 +114,7 @@ sources = [
     "bitcoin/tx.c",
     "bitcoin/varint.c",
     "ccan/ccan/autodata/autodata.c",
+    "ccan/ccan/asort/asort.c",
     "ccan/ccan/breakpoint/breakpoint.c",
     "ccan/ccan/crypto/hkdf_sha256/hkdf_sha256.c",
     "ccan/ccan/crypto/hmac_sha256/hmac_sha256.c",
