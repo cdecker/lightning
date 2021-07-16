@@ -2,7 +2,6 @@
 #include <ccan/str/hex/hex.h>
 #include <common/setup.h>
 #include <common/status_levels.h>
-#include <hsmd/libhsmd.h>
 #include <libhsmd_python.h>
 
 char *init(char *hex_hsm_secret, char *network_name) {
