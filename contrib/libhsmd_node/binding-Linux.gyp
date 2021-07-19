@@ -3,7 +3,7 @@
     {
       "target_name": "libhsmd",
 	"include_dirs": [
-	    "/home/cdecker/.nvm/versions/node/v14.17.0/include",
+	    "<!@(node -p \"require('node-addon-api').include\")",
 	    "/usr/include/",
         "src",
         "src/ccan/",
@@ -154,7 +154,8 @@
         "ENABLE_MODULE_EXTRAKEYS=1",
         "ENABLE_MODULE_RECOVERY=1",
         "ENABLE_MODULE_SCHNORRSIG=1",
-        "ENABLE_MODULE_ECDH=1"
+        "ENABLE_MODULE_ECDH=1",
+	"NAPI_DISABLE_CPP_EXCEPTIONS=1"
       ]
     }
   ]
