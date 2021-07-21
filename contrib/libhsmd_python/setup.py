@@ -9,7 +9,7 @@ from shutil import which
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext as build_ext_orig
 
-VERSION = "0.10.0.post2"
+VERSION = "0.10.0.post3"
 cwd = pathlib.Path(".")
 compiler = "gcc" if which("clang") is None else "clang"
 
