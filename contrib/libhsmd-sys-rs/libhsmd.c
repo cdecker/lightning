@@ -5,7 +5,6 @@
 #include <common/setup.h>
 
 u8 *c_init(u8 *hsm_secret, char *network_name) {
-	const struct bip32_key_version *key_version;
 	struct secret sec;
 	u8 *response;
 	common_setup(NULL);
@@ -21,7 +20,7 @@ u8 *c_init(u8 *hsm_secret, char *network_name) {
 	secp256k1_ctx = wally_get_secp_context();
 
 	sodium_mlock(&sec, sizeof(sec));
-	memcpy(sec.data, hsm_secret, sizeof(sec.data));
+	memcpy(&sec.data, hsm_secret, sizeof(sec.data));
 
 	/* Look up chainparams by their name */
 	chainparams = chainparams_for_network(network_name);
@@ -31,9 +30,7 @@ u8 *c_init(u8 *hsm_secret, char *network_name) {
 		return NULL;
 	}
 
-	key_version = &chainparams->bip32_key_version;
-
-	response = hsmd_init(sec, *key_version);
+	response = hsmd_init(sec, chainparams->bip32_key_version);
 	sodium_munlock(&sec, sizeof(sec));
 	taken(response); // Clear the `take()` flag
 	return response;

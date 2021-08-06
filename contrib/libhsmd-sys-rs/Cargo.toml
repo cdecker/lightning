@@ -5,6 +5,7 @@ name = "libhsmd-sys"
 version = "0.1.0"
 [dependencies]
 libc = "*"
+lazy_static = "*"
 
 [dev-dependencies]
 hex = "*"
