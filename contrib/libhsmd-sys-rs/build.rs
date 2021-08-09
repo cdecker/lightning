@@ -2,9 +2,11 @@ use std::path::Path;
 use std::process::Command;
 
 fn main() {
-    let srcdir = Path::new(".").join("cl");
+    let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR is not set. Are you running in cargo?");
 
-    eprintln!("Source directory: {}", srcdir.to_string_lossy());
+    let srcdir = Path::new(&out_dir).join("cl");
+    println!("Source directory: {}", srcdir.to_string_lossy());
+    println!("Repository directory: {}", repo_dir.to_string_lossy());
 
     let output = Command::new("clang")
         .arg("-dumpmachine")
