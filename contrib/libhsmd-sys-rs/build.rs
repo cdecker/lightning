@@ -1,12 +1,48 @@
+use std::path::Path;
 use std::process::Command;
 
 fn main() {
+    let srcdir = Path::new("cl");
     let output = Command::new("clang")
         .arg("-dumpmachine")
         .output()
         .expect("retrieving platform via clang")
         .stdout;
-    let machine = std::str::from_utf8(&output).expect("clang output is not utf8");
+    let mut machine = std::str::from_utf8(&output)
+        .expect("clang output is not utf8")
+        .to_string();
+    machine.retain(|c| !c.is_whitespace());
+
+    if !srcdir.exists() {
+        Command::new("git")
+            .args(&[
+                "clone",
+                "--depth=1",
+                "--recurse",
+                "https://github.com/cdecker/lightning.git",
+                "--branch=libhsmd-rust",
+                &srcdir.to_string_lossy(),
+            ])
+            .spawn()
+            .unwrap()
+            .wait()
+            .expect("failed to clone the source directory");
+
+        Command::new("./configure")
+            .arg("--disable-valgrind")
+            .arg("--disable-developer")
+            .arg("CC=clang")
+            .current_dir(srcdir)
+            .output()
+            .expect("failed to run ./configure in c-lightning source directory");
+
+        Command::new("make")
+            .arg("lightningd/lightning_hsmd")
+            .arg(format!("external/{}/libsodium.a", machine))
+            .current_dir(srcdir)
+            .output()
+            .expect("failed to build the hsmd binary");
+    }
 
     println!("cargo:rustc-link-search=native=cl/external/{}/", machine);
     println!("cargo:rustc-link-lib=static=sodium");
@@ -14,6 +50,7 @@ fn main() {
     println!("cargo:rustc-link-lib=backtrace");
 
     let src = [
+        "common/lease_rates.c",
         "bitcoin/block.c",
         "bitcoin/chainparams.c",
         "bitcoin/preimage.c",
@@ -26,8 +63,8 @@ fn main() {
         "bitcoin/signature.c",
         "bitcoin/tx.c",
         "bitcoin/varint.c",
-        "ccan/ccan/autodata/autodata.c",
         "ccan/ccan/asort/asort.c",
+        "ccan/ccan/autodata/autodata.c",
         "ccan/ccan/breakpoint/breakpoint.c",
         "ccan/ccan/crypto/hkdf_sha256/hkdf_sha256.c",
         "ccan/ccan/crypto/hmac_sha256/hmac_sha256.c",
@@ -78,19 +115,12 @@ fn main() {
         "common/utils.c",
         "common/utxo.c",
         "common/version.c",
-        "external/libwally-core/src/ccan/ccan/base64/base64.c",
-        "hsmd/hsmd_wiregen.c",
-        "hsmd/libhsmd.c",
-        "wire/fromwire.c",
-        "wire/peer_wire.c",
-        "wire/peer_wiregen.c",
-        "wire/tlvstream.c",
-        "wire/towire.c",
-        "wire/wire_io.c",
-        "wire/wire_sync.c",
         "external/libwally-core/src/base58.c",
         "external/libwally-core/src/base64.c",
         "external/libwally-core/src/bip32.c",
+        "external/libwally-core/src/ccan/ccan/base64/base64.c",
+        "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
+        "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
         "external/libwally-core/src/hex.c",
         "external/libwally-core/src/hmac.c",
         "external/libwally-core/src/internal.c",
@@ -100,9 +130,16 @@ fn main() {
         "external/libwally-core/src/secp256k1/src/secp256k1.c",
         "external/libwally-core/src/sign.c",
         "external/libwally-core/src/transaction.c",
+        "hsmd/hsmd_wiregen.c",
+        "hsmd/libhsmd.c",
         "hsmd/libhsmd_status.c",
-        "external/libwally-core/src/ccan/ccan/crypto/sha256/sha256.c",
-        "external/libwally-core/src/ccan/ccan/crypto/sha512/sha512.c",
+        "wire/fromwire.c",
+        "wire/peer_wire.c",
+        "wire/peer_wiregen.c",
+        "wire/tlvstream.c",
+        "wire/towire.c",
+        "wire/wire_io.c",
+        "wire/wire_sync.c",
     ];
 
     cc::Build::new()
@@ -135,20 +172,18 @@ fn main() {
         .define("ENABLE_MODULE_SCHNORRSIG", Some("1"))
         .define("ENABLE_MODULE_ECDH", Some("1"))
         .define("ENABLE_MODULE_ECDSA_S2C", Some("0"))
-        .define("EXPERIMENTAL_FEATURES", Some("0"))
         .flag("-Wno-nonnull-compare")
         .flag("-Wno-unused-parameter")
         .flag("-Wno-implicit-function-declaration")
         .flag("-Wno-unused-function")
-	.flag("-Wno-unknown-warning-option")
-	.flag("-Wno-old-style-declaration")
-	.flag("-Wno-implicit-fallthrough")
-	.flag("-Wno-sign-compare")
-	.flag("-Wno-pointer-sign")
-	.flag("-Wno-unused-variable")
-	.flag("-Wno-missing-field-initializers")
-	.flag("-Wno-empty-body")
-	.flag("-Wno-type-limits")
+        .flag("-Wno-unknown-warning-option")
+        .flag("-Wno-old-style-declaration")
+        .flag("-Wno-implicit-fallthrough")
+        .flag("-Wno-sign-compare")
+        .flag("-Wno-pointer-sign")
+        .flag("-Wno-unused-variable")
+        .flag("-Wno-missing-field-initializers")
+        .flag("-Wno-empty-body")
+        .flag("-Wno-type-limits")
         .compile("libhsmd");
-
 }
