@@ -2,16 +2,21 @@ use std::path::Path;
 use std::process::Command;
 
 fn main() {
-    let srcdir = Path::new("cl");
+    let srcdir = Path::new(".").join("cl");
+
+    eprintln!("Source directory: {}", srcdir.to_string_lossy());
+
     let output = Command::new("clang")
         .arg("-dumpmachine")
         .output()
         .expect("retrieving platform via clang")
         .stdout;
+
     let mut machine = std::str::from_utf8(&output)
         .expect("clang output is not utf8")
         .to_string();
     machine.retain(|c| !c.is_whitespace());
+    eprintln!("Machine: {}", machine);
 
     if !srcdir.exists() {
         Command::new("git")
@@ -32,19 +37,23 @@ fn main() {
             .arg("--disable-valgrind")
             .arg("--disable-developer")
             .arg("CC=clang")
-            .current_dir(srcdir)
+            .current_dir(srcdir.clone())
             .output()
             .expect("failed to run ./configure in c-lightning source directory");
 
         Command::new("make")
             .arg("lightningd/lightning_hsmd")
             .arg(format!("external/{}/libsodium.a", machine))
-            .current_dir(srcdir)
+            .current_dir(srcdir.clone())
             .output()
             .expect("failed to build the hsmd binary");
     }
 
-    println!("cargo:rustc-link-search=native=cl/external/{}/", machine);
+    println!(
+        "cargo:rustc-link-search=native={}/external/{}/",
+        srcdir.to_string_lossy().to_string(),
+        machine
+    );
     println!("cargo:rustc-link-lib=static=sodium");
     println!("cargo:rustc-link-lib=wallycore");
     println!("cargo:rustc-link-lib=backtrace");
@@ -140,26 +149,56 @@ fn main() {
         "wire/towire.c",
         "wire/wire_io.c",
         "wire/wire_sync.c",
+        "contrib/libhsmd-sys-rs/shims.c",
+        "contrib/libhsmd-sys-rs/libhsmd.c",
     ];
 
+    let srcs: Vec<String> = src
+        .iter()
+        .map(|f| {
+            srcdir
+                .canonicalize()
+                .unwrap()
+                .join(f)
+                .to_string_lossy()
+                .to_string()
+        })
+        .collect();
+
+    eprintln!("SRCS={:?}", srcs);
+
+    let includes = [
+        "./",
+        "./ccan/",
+        "./external/x86_64-pc-linux-gnu/libbacktrace-build/",
+        "./external/libbacktrace/",
+        "./external/libsodium/src/libsodium/include/",
+        "./external/libsodium/src/libsodium/include/sodium/",
+        "./external/x86_64-pc-linux-gnu/libsodium-build/src/libsodium/include/",
+        "./external/libwally-core/",
+        "./external/libwally-core/include/",
+        "./external/libwally-core/src/",
+        "./external/libwally-core/src/ccan/",
+        "./external/libwally-core/src/secp256k1/",
+        "./external/libwally-core/src/secp256k1/include/",
+        "./external/libwally-core/src/secp256k1/src",
+    ];
+
+    let includes: Vec<String> = includes
+        .iter()
+        .map(|f| {
+            srcdir
+                .canonicalize()
+                .unwrap()
+                .join(f)
+                .to_string_lossy()
+                .to_string()
+        })
+        .collect();
+
     cc::Build::new()
-        .files(src.iter().map(|f| format!("cl/{}", f)))
-        .file("shims.c")
-        .file("libhsmd.c")
-        .include("cl/")
-        .include("cl/ccan/")
-        .include("cl/external/x86_64-pc-linux-gnu/libbacktrace-build/")
-        .include("cl/external/libbacktrace/")
-        .include("cl/external/libsodium/src/libsodium/include/")
-        .include("cl/external/libsodium/src/libsodium/include/sodium/")
-        .include("cl/external/x86_64-pc-linux-gnu/libsodium-build/src/libsodium/include/")
-        .include("cl/external/libwally-core/")
-        .include("cl/external/libwally-core/include/")
-        .include("cl/external/libwally-core/src/")
-        .include("cl/external/libwally-core/src/ccan/")
-        .include("cl/external/libwally-core/src/secp256k1/")
-        .include("cl/external/libwally-core/src/secp256k1/include/")
-        .include("cl/external/libwally-core/src/secp256k1/src")
+        .files(srcs)
+        .includes(includes)
         .define("BUILD_ELEMENTS", Some("1"))
         .define("SHACHAIN_BITS", Some("48"))
         .define("USE_NUM_NONE", Some("1"))
