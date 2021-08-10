@@ -1,6 +1,7 @@
 extern crate libc;
 use libc::{c_void, size_t};
 use std::ffi::CString;
+use std::fmt;
 use std::slice;
 use std::sync::Mutex;
 #[macro_use]
@@ -31,6 +32,38 @@ pub enum Error {
     Generic,
     StringConversion,
     Internal,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Error::Generic => "generic error in hsmd",
+                Error::StringConversion => "error converting string to C string",
+                Error::Internal => "internal error in hsmd",
+            }
+        )
+    }
+}
+
+impl std::error::Error for Error {}
+
+// Type alias to be used whenever we want to handle combinations of
+// capabilities. May be replaced with a proper type at some point.
+pub type Capabilities = u64;
+
+#[allow(non_snake_case)]
+pub mod Capability {
+    pub const ECDH: u64 = 1;
+    pub const SIGN_GOSSIP: u64 = 2;
+    pub const SIGN_ONCHAIN_TX: u64 = 4;
+    pub const COMMITMENT_POINT: u64 = 8;
+    pub const SIGN_REMOTE_TX: u64 = 16;
+    pub const SIGN_CLOSING_TX: u64 = 32;
+    pub const SIGN_WILL_FUND_OFFER: u64 = 64;
+    pub const MASTER: u64 = 1024;
 }
 
 /// A handle to an hsmd. Allows us to create a thread-safe interface
@@ -69,7 +102,7 @@ impl Hsmd {
 
     pub fn handle(
         &self,
-        capabilities: u64,
+        capabilities: Capabilities,
         dbid: Option<u64>,
         peer_id: Option<Vec<u8>>,
         message: Vec<u8>,
@@ -91,7 +124,7 @@ impl Hsmd {
         handle(capabilities, dbid, peer_id, message)
     }
 
-    pub fn client(&self, capabilities: u64) -> Client {
+    pub fn client(&self, capabilities: Capabilities) -> Client {
         Client {
             hsmd: self.clone(),
             caps: capabilities,
@@ -100,7 +133,12 @@ impl Hsmd {
         }
     }
 
-    pub fn client_with_context(&self, capabilities: u64, dbid: u64, peer_id: Vec<u8>) -> Client {
+    pub fn client_with_context(
+        &self,
+        capabilities: Capabilities,
+        dbid: u64,
+        peer_id: Vec<u8>,
+    ) -> Client {
         Client {
             hsmd: self.clone(),
             caps: capabilities,
@@ -114,7 +152,7 @@ impl Hsmd {
 /// context which determines how secrets are generated internally.
 pub struct Client {
     hsmd: Hsmd,
-    caps: u64,
+    caps: Capabilities,
     peer_id: Option<Vec<u8>>,
     dbid: Option<u64>,
 }
@@ -161,7 +199,7 @@ pub fn init(secret: Vec<u8>, network: &str) -> Result<Vec<u8>, Error> {
 }
 
 pub fn handle(
-    capabilities: u64,
+    capabilities: Capabilities,
     dbid: Option<u64>,
     peer_id: Option<Vec<u8>>,
     msg: Vec<u8>,
@@ -170,7 +208,7 @@ pub fn handle(
 
     let res: *const u8 = unsafe {
         c_handle(
-            capabilities,
+            capabilities as u64,
             dbid.unwrap_or_default(),
             peer_id.as_ptr(),
             peer_id.len(),
@@ -219,7 +257,7 @@ mod tests {
         let expected = FUNDCHANNEL_RESP.to_vec();
 
         let hsmd = Hsmd::new(secret, network);
-        let capabilities = 24;
+        let capabilities = Capability::SIGN_REMOTE_TX | Capability::COMMITMENT_POINT;
         let dbid = Some(1);
         let node_id = Some(
             hex::decode("02312627fdf07fbdd7e5ddb136611bdde9b00d26821d14d94891395452f67af248")
@@ -262,5 +300,11 @@ mod tests {
 
         let response = dbg!(hsmd.handle(cap, None, None, request)).unwrap();
         assert_eq!(expected, response);
+    }
+
+    #[test]
+    fn test_capabilities() {
+        let caps: Capabilities = Capability::MASTER | Capability::SIGN_GOSSIP | Capability::ECDH;
+        assert_eq!(caps, 1027);
     }
 }
