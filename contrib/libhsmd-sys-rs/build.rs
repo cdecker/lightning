@@ -3,6 +3,9 @@ use std::process::Command;
 
 fn main() {
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR is not set. Are you running in cargo?");
+    let repo_dir =
+        Path::new(&std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is not set"))
+            .join("../..");
 
     let srcdir = Path::new(&out_dir).join("cl");
     println!("Source directory: {}", srcdir.to_string_lossy());
@@ -26,8 +29,7 @@ fn main() {
                 "clone",
                 "--depth=1",
                 "--recurse",
-                "https://github.com/cdecker/lightning.git",
-                "--branch=libhsmd-rust",
+                &repo_dir.to_string_lossy(),
                 &srcdir.to_string_lossy(),
             ])
             .spawn()
