@@ -189,10 +189,10 @@ pub fn init(secret: Vec<u8>, network: &str) -> Result<Vec<u8>, Error> {
     }
 
     unsafe {
-        let reslen = dbg!(tal_bytelen(res as *const c_void));
+        let reslen = tal_bytelen(res as *const c_void);
         let s = slice::from_raw_parts(res, reslen);
         let response: Vec<u8> = s.clone().to_vec();
-        dbg!(tal_free(res as *const c_void));
+        tal_free(res as *const c_void);
         drop(res);
         Ok(response)
     }
@@ -217,10 +217,10 @@ pub fn handle(
         )
     };
     unsafe {
-        let reslen = dbg!(tal_bytelen(res as *const c_void));
+        let reslen = tal_bytelen(res as *const c_void);
         let s = slice::from_raw_parts(res, reslen);
         let response: Vec<u8> = s.clone().to_vec();
-        dbg!(tal_free(res as *const c_void));
+        tal_free(res as *const c_void);
         drop(res);
         Ok(response)
     }
