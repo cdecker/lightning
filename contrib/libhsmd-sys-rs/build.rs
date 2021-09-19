@@ -173,11 +173,11 @@ fn main() {
     let includes = [
         "./",
         "./ccan/",
-        "./external/x86_64-pc-linux-gnu/libbacktrace-build/",
+        &format!("./external/{}/libbacktrace-build/", machine),
         "./external/libbacktrace/",
         "./external/libsodium/src/libsodium/include/",
         "./external/libsodium/src/libsodium/include/sodium/",
-        "./external/x86_64-pc-linux-gnu/libsodium-build/src/libsodium/include/",
+        &format!("./external/{}/libsodium-build/src/libsodium/include/", machine),
         "./external/libwally-core/",
         "./external/libwally-core/include/",
         "./external/libwally-core/src/",
