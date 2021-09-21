@@ -4,6 +4,7 @@
 #include "common/utils.h"
 #include <ccan/str/hex/hex.h>
 #include <common/setup.h>
+#include <stdio.h>
 
 u8 *c_init(u8 *hsm_secret, char *network_name) {
 	struct secret sec;
