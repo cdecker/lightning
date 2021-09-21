@@ -1,7 +1,31 @@
 use std::path::Path;
 use std::process::Command;
+use which::which;
 
 fn main() {
+    let bins = [
+        ["clang"].iter(),
+        ["pkg-config"].iter(),
+        ["autoconf"].iter(),
+        ["libtoolize", "libtool"].iter(),
+        ["python3"].iter(),
+        ["make"].iter(),
+	["git"].iter(),
+    ];
+
+    for b in bins {
+        if b.clone().filter(|x| which(x).is_ok()).count() < 1 {
+            panic!(
+                "Could not find a required executable, you may be missing a dependency: {:?}",
+                b.as_slice()
+            );
+        }
+    }
+
+    pkg_config::Config::new().probe("sqlite3").unwrap();
+    pkg_config::Config::new().probe("gmp").unwrap();
+    pkg_config::Config::new().probe("zlib").unwrap();
+
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR is not set. Are you running in cargo?");
     let repo_dir =
         Path::new(&std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is not set"))
@@ -39,6 +63,7 @@ fn main() {
         Command::new("./configure")
             .arg("--disable-valgrind")
             .arg("--disable-developer")
+            .arg("--disable-experimental-features")
             .arg("CC=clang")
             .current_dir(srcdir.clone())
             .output()
@@ -177,7 +202,10 @@ fn main() {
         "./external/libbacktrace/",
         "./external/libsodium/src/libsodium/include/",
         "./external/libsodium/src/libsodium/include/sodium/",
-        &format!("./external/{}/libsodium-build/src/libsodium/include/", machine),
+        &format!(
+            "./external/{}/libsodium-build/src/libsodium/include/",
+            machine
+        ),
         "./external/libwally-core/",
         "./external/libwally-core/include/",
         "./external/libwally-core/src/",
@@ -227,5 +255,6 @@ fn main() {
         .flag("-Wno-missing-field-initializers")
         .flag("-Wno-empty-body")
         .flag("-Wno-type-limits")
-        .compile("libhsmd");
+	.flag("-Wno-int-conversion")
+        .compile("hsmd");
 }
