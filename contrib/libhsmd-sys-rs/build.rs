@@ -169,7 +169,6 @@ fn main() {
         "external/libwally-core/src/transaction.c",
         "hsmd/hsmd_wiregen.c",
         "hsmd/libhsmd.c",
-        "hsmd/libhsmd_status.c",
         "wire/fromwire.c",
         "wire/peer_wire.c",
         "wire/peer_wiregen.c",
