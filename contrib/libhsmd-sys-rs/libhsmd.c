@@ -3,6 +3,7 @@
 #include "common/node_id.h"
 #include "common/utils.h"
 #include <ccan/str/hex/hex.h>
+#include <ccan/tal/str/str.h>
 #include <common/setup.h>
 #include <stdio.h>
 
@@ -58,4 +59,40 @@ u8 *c_handle(long long cap, long long dbid, const u8 *peer_id, size_t peer_id_le
 	taken(res); // Clear the `take()` flag
 
 	return res;
+}
+
+u8 *hsmd_status_bad_request(struct hsmd_client *client, const u8 *msg, const char *error)
+{
+	fprintf(stderr, "%s\n", error);
+	return NULL;
+}
+
+void hsmd_status_fmt(enum log_level level, const struct node_id *peer,
+		     const char *fmt, ...)
+{
+	va_list ap;
+	char *msg;
+	FILE *stream = level >= LOG_UNUSUAL ? stderr : stdout;
+	va_start(ap, fmt);
+	msg = tal_vfmt(NULL, fmt, ap);
+	va_end(ap);
+
+	if (peer != NULL)
+		fprintf(stream, "[%s] %s: %s\n", log_level_name(level),
+			node_id_to_hexstr(msg, peer), msg);
+	else
+		fprintf(stream, "[%s]: %s\n", log_level_name(level), msg);
+
+	tal_free(msg);
+}
+
+void hsmd_status_failed(enum status_failreason reason, const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+
+	exit(0x80 | (reason & 0xFF));
 }
