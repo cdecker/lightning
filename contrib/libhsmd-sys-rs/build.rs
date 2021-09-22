@@ -87,7 +87,7 @@ fn main() {
     println!("cargo:rustc-link-lib=backtrace");
 
     let src = [
-        "common/lease_rates.c",
+	"ccan/ccan/strmap/strmap.c",
         "bitcoin/block.c",
         "bitcoin/chainparams.c",
         "bitcoin/preimage.c",
@@ -101,7 +101,6 @@ fn main() {
         "bitcoin/tx.c",
         "bitcoin/varint.c",
         "ccan/ccan/asort/asort.c",
-        "ccan/ccan/autodata/autodata.c",
         "ccan/ccan/breakpoint/breakpoint.c",
         "ccan/ccan/crypto/hkdf_sha256/hkdf_sha256.c",
         "ccan/ccan/crypto/hmac_sha256/hmac_sha256.c",
@@ -128,6 +127,7 @@ fn main() {
         "ccan/ccan/timer/timer.c",
         "ccan/ccan/utf8/utf8.c",
         "common/amount.c",
+        "common/autodata.c",
         "common/bigsize.c",
         "common/bip32.c",
         "common/bolt12_merkle.c",
@@ -138,6 +138,7 @@ fn main() {
         "common/hash_u5.c",
         "common/hsm_encryption.c",
         "common/key_derive.c",
+        "common/lease_rates.c",
         "common/memleak.c",
         "common/msg_queue.c",
         "common/node_id.c",
@@ -152,6 +153,8 @@ fn main() {
         "common/utils.c",
         "common/utxo.c",
         "common/version.c",
+        "contrib/libhsmd-sys-rs/libhsmd.c",
+        "contrib/libhsmd-sys-rs/shims.c",
         "external/libwally-core/src/base58.c",
         "external/libwally-core/src/base64.c",
         "external/libwally-core/src/bip32.c",
@@ -176,8 +179,6 @@ fn main() {
         "wire/towire.c",
         "wire/wire_io.c",
         "wire/wire_sync.c",
-        "contrib/libhsmd-sys-rs/shims.c",
-        "contrib/libhsmd-sys-rs/libhsmd.c",
     ];
 
     let srcs: Vec<String> = src
