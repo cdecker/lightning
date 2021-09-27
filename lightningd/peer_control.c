@@ -1471,7 +1471,7 @@ static struct command_result *json_listpeers(struct command *cmd,
 		return command_param_failed();
 
 	response = json_stream_success(cmd);
-	json_array_start(response, "peers");
+	json_array_start(response, "nachbarn");
 	if (specific_id) {
 		peer = peer_by_id(cmd->ld, specific_id);
 		if (peer)
