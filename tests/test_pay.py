@@ -3597,6 +3597,59 @@ def test_listpay_result_with_paymod(node_factory, bitcoind):
     assert 'destination' in l2.rpc.listpays()['pays'][0]
 
 
+def test_listpays_bolt11(node_factory, bitcoind):
+    """Test that all results for `listpays` have a `bolt11` associated.
+
+    Reported by @shesek, under some circumstances an MPP payment may
+    not be aggregated correctly, thus resulting in a `listpays` entry
+    that doesn't include a `bolt11`.
+
+    The network topology is a diamond, forcing us to use MPP for the
+    payment. l1 is the sender, l6 is the recipient.
+
+    """
+    l1, l2, l3, l4, l5, l6 = node_factory.get_nodes(6)
+    channels = [
+        [l1, l2],
+        [l1, l3],
+        [l1, l4],
+        [l1, l5],
+        [l2, l6],
+        [l3, l6],
+        [l4, l6],
+        [l5, l6],
+    ]
+
+    fundings = []
+    for s, d in channels:
+        f = s.openchannel(d, connect=True, confirm=False, wait_for_announce=False)
+        fundings.append(f)
+
+    bitcoind.generate_block(6)
+
+    wait_for(lambda: len(l1.rpc.listchannels()['channels']) == 2 * len(channels))
+
+    # Now perform a number of invoice payments, forcing them to be
+    # multi-part payments, since presumably the aggregation is broken
+    # in this case.
+    for i in range(100):
+        inv = l6.rpc.invoice(
+            3*10**7, # Likely MPP since we cluster around powers of 10
+            f"invoice-{i}",
+            f"description-{i}",
+        )['bolt11']
+
+        p = l1.rpc.pay(inv)
+        assert(p['parts'] > 1)
+
+    l1.restart()
+    # And now we check that `listpays` has all the payments annotated
+    # with their bolt11 string.
+    lp = l1.rpc.listpays()
+    for p in lp['pays']:
+        assert('bolt11' in p)
+
+
 @unittest.skipIf(env('COMPAT') != 1, "legacypay requires COMPAT=1")
 def test_listpays_ongoing_attempt(node_factory, bitcoind, executor):
     """Test to reproduce issue #3915.
