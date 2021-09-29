@@ -4782,3 +4782,42 @@ def test_sendpay_grouping(node_factory, bitcoind):
     pays = l1.rpc.listpays()['pays']
     assert(len(pays) == 3)
     assert([p['status'] for p in pays] == ['failed', 'failed', 'complete'])
+
+
+def test_pay_manual_retry(node_factory):
+    """The user submits the same invoice multiple times.
+
+    We have a line-graph, with a drained channel between l2 and l3
+    during the first attempt to force a failure. We then refill the
+    exhausted channel and then resubmit `pay` which should
+    succeed. `listsendpay` should show the latest attempt only to
+    maintain the invariance, `listpays` should show both attempts once
+    we finish the `sendpay` grouping and don't delete prior attempts
+    anymore.
+
+    """
+    l1, l2, l3 = node_factory.line_graph(3, wait_for_announce=True)
+    inv = l3.rpc.invoice(10**6, 'test-invoice', 'Just testing manual retries')['bolt11']
+    l2.drain(l3)
+
+    with pytest.raises(RpcError):
+        l1.rpc.pay(inv)
+
+    sendpays = l1.rpc.listsendpays()
+    assert sendpays['payments'][0]['bolt11'] is not None
+    assert set([p['groupid'] for p in sendpays['payments']]) == set([1])
+    assert set([p['status'] for p in sendpays['payments']]) == set(["failed"])
+
+    # Where do we expect the next attempt to start off from?
+    idx = len(sendpays['payments'])
+
+    l3.drain(l2)
+    p = l1.rpc.pay(inv)
+    sendpays = l1.rpc.listsendpays()
+    assert sendpays['payments'][idx]['bolt11'] is not None
+    assert set([p['groupid'] for p in sendpays['payments']][idx:]) == set([2])
+    assert set([p['status'] for p in sendpays['payments']][idx:]) == set(["complete"])
+
+    # Trying this again should fail on us:
+    with pytest.raises(RpcError, match=r'The payment with payment_hash=([a-f0-9]{64}) was successful \(groupid=2\)'):
+        l1.rpc.pay(inv)
