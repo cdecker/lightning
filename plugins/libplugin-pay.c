@@ -8,6 +8,7 @@
 #include <common/random_select.h>
 #include <common/type_to_string.h>
 #include <errno.h>
+#include <math.h>
 #include <plugins/libplugin-pay.h>
 #include <sys/types.h>
 #include <wire/peer_wire.h>
@@ -704,25 +705,29 @@ static bool payment_route_can_carry_even_disabled(const struct gossmap *map,
  */
 static u64 capacity_bias(const struct gossmap *map,
 			 const struct gossmap_chan *c,
-			 int dir,
+			 int dir,//TODO: seems not to be used
 			 struct amount_msat amount)
 {
-	struct amount_msat fee;
+	//struct amount_msat fee;
 	struct amount_sat capacity;
 
 	/* Median fees are 1000 base, 10 ppm, so scale capacity bias to that */
 	/* Overflow is pretty-much impossible, so ignore. */
-	if (!amount_msat_fee(&fee, amount, 1000, 10))
-		return 0;
+	//TODO: don't have median results as fixed constants in the code
+	//if (!amount_msat_fee(&fee, amount, 1000, 10))
+	//	return 0;
 
 	/* Can fail in theory if gossmap changed underneath. */
 	if (!gossmap_chan_get_capacity(map, c, &capacity))
 		return 0;
 
+	//negative log prob:
+	return -log((capacity.satoshis*1000 + 1 - amount.millisatoshis)
+		    / (capacity.satoshi*1000 + 1));
 	/* bias = fee * (amt / (c + 1)) */
-	return fee.millisatoshis    /* Raw: complex math & laziness */
-		* amount.millisatoshis  /* Raw: complex math & laziness */
-		/ (capacity.satoshis*1000 + 1); /* Raw: complex math & laziness */
+//	return fee.millisatoshis    /* Raw: complex math & laziness */
+//		* amount.millisatoshis  /* Raw: complex math & laziness */
+//		/ (capacity.satoshis*1000 + 1); /* Raw: complex math & laziness */
 }
 
 /* Prioritize costs over distance, but bias to larger channels. */
@@ -732,10 +737,15 @@ static u64 route_score(u32 distance,
 		       int dir,
 		       const struct gossmap_chan *c)
 {
-	u64 costs = cost.millisatoshis + risk.millisatoshis /* Raw: score */
+	//u64 costs = cost.millisatoshis + risk.millisatoshis /* Raw: score */
 		/* We use global_gossmap (can't still be NULL)
 		 * *without* get_gossmap() which might change topology. */
-		+ capacity_bias(global_gossmap, c, dir, cost);
+	//	+ capacity_bias(global_gossmap, c, dir, cost);
+	//smoothed harmonic mean to avoid division by 1
+	u64 costs = cost.millisatoshis*risk.millisatoshis
+		*capacity_bias(global_gossmap,c,dir,cost)
+		/(cost.millisatoshis+risk.millisatoshis
+		  +capacity_bias(global_gossmap,c,dir,cost)+1);
 	if (costs > 0xFFFFFFFF)
 		costs = 0xFFFFFFFF;
 	return costs;
