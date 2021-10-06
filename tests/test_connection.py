@@ -3520,6 +3520,7 @@ def test_upgrade_statickey(node_factory, executor):
 
 @unittest.skipIf(not EXPERIMENTAL_FEATURES, "upgrade protocol not available")
 @pytest.mark.developer("dev-force-features required")
+@flaky
 def test_upgrade_statickey_onchaind(node_factory, executor, bitcoind):
     """We test penalty before/after, and unilateral before/after"""
     l1, l2 = node_factory.line_graph(2, opts=[{'may_reconnect': True,
