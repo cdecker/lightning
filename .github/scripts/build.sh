@@ -9,7 +9,7 @@ export TEST_CHECK_DBSTMTS=${TEST_CHECK_DBSTMTS:-0}
 export DEVELOPER=${DEVELOPER:-1}
 export EXPERIMENTAL_FEATURES=${EXPERIMENTAL_FEATURES:-0}
 export PATH=$CWD/dependencies/bin:"$HOME"/.local/bin:"$PATH"
-export PYTEST_OPTS="--maxfail=5 --suppress-no-test-exit-code ${PYTEST_OPTS}"
+export PYTEST_OPTS="--maxfail=5 --suppress-no-test-exit-code --flake-finder --flake-max-minutes=120 ${PYTEST_OPTS}"
 export PYTEST_PAR=${PYTEST_PAR:-10}
 export PYTEST_SENTRY_ALWAYS_REPORT=1
 export SLOW_MACHINE=1
@@ -41,6 +41,7 @@ pip3 install --user \
      pytest-test-groups==1.0.3 \
      pytest-custom-exit-code==0.3.0 \
      pytest-timeout \
+     pytest-flakefinder \
      pytest-json-report
 
 git clone https://github.com/lightningnetwork/lightning-rfc.git ../lightning-rfc
