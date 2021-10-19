@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ::group::Metadata
 echo "Running in $(pwd)"
 export ARCH=${ARCH:-64}
 export BOLTDIR=lightning-rfc
@@ -19,6 +20,7 @@ export TEST_NETWORK=${NETWORK:-"regtest"}
 export TIMEOUT=900
 export VALGRIND=${VALGRIND:-0}
 export FUZZING=${FUZZING:-0}
+echo ::endgroup::
 
 echo ::group::Preparations to run tests
 
