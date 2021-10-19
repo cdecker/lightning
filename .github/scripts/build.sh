@@ -20,6 +20,8 @@ export TIMEOUT=900
 export VALGRIND=${VALGRIND:-0}
 export FUZZING=${FUZZING:-0}
 
+echo ::group::Preparations to run tests
+
 pip3 install --user -U \
      -r requirements.lock
 
@@ -56,6 +58,7 @@ addopts=-p no:logging --color=yes --timeout=1800 --timeout-method=thread --test-
 markers =
     slow_test: marks tests as slow (deselect with '-m "not slow_test"')
 EOF
+echo ::endgroup::
 
 if [ "$TARGET_HOST" == "arm-linux-gnueabihf" ] || [ "$TARGET_HOST" == "aarch64-linux-gnu" ]
 then
@@ -110,7 +113,12 @@ then
 
     make -j32 CC="$TARGET_HOST-gcc" > /dev/null
 else
+    echo ::group::Compilation
     eatmydata make -j32
+    echo ::endgroup::
+
+    echo ::group::Test command: $TEST_CMD
     # shellcheck disable=SC2086
     eatmydata $TEST_CMD
+    echo ::endgroup::
 fi
