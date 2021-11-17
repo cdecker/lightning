@@ -10,7 +10,7 @@ fn main() {
         ["libtoolize", "libtool"].iter(),
         ["python3"].iter(),
         ["make"].iter(),
-	["git"].iter(),
+        ["git"].iter(),
     ];
 
     for b in bins {
@@ -47,36 +47,48 @@ fn main() {
     machine.retain(|c| !c.is_whitespace());
     eprintln!("Machine: {}", machine);
 
-    if !srcdir.exists() {
-        Command::new("git")
-            .args(&[
-                "clone",
-                "--depth=1",
-                "--recurse",
-                &repo_dir.to_string_lossy(),
-                &srcdir.to_string_lossy(),
-            ])
-            .spawn()
-            .unwrap()
-            .wait()
-            .expect("failed to clone the source directory");
+    Command::new("git")
+        .args(&[
+            "clone",
+            "--depth=1",
+            "--recurse",
+            &repo_dir.to_string_lossy(),
+            &srcdir.to_string_lossy(),
+        ])
+        .spawn()
+        .unwrap()
+        .wait()
+        .expect("failed to clone the source directory");
 
-        Command::new("./configure")
-            .arg("--disable-valgrind")
-            .arg("--disable-developer")
-            .arg("--disable-experimental-features")
-            .arg("CC=clang")
-            .current_dir(srcdir.clone())
-            .output()
-            .expect("failed to run ./configure in c-lightning source directory");
+    Command::new("git")
+        .args(&[
+            "ls-files",
+        ])
+        .current_dir(srcdir.clone())
+        .spawn()
+        .unwrap()
+        .wait()
+        .expect("failed to clone the source directory");
 
-        Command::new("make")
-            .arg("lightningd/lightning_hsmd")
-            .arg(format!("external/{}/libsodium.a", machine))
-            .current_dir(srcdir.clone())
-            .output()
-            .expect("failed to build the hsmd binary");
-    }
+    Command::new("./configure")
+        .arg("--disable-valgrind")
+        .arg("--disable-developer")
+        .arg("--disable-experimental-features")
+        .arg("CC=clang")
+        .current_dir(srcdir.clone())
+        .spawn()
+        .unwrap()
+        .wait()
+        .expect("failed to run ./configure in c-lightning source directory");
+
+    Command::new("make")
+        .arg("lightningd/lightning_hsmd")
+        .arg(format!("external/{}/libsodium.a", machine))
+        .current_dir(srcdir.clone())
+        .spawn()
+        .unwrap()
+        .wait()
+        .expect("failed to build the hsmd binary");
 
     println!(
         "cargo:rustc-link-search=native={}/external/{}/",
@@ -88,7 +100,7 @@ fn main() {
     println!("cargo:rustc-link-lib=backtrace");
 
     let src = [
-	"ccan/ccan/strmap/strmap.c",
+        "ccan/ccan/strmap/strmap.c",
         "bitcoin/block.c",
         "bitcoin/chainparams.c",
         "bitcoin/preimage.c",
@@ -255,6 +267,6 @@ fn main() {
         .flag("-Wno-missing-field-initializers")
         .flag("-Wno-empty-body")
         .flag("-Wno-type-limits")
-	.flag("-Wno-int-conversion")
+        .flag("-Wno-int-conversion")
         .compile("hsmd");
 }
