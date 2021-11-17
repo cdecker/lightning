@@ -23,7 +23,7 @@ fn main() {
     }
 
     pkg_config::Config::new().probe("sqlite3").unwrap();
-    pkg_config::Config::new().probe("gmp").unwrap();
+    //pkg_config::Config::new().probe("gmp").unwrap();
     pkg_config::Config::new().probe("zlib").unwrap();
 
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR is not set. Are you running in cargo?");
