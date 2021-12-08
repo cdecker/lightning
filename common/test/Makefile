@@ -10,7 +10,9 @@ COMMON_TEST_PROGRAMS := $(COMMON_TEST_OBJS:.o=)
 COMMON_TEST_COMMON_OBJS :=				\
 	common/autodata.o				\
 	common/setup.o					\
-	common/utils.o
+	common/utils.o\
+	hsmd/hsmd_wiregen.o\
+common/bip32.o common/derive_basepoints.o common/utxo.o common/node_id.o wire/fromwire.o wire/towire.o 
 
 $(COMMON_TEST_PROGRAMS): $(COMMON_TEST_COMMON_OBJS) $(BITCOIN_OBJS)
 $(COMMON_TEST_OBJS): $(COMMON_HEADERS) $(WIRE_HEADERS) $(COMMON_SRC)
