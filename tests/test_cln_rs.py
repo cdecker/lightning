@@ -12,6 +12,9 @@ pytestmark = pytest.mark.skipif(
 )
 
 
+os.environ["RUST_LOG"] = "trace"
+
+
 def test_rpc_client(node_factory):
     l1 = node_factory.get_node()
     bin_path = Path.cwd() / "target" / "debug" / "examples" / "cln-rpc-getinfo"
