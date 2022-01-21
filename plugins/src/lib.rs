@@ -52,9 +52,7 @@ where
 
     pub async fn run(self) -> Result<(), Error> {
         let (plugin, input) = self.build();
-        tokio::task::spawn(plugin.run(input));
-        tokio::time::sleep(std::time::Duration::from_secs(300)).await;
-        unimplemented!()
+        plugin.run(input).await
     }
 
     pub fn build(self) -> (Plugin<S, I, O>, I) {
