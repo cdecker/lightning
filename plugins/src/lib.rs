@@ -1,16 +1,19 @@
 use crate::codec::{JsonCodec, JsonRpcCodec};
-use futures::sink::SinkExt;
-use std::sync::Arc;
-use tokio::sync::Mutex;
-use tokio_util::codec::FramedWrite;
-pub mod codec;
-mod messages;
 pub use anyhow::Error;
-use log::{trace, warn};
+use futures::sink::SinkExt;
+extern crate log;
+use log::{debug, trace, warn};
 use std::marker::PhantomData;
+use std::sync::Arc;
 use tokio::io::{AsyncRead, AsyncWrite};
+use tokio::sync::Mutex;
 use tokio_stream::StreamExt;
 use tokio_util::codec::FramedRead;
+use tokio_util::codec::FramedWrite;
+
+pub mod codec;
+pub mod logging;
+mod messages;
 
 #[macro_use]
 extern crate serde_json;
@@ -50,19 +53,20 @@ where
         }
     }
 
-    pub async fn run(self) -> Result<(), Error> {
-        let (plugin, input) = self.build();
-        plugin.run(input).await
-    }
-
     pub fn build(self) -> (Plugin<S, I, O>, I) {
+        let output = Arc::new(Mutex::new(FramedWrite::new(
+            self.output,
+            JsonCodec::default(),
+        )));
+
+        // Now configure the logging, so any `log` call is wrapped
+        // in a JSON-RPC notification and sent to `lightningd`
+	tokio::spawn(async move {
+	});
         (
             Plugin {
                 state: Arc::new(Mutex::new(self.state)),
-                output: Arc::new(Mutex::new(FramedWrite::new(
-                    self.output,
-                    JsonCodec::default(),
-                ))),
+                output,
                 input_type: PhantomData,
             },
             self.input,
@@ -74,7 +78,7 @@ pub struct Plugin<S, I, O>
 where
     S: Clone + Send,
     I: AsyncRead,
-    O: Send + AsyncWrite,
+    O: Send + AsyncWrite + 'static,
 {
     //input: FramedRead<Stdin, JsonCodec>,
     output: Arc<Mutex<FramedWrite<O, JsonCodec>>>,
@@ -87,12 +91,15 @@ impl<S, I, O> Plugin<S, I, O>
 where
     S: Clone + Send,
     I: AsyncRead + Send + Unpin,
-    O: Send + AsyncWrite + Unpin,
+    O: Send + AsyncWrite + Unpin + 'static,
 {
     /// Read incoming requests from `lightningd` and dispatch their handling.
     #[allow(unused_mut)]
     pub async fn run(mut self, input: I) -> Result<(), Error> {
-        let mut input = FramedRead::new(input, JsonRpcCodec::default());
+        crate::logging::init(self.output.clone()).await?;
+        trace!("Plugin logging initialized");
+
+	let mut input = FramedRead::new(input, JsonRpcCodec::default());
         loop {
             match input.next().await {
                 Some(Ok(msg)) => {
