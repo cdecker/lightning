@@ -6,9 +6,11 @@ use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    env_logger::init();
+    let (plugin, input) = Builder::new((), tokio::io::stdin(), tokio::io::stdout()).build();
 
-    let plugin = Builder::new((), tokio::io::stdin(), tokio::io::stdout());
-    plugin.run().await;
-    Ok(())
+    tokio::spawn(async {
+        tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
+        log::info!("Hello world");
+    });
+    plugin.run(input).await
 }
