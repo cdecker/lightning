@@ -29,11 +29,22 @@ pub enum ChannelStateChangeCause {
 }
 
 #[derive(Copy, Clone, Serialize, Debug, PartialEq)]
-pub enum Amount {
-    Millisatoshi(u64),
-    Satoshi(u64),
-    Millibitcoin(u64),
-    Bitcoin(u64),
+pub struct Amount {
+    msat: u64,
+}
+
+impl Amount {
+    pub fn from_msat(msat: u64) -> Amount {
+        Amount { msat: msat }
+    }
+    pub fn from_sat(sat: u64) -> Amount {
+        Amount { msat: 1_000 * sat }
+    }
+    pub fn from_btc(btc: u64) -> Amount {
+        Amount {
+            msat: 100_000_000 * btc,
+        }
+    }
 }
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq)]
@@ -66,13 +77,11 @@ impl TryFrom<&str> for Amount {
 
         let s = s.to_lowercase();
         if s.ends_with("msat") {
-            Ok(Amount::Millisatoshi(number))
+            Ok(Amount::from_msat(number))
         } else if s.ends_with("sat") {
-            Ok(Amount::Satoshi(number))
-        } else if s.ends_with("mbtc") {
-            Ok(Amount::Millibitcoin(number))
+            Ok(Amount::from_sat(number))
         } else if s.ends_with("btc") {
-            Ok(Amount::Bitcoin(number))
+            Ok(Amount::from_btc(number))
         } else {
             Err(anyhow!("Unable to parse amount from string: {}", s))
         }
@@ -81,12 +90,7 @@ impl TryFrom<&str> for Amount {
 
 impl From<Amount> for String {
     fn from(a: Amount) -> String {
-        match a {
-            Amount::Millisatoshi(v) => format!("{}msat", v),
-            Amount::Satoshi(v) => format!("{}sat", v),
-            Amount::Millibitcoin(v) => format!("{}mbtc", v),
-            Amount::Bitcoin(v) => format!("{}btc", v),
-        }
+        format!("{}msat", a.msat)
     }
 }
 
