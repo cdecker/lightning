@@ -42,7 +42,7 @@ impl Amount {
     }
     pub fn from_btc(btc: u64) -> Amount {
         Amount {
-            msat: 100_000_000 * btc,
+            msat: 100_000_000_000 * btc,
         }
     }
 }
