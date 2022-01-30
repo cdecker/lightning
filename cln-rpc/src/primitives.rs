@@ -115,21 +115,18 @@ mod test {
         }
 
         let tests = vec![
+            ("{\"amount\": \"10msat\"}", Amount { msat: 10 }, "10msat"),
             (
-                "{\"amount\": \"10msat\"}",
-                Amount::Millisatoshi(10),
-                "10msat",
+                "{\"amount\": \"42sat\"}",
+                Amount { msat: 42_000 },
+                "42000msat",
             ),
-            ("{\"amount\": \"42sat\"}", Amount::Satoshi(42), "42sat"),
             (
                 "{\"amount\": \"31337btc\"}",
-                Amount::Bitcoin(31337),
-                "31337btc",
-            ),
-            (
-                "{\"amount\": \"123mbtc\"}",
-                Amount::Millibitcoin(123),
-                "123mbtc",
+                Amount {
+                    msat: 3_133_700_000_000_000,
+                },
+                "3133700000000000msat",
             ),
         ];
 
