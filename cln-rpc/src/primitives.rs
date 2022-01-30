@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Error, Result};
-use serde::Deserializer;
 use serde::{Deserialize, Serialize};
+use serde::{Deserializer, Serializer};
 #[derive(Copy, Clone, Serialize, Deserialize, Debug)]
 #[allow(non_camel_case_types)]
 pub enum ChannelState {
@@ -28,7 +28,7 @@ pub enum ChannelStateChangeCause {
     ONCHAIN,
 }
 
-#[derive(Copy, Clone, Serialize, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Amount {
     msat: u64,
 }
@@ -63,6 +63,15 @@ impl<'de> Deserialize<'de> for Amount {
         let ss: &str = &s;
         ss.try_into()
             .map_err(|_e| Error::custom("could not parse amount"))
+    }
+}
+
+impl Serialize for Amount {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&format!("{}msat", self.msat))
     }
 }
 
