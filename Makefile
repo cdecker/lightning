@@ -366,8 +366,8 @@ GRPC_GEN = tests/node_pb2.py \
 ALL_TEST_GEN += $(GRPC_GEN)
 
 $(GRPC_GEN): cln-grpc/proto/node.proto cln-grpc/proto/primitives.proto
-	python -m grpc_tools.protoc -I cln-grpc/proto cln-grpc/proto/node.proto --python_out=tests/ --grpc_python_out=tests/
-	python -m grpc_tools.protoc -I cln-grpc/proto cln-grpc/proto/primitives.proto --python_out=tests/ --grpc_python_out=tests/
+	python -m grpc_tools.protoc -I cln-grpc/proto cln-grpc/proto/node.proto --python_out=tests/ --grpc_python_out=tests/ --experimental_allow_proto3_optional
+	python -m grpc_tools.protoc -I cln-grpc/proto cln-grpc/proto/primitives.proto --python_out=tests/ --grpc_python_out=tests/ --experimental_allow_proto3_optional
 
 endif
 
