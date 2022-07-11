@@ -3877,6 +3877,7 @@ void wallet_utxoset_add(struct wallet *w,
 			const u32 txindex, const u8 *scriptpubkey,
 			struct amount_sat sat)
 {
+#if !GREENLIGHT
 	struct db_stmt *stmt;
 
 	stmt = db_prepare_v2(w->db, SQL("INSERT INTO utxoset ("
@@ -3898,6 +3899,7 @@ void wallet_utxoset_add(struct wallet *w,
 	db_exec_prepared_v2(take(stmt));
 
 	outpointfilter_add(w->utxoset_outpoints, outpoint);
+#endif
 }
 
 void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
@@ -3914,6 +3916,7 @@ void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
 	db_bind_sha256d(stmt, 2, &fb->prev_hash.shad);
 	db_exec_prepared_v2(take(stmt));
 
+#if !GREENLIGHT
 	for (size_t i = 0; i < tal_count(fb->outpoints); i++) {
 		struct filteredblock_outpoint *o = fb->outpoints[i];
 		stmt =
@@ -3937,6 +3940,7 @@ void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
 
 		outpointfilter_add(w->utxoset_outpoints, &o->outpoint);
 	}
+#endif
 }
 
 bool wallet_have_block(struct wallet *w, u32 blockheight)
