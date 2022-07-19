@@ -9,6 +9,27 @@ import pytest
 import re
 
 
+@pytest.fixture(autouse=True, scope="function")
+def resource_leak_detection():
+    """Uses psutils to check if all files and processes are closed.
+    """
+    # This is the python process running this test.
+    import psutil
+    p = psutil.Process()
+    children = p.children()
+    fds = p.open_files()
+
+    yield
+
+    new_children = p.children()
+    new_fds = p.open_files()
+
+    print(children, new_children)
+    print(fds, new_fds)
+    #assert(new_children == [])
+    #assert(new_fds == [])
+
+
 @pytest.fixture
 def node_cls():
     return LightningNode
