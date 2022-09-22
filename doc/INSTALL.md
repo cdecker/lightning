@@ -77,7 +77,6 @@ There are two ways to build core lightning, and this depends on how you want use
 To build cln to just install a tagged or master version you can use the following commands:
 
     pip3 install --upgrade pip
-    pip3 install mako
     ./configure
     make
     sudo make install
@@ -208,7 +207,9 @@ pkg_add git python gmake py3-pip libtool gmp
 pkg_add automake # (select highest version, automake1.16.2 at time of writing)
 pkg_add autoconf # (select highest version, autoconf-2.69p2 at time of writing)
 ```
-Install `mako` otherwise we run into build errors:
+
+Install python dependencies with `poetry`
+
 ```
 pip3.7 install --user poetry
 poetry install
