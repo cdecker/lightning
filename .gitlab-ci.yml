@@ -11,7 +11,7 @@ variables:
   
 build:
   image: ubuntu:20.04
-  script:
+  before_script:
     - apt-get update -qq
     - >
       apt-get install -qqy \
@@ -39,8 +39,12 @@ build:
     - git config --global user.email "ci@blockstream.com"
     - git config --global user.name "Gitlab CI"
     - git branch --show-current
+    - git submodule update --recursive
+    - git status
+
+  script:
     - python3 build.py $CI_COMMIT_BRANCH
-      
+
   artifacts:
     paths:
       - lightningd-{$CI_COMMIT_BRANCH}.tar.bz2
