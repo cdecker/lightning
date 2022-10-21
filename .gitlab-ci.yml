@@ -33,12 +33,12 @@ build:
         pkg-config \
         gettext \
         zlib1g-dev
-    - pip install -U sh wheel pip mako mrkd mistune==0.8.4
+    - pip install -U sh wheel pip mako mrkd mistune==0.8.4 google-cloud-storage oauth2client
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${RUST_VERSION}  
     - ~/.cargo/bin/rustup toolchain install ${RUST_VERSION} --component rustfmt --allow-downgrade
     - git config --global user.email "ci@blockstream.com"
     - git config --global user.name "Gitlab CI"
-    - echo "$CI_SERVICE_ACCOUNT" > ci-service-account.json
+    - cat "$CI_SERVICE_ACCOUNT" > ci-service-account.json
     - git branch --show-current
     - git submodule update --recursive
     - git status

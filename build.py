@@ -65,10 +65,11 @@ make(
     _err=sys.stderr
 )
 
+filename = f"lightningd-{branch}.tar.bz2"
 tar(
     "-cvjf",
-    f"../../lightningd-{branch}.tar.bz2",
-    f".",
+    f"../../{filename}",
+    f"usr",
     _out=sys.stdout,
     _err=sys.stderr,
     _cwd=f"cln-versions/{branch}",
@@ -81,16 +82,16 @@ comp_version = ld("--version").strip()
 assert comp_version == branch
 
 from pathlib import Path
+from google.cloud import storage
+from google.oauth2.service_account import Credentials
+
 service_acc = Path('ci-service-account.json')
-
 if service_acc.exists():
-    from gcloud import storage
-    from oauth2client.service_account import ServiceAccountCredentials
+    bucket = 'greenlight-artifacts'
+    print(f"Uploading CLN version {filename} to gs://{bucket}/cln/{filename}")
 
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-        service_acc
-    )
+    credentials = Credentials.from_service_account_file(service_acc)
     client = storage.Client(credentials=credentials, project='c-lightning')
-    bucket = client.get_bucket('greenlight-artifacts')
-    blob = bucket.blob(f'lightningd-{branch}.tar.bz2')
-    blob.upload_from_filename(f'lightningd-{branch}.tar.bz2')
+    bucket = client.bucket(bucket)
+    blob = bucket.blob(f"cln/{filename}")
+    blob.upload_from_filename(filename)
