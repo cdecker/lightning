@@ -79,3 +79,18 @@ tar(
 ld = sh.Command(f"cln-versions/{branch}/usr/local/bin/lightningd")
 comp_version = ld("--version").strip()
 assert comp_version == branch
+
+from pathlib import Path
+service_acc = Path('ci-service-account.json')
+
+if service_acc.exists():
+    from gcloud import storage
+    from oauth2client.service_account import ServiceAccountCredentials
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+        service_acc
+    )
+    client = storage.Client(credentials=credentials, project='c-lightning')
+    bucket = client.get_bucket('greenlight-artifacts')
+    blob = bucket.blob(f'lightningd-{branch}.tar.bz2')
+    blob.upload_from_filename(f'lightningd-{branch}.tar.bz2')
