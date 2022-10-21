@@ -47,6 +47,7 @@ bash(
     "--enable-developer",
     "--disable-valgrind",
     "--enable-experimental-features",
+    "--enable-static",
     _out=sys.stdout,
     _err=sys.stderr,
 )
