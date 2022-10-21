@@ -38,6 +38,7 @@ build:
     - ~/.cargo/bin/rustup toolchain install ${RUST_VERSION} --component rustfmt --allow-downgrade
     - git config --global user.email "ci@blockstream.com"
     - git config --global user.name "Gitlab CI"
+    - echo "$CI_SERVICE_ACCOUNT" > ci-service-account.json
     - git branch --show-current
     - git submodule update --recursive
     - git status
