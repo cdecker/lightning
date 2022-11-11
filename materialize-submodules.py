@@ -51,8 +51,20 @@ for module in submodules.values():
     gsubtree(
         'add',
         f'--prefix={module["path"]}',
-        module['url'], module['hash']
+        module['url'],
+        module['hash']
     )
 
+# Manually add the bloody secp256k1 submodule
+grm('external/libwally-core/src/secp256k1')
+commit('Materializing secp256k1 submodule')
+gsubtree(
+    'add',
+    '--prefix=external/libwally-core/src/secp256k1',
+    '--squash',
+    'https://github.com/ElementsProject/secp256k1-zkp.git',
+    '6c0aecf72b1f4290f50302440065392715d6240a',
+)
+
 #mv(".gitignore.bak", ".gitignore")
-commit("scripted: Materialize submodules")
+#commit("scripted: Materialize submodules")
