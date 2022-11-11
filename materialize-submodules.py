@@ -57,7 +57,7 @@ for module in submodules.values():
     )
 
 # Manually add the bloody secp256k1 submodule
-grm('external/libwally-core/src/secp256k1')
+rm('external/libwally-core/src/secp256k1')
 commit('Materializing secp256k1 submodule')
 gsubtree(
     'add',
