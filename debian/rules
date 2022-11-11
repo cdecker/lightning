@@ -18,6 +18,9 @@ export DH_VERBOSE = 1
 	dh $@  --with autotools_dev
 
 
+override_dh_auto_clean:
+	echo Clean disabled
+
 override_dh_auto_build:
 	# Trick cargo into not writing stuff to our non-existent $HOME
 	mkdir /tmp/home
