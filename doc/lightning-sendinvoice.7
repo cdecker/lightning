@@ -1,18 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-SENDINVOICE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-SENDINVOICE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-sendinvoice -- Command for send an invoice for an offer
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB(WARNING: experimental-offers only)\fR
 .PP
 \fBsendinvoice\fR \fIoffer\fR \fIlabel\fR [\fImsatoshi\fR] [\fItimeout\fR] [\fIquantity\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBsendinvoice\fR RPC command creates and sends an invoice to the
 issuer of an \fIoffer\fR for it to pay: the offer must contain
 \fIsend_invoice\fR; see lightning-fetchinvoice(7).
@@ -36,9 +30,7 @@ timeout on the invoice that is sent.
 .PP
 \fIquantity\fR is optional: it is required if the \fIoffer\fR specifies
 \fIquantity_min\fR or \fIquantity_max\fR, otherwise it is not allowed.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBlabel\fR (string): unique label supplied at invoice creation
@@ -107,16 +99,10 @@ The following error codes may occur:
 - 1003: Cannot find a route to the node making the offer.
 - 1004: The node making the offer returned an error message.
 - 1005: We timed out waiting for the invoice to be paid
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-fetchinvoice(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:8d2a00eea77f3bb7e4e285c7d589752cf0d72ec9e14de03d023e5704342a4f6e
+\" SHA256STAMP:e270fd905a359b9d9ff906db263d2ff8548c4506c6e292d97c03c2b45d82eca1

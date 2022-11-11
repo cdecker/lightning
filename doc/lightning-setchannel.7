@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-SETCHANNEL" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-SETCHANNEL" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-setchannel -- Command for configuring fees / htlc range advertized for a channel
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBsetchannel\fR \fIid\fR [\fIfeebase\fR] [\fIfeeppm\fR] [\fIhtlcmin\fR] [\fIhtlcmax\fR] [\fIenforcedelay\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBsetchannel\fR RPC command sets channel specific routing fees, and
 \fChtlc_minimum_msat\fR or \fChtlc_maximum_msat\fR as defined in BOLT #7. The channel has to be in
 normal or awaiting state.  This can be checked by \fBlistpeers\fR
@@ -63,9 +57,7 @@ HTLCs before they do.  This only has an effect if rates are increased
 only applied to a single rate increase per channel (we don't remember
 an arbitrary number of prior feerates) and if the node is restarted
 the updated configuration is enforced immediately.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBchannels\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBpeer_id\fR (pubkey): The node_id of the peer
@@ -104,7 +96,7 @@ On success, an object containing \fBchannels\fR is returned.  It is an array of 
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid, optional): the short\fIchannel\fRid (if locked in)
+\fBshort_channel_id\fR (short_channel_id, optional): the short\fIchannel\fRid (if locked in)
 .if n \
 .sp -1
 .if t \
@@ -121,26 +113,18 @@ the following warnings are possible:
 .IP "\(bu" 2
 \fBwarning_htlcmax_too_high\fR: The requested htlcmax was greater than the channel capacity, so we set it to the channel capacity
 .RE
-.SH
-ERRORS
-.LP
+.SH ERRORS
 The following error codes may occur:
 - -1: Channel is in incorrect state, i.e. Catchall nonspecific error.
 - -32602: JSONRPC2_INVALID_PARAMS, i.e. Given id is not a channel ID
 or short channel ID.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Michael Schmoock <\fImichael@schmoock.net\fR> is the author of this
 feature. Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly
 responsible for the Core Lightning project.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightningd-config(5), lightning-fundchannel(7),
 lightning-listchannels(7), lightning-listpeers(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:daaaeed056033d0237675d1369505203a502c623c7983c8e4ebe8adda26a318e
+\" SHA256STAMP:08c47cf800aea62397b2c613baacf7fe9cc304424b39ae7c167f3d8d2a5a9bdf

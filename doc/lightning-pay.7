@@ -1,18 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-PAY" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-PAY" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-pay -- Command for sending a payment to a BOLT11 invoice
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBpay\fR \fIbolt11\fR [\fImsatoshi\fR] [\fIlabel\fR] [\fIriskfactor\fR]
 [\fImaxfeepercent\fR] [\fIretry_for\fR] [\fImaxdelay\fR] [\fIexemptfee\fR]
-[\fIlocalofferid\fR] [\fIexclude\fR] [\fImaxfee\fR] [\fIdescription\fR]
-.SH
-DESCRIPTION
-.LP
+[\fIlocalinvreqid\fR] [\fIexclude\fR] [\fImaxfee\fR] [\fIdescription\fR]
+.SH DESCRIPTION
 The \fBpay\fR RPC command attempts to find a route to the given
 destination, and send the funds it asks for. If the \fIbolt11\fR does not
 contain an amount, \fImsatoshi\fR is required, otherwise if it is specified
@@ -34,8 +28,8 @@ leveraged by forwarding nodes. Setting \fCexemptfee\fR allows the
 \fCmaxfeepercent\fR check to be skipped on fees that are smaller than
 \fCexemptfee\fR (default: 5000 millisatoshi).
 .PP
-\fClocalofferid\fR is used by offers to link a payment attempt to a local
-\fCsend_invoice\fR offer created by lightningd-offerout(7).  This ensures
+\fClocalinvreqid\fR is used by offers to link a payment attempt to a local
+\fCinvoice_request\fR offer created by lightningd-invoicerequest(7).  This ensures
 that we only make a single payment for an offer, and that the offer is
 marked \fCused\fR once paid.
 .PP
@@ -66,9 +60,7 @@ or nodes.
 .PP
 When using \fIlightning-cli\fR, you may skip optional parameters by using
 \fInull\fR. Alternatively, use \fB-k\fR option to provide parameters by name.
-.SH
-RANDOMIZATION
-.LP
+.SH RANDOMIZATION
 To protect user privacy, the payment algorithm performs some
 randomization.
 .PP
@@ -89,9 +81,7 @@ nodes from reliably guessing their distance from the payee.
 Route randomization will never exceed \fImaxfeepercent\fR of the payment.
 Route randomization and shadow routing will not take routes that would
 exceed \fImaxdelay\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBpayment_preimage\fR (secret): the proof of payment: SHA256 of this \fBpayment_hash\fR (always 64 characters)
@@ -182,17 +172,11 @@ remote node and the \fIfailcode\fR has the UPDATE bit set, as per BOLT #4.
 The \fIdata\fR field of errors will include statistics \fIgetroute_tries\fR and
 \fIsendpay_tries\fR. It will also contain a \fIfailures\fR field with detailed
 data about routing errors.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listpays(7), lightning-decodepay(7), lightning-listinvoice(7),
 lightning-delinvoice(7), lightning-getroute(7), lightning-invoice(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:d49dd9ee6fe05223ad55625101afc09c8140a0023e3503b81e42e5070ecc60e7
+\" SHA256STAMP:7e0463c79abf1c67ba7d80fce331fb0ec939a664aa62789bf8a7d402ba13b3b9

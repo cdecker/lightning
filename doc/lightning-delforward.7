@@ -1,0 +1,35 @@
+.\" -*- mode: troff; coding: utf-8 -*-
+.TH "LIGHTNING-DELFORWARD" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
+lightning-delforward -- Command for removing a forwarding entry
+.SH SYNOPSIS
+\fBdelforward\fR \fIin_channel\fR \fIin\fIhtlc\fIid\fR \fIstatus\fR
+.SH DESCRIPTION
+The \fBdelforward\fR RPC command removes a single forward from \fBlistforwards\fR,
+using the uniquely-identifying \fIin_channel\fR and \fIin\fIhtlc\fIid\fR (and, as a sanity
+check, the \fIstatus\fR) given by that command.
+.PP
+This command is mainly used by the \fIautoclean\fR plugin (see lightningd-config(7)),
+As these database entries are only kept for your own analysis, removing them
+has no effect on the running of your node.
+.PP
+You cannot delete forwards which have status \fIoffered\fR (i.e. are
+currently active).
+.PP
+Note: for \fBlistforwards\fR entries without an \fIin\fIhtlc\fIid\fR entry (no
+longer created in v22.11, but can exist from older versions), a value
+of 18446744073709551615 can be used, but then it will delete \fIall\fR
+entries without \fIin\fIhtlc\fIid\fR for this \fIin_channel\fR and \fIstatus\fR.
+.SH RETURN VALUE
+On success, an empty object is returned.
+.SH ERRORS
+The following errors may be reported:
+.IP "\(bu" 2
+1401: The forward specified does not exist.
+.SH AUTHOR
+Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
+.SH SEE ALSO
+lightning-autoclean(7)
+.SH RESOURCES
+Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
+\" SHA256STAMP:83e84c13916a2325d85362f80ad4ac402eb312f3fbbb5058be74af68eb883b86

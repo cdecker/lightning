@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-NOTIFICATIONS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-NOTIFICATIONS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-notifications -- Command to set up notifications.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBnotifications\fR \fIenable\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBnotifications\fR the RPC command enabled notifications for this JSON-RPC
 connection.  By default (and for backwards-compatibility) notifications are
 disabled.
@@ -19,8 +13,7 @@ Various commands, especially complex and slow ones, offer
 notifications which indicate their progress.
 .IP "\(bu" 2
 \fIenable\fR: \fItrue\fR to enable notifications, \fIfalse\fR to disable them.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -31,9 +24,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-NOTIFICATIONS
-.LP
+.SH NOTIFICATIONS
 Notifications are JSON-RPC objects without an \fIid\fR field.  \fIlightningd\fR sends
 notifications (once enabled with this \fInotifications\fR command) with a \fIparams\fR
 \fIid\fR field indicating which command the notification refers to.
@@ -54,9 +45,7 @@ as per lightning-getlog(7): \fIinfo\fR and \fIdebug\fR are typical.
 \fIprogress\fR: param \fInum\fR and \fItotal\fR, where \fInum\fR starts at 0 and is always
 less than \fItotal\fR. Optional param \fIstage\fR with fields \fInum\fR and \fItotal\fR,
 indicating what stage we are progressing through.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an empty object is returned.
 .PP
 On success, if \fIenable\fR was \fItrue\fR, notifications will be forwarded
@@ -65,8 +54,7 @@ from then on.
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters.
-.SH
-EXAMPLE NOTIFICATIONS
+.SH EXAMPLE NOTIFICATIONS
 .LP
 .EX
 {
@@ -93,12 +81,8 @@ EXAMPLE NOTIFICATIONS
    }
 }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@blockstream.com\fR> wrote the initial version of this man page.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:c8c967d8326ce0fd812f41506bcaf557684b6c7485e30d0db890b31f1228e376
+\" SHA256STAMP:09833e7e340ab2c88766b454d96a95a4fec1411a1e37ae0329f2e0b849de593a

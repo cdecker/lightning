@@ -1,19 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-GETINFO" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-GETINFO" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-getinfo -- Command to receive all information about the Core Lightning node.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBgetinfo\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBgetinfo\fR gives a summary of the current running node.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -22,9 +15,7 @@ EXAMPLE JSON REQUEST
   \(dqparams\(dq: {}
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBid\fR (pubkey): The public key unique to this node
@@ -182,8 +173,7 @@ The following warnings may also be returned:
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters or some error happened during the command process.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -228,16 +218,10 @@ EXAMPLE JSON RESPONSE
 }
 
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-fundchannel(7), lightning-listconfigs(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:b81018f094b8f69606aaf0ae0ba6ea187db251d97d1fcc67c3c7f9f75222d3ad
+\" SHA256STAMP:13dbacb0896897fc061d1a55d752029fc169a499d4683c454d5081265507ca69

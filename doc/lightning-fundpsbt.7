@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-FUNDPSBT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-FUNDPSBT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-fundpsbt -- Command to populate PSBT inputs from the wallet
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBfundpsbt\fR \fIsatoshi\fR \fIfeerate\fR \fIstartweight\fR [\fIminconf\fR] [\fIreserve\fR] [\fIlocktime\fR] [\fImin\fIwitness\fIweight\fR] [\fIexcess\fIas\fIchange\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCfundpsbt\fR is a low-level RPC command which creates a PSBT using unreserved
 inputs in the wallet, optionally reserving them as well.
 .PP
@@ -48,9 +42,7 @@ the actual witness weight will be used.
 .PP
 \fIexcess\fIas\fIchange\fR is an optional boolean to flag to add a change output
 for the excess sats.
-.SH
-EXAMPLE USAGE
-.LP
+.SH EXAMPLE USAGE
 Let's assume the caller is trying to produce a 100,000 satoshi output.
 .PP
 First, the caller estimates the weight of the core (typically 42) and
@@ -67,9 +59,7 @@ PSBT.  Say \fIfeerate\fIper\fIkw\fR is 253, and the change output is a P2WPKH
 (weight 124), the cost is around 31 sats.  With the dust limit disallowing
 payments below 546 satoshis, we would only create a change output
 if \fIexcess_msat\fR was greater or equal to 31 + 546.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBpsbt\fR (string): Unsigned PSBT which fulfills the parameters given
@@ -154,16 +144,10 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 301: Insufficient UTXOs to meet \fIsatoshi\fR value.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-utxopsbt(7), lightning-reserveinputs(7), lightning-unreserveinputs(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:eb3eae0c99d8ca66427b89b0506842f78e9d490d3f538ca3a795142c343bb664
+\" SHA256STAMP:392e87d761a0e66147a0ce3970af1c0c5b18ca4f4c6f53c71388f87ff247800b

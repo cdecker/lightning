@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-DISCONNECT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-DISCONNECT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-disconnect -- Command for disconnecting from another lightning node
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBdisconnect\fR \fIid\fR [\fIforce\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The disconnect RPC command closes an existing connection to a peer,
 identified by \fIid\fR, in the Lightning Network, as long as it doesn't have
 an active channel. If \fIforce\fR is set then it will disconnect even with
@@ -33,9 +27,7 @@ returns a set of peers:
 .PP
 Passing the \fIid\fR attribute of a peer to \fIdisconnect\fR will terminate the
 connection.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an empty object is returned.
 .PP
 On error the returned object will contain \fCcode\fR and \fCmessage\fR properties,
@@ -48,16 +40,10 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 -1: Catchall nonspecific error.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Michael Hawkins <\fImichael.hawkins@protonmail.com\fR>.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(1), lightning-listpeers(1)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:d8bd29af48ec552d04c299cea5d3dacad93a02e2e50a3666dfb8865b05379576
+\" SHA256STAMP:125a33b5ea5ae1b9e1c586698f8e62a4ef1200271c593e4e243486caa12454aa

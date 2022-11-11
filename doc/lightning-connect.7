@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-CONNECT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-CONNECT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-connect -- Command for connecting to another lightning node
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBconnect\fR \fIid\fR [\fIhost\fR] [\fIport\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBconnect\fR RPC command establishes a new connection with another
 node in the Lightning Network.
 .PP
@@ -45,9 +39,7 @@ lightning-fundchannel(7).
 If there are active channels with the peer, \fBconnect\fR returns once
 all the subdaemons are in place to handle the channels, not just once
 it's connected.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBid\fR (pubkey): the peer we connected to
@@ -91,9 +83,7 @@ If \fBtype\fR is \(dqipv4\(dq, \(dqipv6\(dq, \(dqtorv2\(dq or \(dqtorv3\(dq:
 .IP "\(bu" 2
 \fBport\fR (u16): port number
 .RE
-.SH
-ERRORS
-.LP
+.SH ERRORS
 On failure, one of the following errors will be returned:
 .LP
 .EX
@@ -118,18 +108,12 @@ If the given parameters are wrong:
 .EX
 { \(dqcode\(dq : -32602, \(dqmessage\(dq : \(dq...\(dq }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
 Felix <\fIfixone@gmail.com\fR> is the original author of this manpage.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-fundchannel(7), lightning-listpeers(7),
 lightning-listchannels(7), lightning-disconnect(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:327df39f103d932b9d121370dd704a9c4810bc3988e9eadf697d6af464eed0e5
+\" SHA256STAMP:8c2b8f26c014abf14d1d2832e460a1b2c01f7840e02886b093c172999529474b

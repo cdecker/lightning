@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-CREATEINVOICE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-CREATEINVOICE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-createinvoice -- Low-level invoice creation
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBcreateinvoice\fR \fIinvstring\fR \fIlabel\fR \fIpreimage\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBcreateinvoice\fR RPC command signs and saves an invoice into the
 database.
 .PP
@@ -26,9 +20,7 @@ of this invoice.
 .PP
 The \fIpreimage\fR is the preimage to supply upon successful payment of
 the invoice.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 (Note: the return format is the same as lightning-listinvoices(7)).
 .PP
 On success, an object is returned, containing:
@@ -111,7 +103,7 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBpayer_note\fR (string, optional): the optional \fIpayer_note\fR from invoice_request which created this invoice (\fBexperimental-offers\fR only).
+\fBinvreq_payer_note\fR (string, optional): the optional \fIinvreq\fIpayer\fInote\fR from invoice_request which created this invoice (\fBexperimental-offers\fR only).
 .LP
 On failure, an error is returned and no invoice is created. If the
 lightning process fails before responding, the caller should use
@@ -121,17 +113,11 @@ not.
 The following error codes may occur:
 - -1: Catchall nonspecific error.
 - 900: An invoice with the given \fIlabel\fR already exists.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-invoice(7), lightning-listinvoices(7), lightning-delinvoice(7),
 lightning-getroute(7), lightning-sendpay(7), lightning-offer(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:0196c04ab92816d2bb24986c0234c09b0b7bc5e37be8e89a5906383e103e216f
+\" SHA256STAMP:d723fbdbb13f3811b63da899105ded3966464722fe4f6f1d6092b80c598efa5d

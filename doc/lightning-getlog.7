@@ -1,21 +1,14 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-GETLOG" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-GETLOG" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-getlog -- Command to show logs.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBgetlog\fR [\fIlevel\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBgetlog\fR the RPC command to show logs, with optional log \fIlevel\fR.
 .IP "\(bu" 2
 \fIlevel\fR: A string that represents the log level (\fIbroken\fR, \fIunusual\fR, \fIinfo\fR, \fIdebug\fR, or \fIio\fR).  The default is \fIinfo\fR.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -26,9 +19,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBcreated_at\fR (string): UNIX timestamp with 9 decimal places, when logging was initialized
@@ -118,8 +109,7 @@ If \fBtype\fR is \(dqIO\fIIN\(dq or \(dqIO\fROUT\(dq:
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -140,12 +130,8 @@ EXAMPLE JSON RESPONSE
    ]
 }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:6df0ea58b53a599f18299b5f47f168ba698de10dbdb74c964b2bbc0151e25ae6
+\" SHA256STAMP:3e090a0eb332d253aa7647526a6f0ac3c2c714e0420cdc2c0e2bd6c875c02914

@@ -1,21 +1,13 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-TXSEND" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-TXSEND" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-txsend -- Command to sign and send transaction from txprepare
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBtxsend\fR \fItxid\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBtxsend\fR RPC command signs and broadcasts a transaction created by
 \fBtxprepare\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBpsbt\fR (string): the completed PSBT representing the signed transaction
@@ -37,16 +29,10 @@ the transaction are unreserved.
 .PP
 The following error codes may occur:
 - -1: Catchall nonspecific error.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-txprepare(7), lightning-txdiscard(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:307fe0c91c1d4b7461d56eec6713609a89a38992daa585fa0059f1cd56309676
+\" SHA256STAMP:9f66da74019446e2f006f1f67d5755a5ba97b0d4b79a1e1bd29644fa4f1af9b1

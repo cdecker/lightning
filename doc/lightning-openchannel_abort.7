@@ -1,24 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-OPENCHANNEL_ABORT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-OPENCHANNEL_ABORT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-openchannel_abort -- Command to abort a channel to a peer
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBopenchannel_abort\fR \fIchannel_id\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCopenchannel_init\fR is a low level RPC command which initiates a channel
 open with a specified peer. It uses the openchannel protocol
 which allows for interactive transaction construction.
 .PP
 \fIchannel_id\fR is id of this channel.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBchannel_id\fR (hex): the channel id of the aborted channel (always 64 characters)
@@ -63,20 +55,14 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 312: Channel in an invalid state
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-openchannel_init(7), lightning-openchannel_update(7),
 lightning-openchannel_signed(7), lightning-openchannel_bump(7),
 lightning-fundchannel_start(7), lightning-fundchannel_complete(7),
 lightning-fundchannel(7), lightning-fundpsbt(7), lightning-utxopsbt(7),
 lightning-multifundchannel(7)
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 @niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:75c8d58ae53e2b747ee2b53e8af2d4ffdde91963a4f182041f54626b6133c121
+\" SHA256STAMP:95d5b56aebca3e7081f3a40e4f927bfea67a9c18ee0e2a0fd9a8e02c92a68609

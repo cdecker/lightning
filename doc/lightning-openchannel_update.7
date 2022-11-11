@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-OPENCHANNEL_UPDATE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-OPENCHANNEL_UPDATE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-openchannel_update -- Command to update a collab channel open
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBopenchannel_update\fR \fIchannel_id\fR \fIpsbt\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCopenchannel_update\fR is a low level RPC command which continues an open
 channel, as specified by \fIchannel_id\fR. An updated  \fIpsbt\fR is passed in; any
 changes from the PSBT last returned (either from \fCopenchannel_init\fR or
@@ -26,9 +20,7 @@ returned by the last call to \fCopenchannel_update\fR.
 .PP
 \fIpsbt\fR is the updated PSBT to be sent to the peer. May be identical to
 the PSBT last returned by either \fCopenchannel_init\fR or \fCopenchannel_update\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBchannel_id\fR (hex): the channel id of the channel (always 64 characters)
@@ -95,20 +87,14 @@ in the funding transaction.
 .sp -0.25v
 .IP "\(bu" 2
 312: Channel in an invalid state
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-openchannel_init(7), lightning-openchannel_signed(7),
 lightning-openchannel_bump(7), lightning-openchannel_abort(7), 
 lightning-fundchannel_start(7), lightning-fundchannel_complete(7),
 lightning-fundchannel(7), lightning-fundpsbt(7), lightning-utxopsbt(7),
 lightning-multifundchannel(7)
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 @niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:7778e05c179a54e7eea93dd8e20cce50eeda8d9162b99e18eda439b792138cd6
+\" SHA256STAMP:6a8e9119c1d35942ca7414183d248e58b89bdc4f7e2c9a05fd886e67f287e113

@@ -1,22 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNINGD" "8" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNINGD" "8" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightningd -- Daemon for running a Lightning Network node
-.SH
-SYNOPSIS
+.SH SYNOPSIS
 .LP
 .EX
 lightningd [--conf=<config-file>] [OPTIONS]
 .EE
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fBlightningd\fR starts the Core Lightning daemon, which implements a
 standards-compliant Lightning Network node.
-.SH
-CONFIGURATION OPTIONS
+.SH CONFIGURATION OPTIONS
 .IP "\(bu" 2
 \fB--conf\fR=\fIFILE\fR
 Specify configuration file. If not an absolute path, will be relative
@@ -25,18 +19,14 @@ from the lightning-dir location. Defaults to \fIconfig\fR.
 \fB--lightning-dir\fR=\fIDIR\fR
 Set the directory for the Core Lightning daemon. Defaults to
 \fI$HOME/.lightning\fR.
-.SH
-MORE OPTIONS
-.LP
+.SH MORE OPTIONS
 Command line options are mirrored as configuration options in the
 configuration file, so \fCfoo\fR in the configuration file simply becomes
 \fC--foo\fR on the command line, and \fCfoo=bar\fR becomes \fC--foo=bar\fR.
 .PP
 See lightningd-config(5) for a comprehensive list of all available
 options.
-.SH
-LOGGING AND COMMANDING CORE LIGHTNING
-.LP
+.SH LOGGING AND COMMANDING CORE LIGHTNING
 By default, Core Lightning will log to the standard output.
 To log to a specific file, use \fB--log-file\fR=\fIPATH\fR.
 Sending SIGHUP will cause Core Lightning to reopen this file,
@@ -52,9 +42,7 @@ once \fBlightningd\fR has started; you need to match the
 .PP
 Commands for Core Lightning are described in various manpages
 in section 7, with the common prefix \fBlightning-\fR.
-.SH
-QUICK START
-.LP
+.SH QUICK START
 First, decide on and create a directory for \fIlightning-dir\fR, or just use
 the default \fI$HOME/.lightning\fR. Then create a \fIconfig\fR file in this
 directory containing your configuration.
@@ -170,8 +158,7 @@ merchant, and use lightning-pay(7) to pay it:
 .EX
 $ lightning-cli pay $INVOICE
 .EE
-.SH
-ERRORS CODE
+.SH ERRORS CODE
 .IP "\(bu" 2
 1: Generic lightning-cli error
 .if n \
@@ -216,32 +203,23 @@ ERRORS CODE
 .sp -0.25v
 .IP "\(bu" 2
 30: Wallet database does not match (network or hsm secret)
-.SH
-BUGS
-.LP
+.SH BUGS
 You should report bugs on our github issues page, and maybe submit a fix
 to gain our eternal gratitude!
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 ZmnSCPxj <\fIZmnSCPxj@protonmail.com\fR> wrote the initial version of
 this man page, but many others did the hard work of actually
 implementing a standards-compliant Lightning Network node
 implementation.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
+lightningd-rpc(7),
 lightning-listconfigs(7), lightningd-config(5), lightning-cli(1),
 lightning-newaddr(7), lightning-listfunds(7), lightning-connect(7),
 lightning-fundchannel(7), lightning-listpeers(7), lightning-pay(7),
 lightning-hsmtool(8)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-.SH
-COPYING
-.LP
+.SH COPYING
 Note: the modules in the ccan/ directory have their own licenses, but
 the rest of the code is covered by the BSD-style MIT license.
-\" SHA256STAMP:4024e68214a9c1e00784c2f51c6cbf8ca9196a76d80a95834c131d0b30ab211e
+\" SHA256STAMP:dd9fd4c34f0c02fafd9be99b0174cfb4f23a8c101a96ae1080bae24a36ae734b

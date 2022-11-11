@@ -1,19 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTTRANSACTIONS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTTRANSACTIONS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listtransactions -- Command to get the list of transactions that was stored in the wallet.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlisttransactions\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlisttransactions\fR command returns transactions tracked in the wallet. This includes deposits, withdrawals and transactions related to channels. A transaction may have multiple types, e.g., a transaction may both be a close and a deposit if it closes the channel and returns funds to the wallet.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -22,9 +15,7 @@ EXAMPLE JSON REQUEST
   \(dqparams\(dq: {}
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBtransactions\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBhash\fR (txid): the transaction id
@@ -90,7 +81,7 @@ On success, an object containing \fBtransactions\fR is returned.  It is an array
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBchannel\fR (short\fIchannel\fRid, optional): the channel this input is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
+\fBchannel\fR (short_channel_id, optional): the channel this input is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
 .RE
 .if n \
 .sp -1
@@ -124,7 +115,7 @@ On success, an object containing \fBtransactions\fR is returned.  It is an array
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBchannel\fR (short\fIchannel\fRid, optional): the channel this output is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
+\fBchannel\fR (short_channel_id, optional): the channel this output is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
 .RE
 .if n \
 .sp -1
@@ -141,12 +132,11 @@ Reason we care about this transaction (\fIEXPERIMENTAL_FEATURES\fR only) (one of
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBchannel\fR (short\fIchannel\fRid, optional): the channel this transaction is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
+\fBchannel\fR (short_channel_id, optional): the channel this transaction is associated with (\fIEXPERIMENTAL_FEATURES\fR only)
 .LP
 On failure, one of the following error codes may be returned:
 - -32602: Error in given parameters.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -181,16 +171,10 @@ EXAMPLE JSON RESPONSE
     ]
 }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-newaddr(7), lightning-listfunds(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:ba565dd7aeb162e8c0f810d2ba4192f54a1ddb70d15ef25c658740e0ee1d0493
+\" SHA256STAMP:12c3deddf8be491dad984504a055980fc09553c59bc44dcb9827dade69326283

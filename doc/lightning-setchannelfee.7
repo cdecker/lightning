@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-SETCHANNELFEE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-SETCHANNELFEE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-setchannelfee -- Command for setting specific routing fees on a lightning channel
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 (DEPRECATED) \fBsetchannelfee\fR \fIid\fR [\fIbase\fR] [\fIppm\fR] [\fIenforcedelay\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBsetchannelfee\fR RPC command sets channel specific routing fees as
 defined in BOLT #7. The channel has to be in normal or awaiting state.
 This can be checked by \fBlistpeers\fR reporting a \fIstate\fR of
@@ -44,9 +38,7 @@ always allow users to overpay fees), only applies to a single rate
 increase per channel (we don't remember an arbitrary number of prior
 feerates) and if the node is restarted the updated fees are enforced
 immediately.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBbase\fR (u32): The fee\fIbase\fRmsat value
@@ -76,27 +68,19 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid, optional): the short\fIchannel\fRid (if locked in)
+\fBshort_channel_id\fR (short_channel_id, optional): the short\fIchannel\fRid (if locked in)
 .RE
-.SH
-ERRORS
-.LP
+.SH ERRORS
 The following error codes may occur:
 - -1: Channel is in incorrect state, i.e. Catchall nonspecific error.
 - -32602: JSONRPC2_INVALID_PARAMS, i.e. Given id is not a channel ID
 or short channel ID.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Michael Schmoock <\fImichael@schmoock.net\fR> is the author of this
 feature. Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly
 responsible for the Core Lightning project.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightningd-setchannel(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:cf1dcc0910a91ae39e23c98b38e4e51b73d95d5b6f135e360eabf944dfd46393
+\" SHA256STAMP:99c4c045f7cd1209f4c2a1bfe0ebacfb6c8d5f3c4e3603776c0cf1a96e4246dd

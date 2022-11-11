@@ -1,22 +1,14 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-BKPR-INSPECT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-BKPR-INSPECT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-bkpr-inspect -- Command to show onchain footprint of a channel
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBbkpr-inspect\fR \fIaccount\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBbkpr-inspect\fR RPC command lists all known on-chain transactions and
 associated events for the provided account. Useful for inspecting unilateral
 closes for a given channel account. Only valid for channel accounts.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBtxs\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBtxid\fR (txid): transaction id
@@ -102,16 +94,10 @@ On success, an object containing \fBtxs\fR is returned.  It is an array of objec
 .sp -0.25v
 .IP "\(bu" 2
 \fBblockheight\fR (u32, optional): Blockheight of transaction
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei \fIniftynei@gmail.com\fR is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listbalances(7), lightning-listfunds(7), lightning-listpeers(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:e7cfcfed93eef02fb1cb5fbdf303d2fbe8083ed1acc83097636c4e44f6d277ec
+\" SHA256STAMP:b35a76b9fda62e189871a1b014291318e40c841b5fb6fe646789a81025408f8b

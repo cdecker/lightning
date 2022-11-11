@@ -1,18 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-FETCHINVOICE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-FETCHINVOICE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-fetchinvoice -- Command for fetch an invoice for an offer
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB(WARNING: experimental-offers only)\fR
 .PP
 \fBfetchinvoice\fR \fIoffer\fR [\fImsatoshi\fR] [\fIquantity\fR] [\fIrecurrence_counter\fR] [\fIrecurrence_start\fR] [\fIrecurrence_label\fR] [\fItimeout\fR] [\fIpayer_note\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBfetchinvoice\fR RPC command contacts the issuer of an \fIoffer\fR to get
 an actual invoice that can be paid.  It highlights any changes between the
 offer and the returned invoice.
@@ -46,9 +40,7 @@ calls for the same recurrence, as it is used to link them together.
 we fail (default, 60 seconds).
 .PP
 \fIpayer_note\fR is an optional payer note to include in the fetched invoice.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBinvoice\fR (string): The BOLT12 invoice we fetched
@@ -127,16 +119,10 @@ The following error codes may occur:
 - 1003: Cannot find a route to the node making the offer.
 - 1004: The node making the offer returned an error message.
 - 1005: We timed out trying to fetch an invoice.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-sendinvoice(7), lightning-pay(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:5a07ed5e5a8e49d00fbad27a3baf9b95b7b0af7bef9edadbdbf25ceed4f89ae5
+\" SHA256STAMP:ec030c51b382ba86abc7ddda59fc2f85b72af1816c977510c5d3de1b94e1a5a4

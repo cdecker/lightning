@@ -1,17 +1,11 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-GETROUTE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-GETROUTE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-getroute -- Command for routing a payment (low-level)
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBgetroute\fR \fIid\fR \fImsatoshi\fR \fIriskfactor\fR [\fIcltv\fR] [\fIfromid\fR]
 [\fIfuzzpercent\fR] [\fIexclude\fR] [\fImaxhops\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBgetroute\fR RPC command attempts to find the best route for the
 payment of \fImsatoshi\fR to lightning node \fIid\fR, such that the payment will
 arrive at \fIid\fR with \fIcltv\fR-blocks to spare (default 9).
@@ -48,9 +42,7 @@ or nodes. Note if the source or destination is excluded, the command result
 is undefined.
 .PP
 \fImaxhops\fR is the maximum number of channels to return; default is 20.
-.SH
-RISKFACTOR EFFECT ON ROUTING
-.LP
+.SH RISKFACTOR EFFECT ON ROUTING
 The risk factor is treated as if it were an additional fee on the route,
 for the purposes of comparing routes.
 .PP
@@ -74,9 +66,7 @@ Here are the risk fees in millisatoshis, using various parameters. I
 assume a channel charges the default of 1000 millisatoshis plus 1
 part-per-million. Common to_self_delay values on the network at 14 and
 144 blocks.
-.SH
-RECOMMENDED RISKFACTOR VALUES
-.LP
+.SH RECOMMENDED RISKFACTOR VALUES
 The default \fIfuzz\fR factor is 5%, so as you can see from the table above,
 that tends to overwhelm the effect of \fIriskfactor\fR less than about 5.
 .PP
@@ -88,9 +78,7 @@ costs.
 .PP
 The default for lightning-pay(7) is 10, which starts to become a major
 factor for larger amounts, and is basically ignored for tiny ones.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBroute\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBid\fR (pubkey): The node at the end of this hop
@@ -99,7 +87,7 @@ On success, an object containing \fBroute\fR is returned.  It is an array of obj
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBchannel\fR (short\fIchannel\fRid): The channel joining these nodes
+\fBchannel\fR (short_channel_id): The channel joining these nodes
 .if n \
 .sp -1
 .if t \
@@ -130,16 +118,10 @@ difference between the first \fImsatoshi\fR minus the \fImsatoshi\fR given in
 the input is the fee (assuming the first hop is free). The first
 \fIdelay\fR is the very worst case timeout for the payment failure, in
 blocks.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-pay(7), lightning-sendpay(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:fda08c6f73af3c8e8f6e6d867828a1a81eab47624c02e926c0815bf14e0e8ce1
+\" SHA256STAMP:6e4a7c6733078143595faa9d9a342a68f430537c6a1b1d19efd5d76a00c2f8d6

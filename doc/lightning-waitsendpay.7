@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-WAITSENDPAY" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-WAITSENDPAY" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-waitsendpay -- Command for sending a payment via a route
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBwaitsendpay\fR \fIpayment_hash\fR [\fItimeout\fR] [\fIpartid\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBwaitsendpay\fR RPC command polls or waits for the status of an
 outgoing payment that was initiated by a previous \fBsendpay\fR
 invocation.
@@ -30,9 +24,7 @@ of the status of the payment.
 If the payment completed with success, this command returns with
 success. Otherwise, if the payment completed with failure, this command
 returns an error.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBid\fR (u64): unique ID for this payment attempt
@@ -78,6 +70,12 @@ On success, an object is returned, containing:
 .sp -0.25v
 .IP "\(bu" 2
 \fBdestination\fR (pubkey, optional): the final destination of the payment if known
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBcompleted_at\fR (number, optional): the UNIX timestamp showing when this payment was completed
 .if n \
 .sp -1
 .if t \
@@ -140,16 +138,10 @@ error (or the final channel if the destination raised the error).
 -   \fIfailcode\fR: The failure code, as per BOLT #4.
 -   \fIfailcodename\fR: The human-readable name corresponding to \fIfailcode\fR,
 if known.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 ZmnSCPxj <\fIZmnSCPxj@protonmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-sendpay(7), lightning-pay(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:ad0d8d50c4e05ce2d840bb72e63c3f9645ca005dfc6b2101f47b69ef13a0647b
+\" SHA256STAMP:791713832ccd44d693eeab7704abf9a2d84e8cab6fc2c63d8f808b61116de621

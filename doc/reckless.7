@@ -1,0 +1,122 @@
+.\" -*- mode: troff; coding: utf-8 -*-
+.TH "RECKLESS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
+reckless - install and activate a CLN plugin by name
+.SH SYNOPSIS
+\fBreckless\fR [\fIoptions\fR] \fBinstall/uninstall/enable/disable/source\fR \fItarget\fR
+.SH DESCRIPTION
+Reckless is a plugin manager for Core-Lightning. Typical plugin
+installation involves: finding the source plugin, copying,
+installing dependencies, testing, activating, and updating the
+lightningd config file. Reckless does all of these by invoking:
+.PP
+\fBreckless\fR \fBinstall\fR \fIplugin_name\fR
+.PP
+reckless will exit early in the event that:
+- the plugin is not found in any available source repositories
+- dependencies are not sucessfully installed
+- the plugin fails to execute
+.PP
+Reckless-installed plugins reside in the 'reckless' subdirectory
+of the user's \fC.lightning\fR folder.  By default, plugins are activated
+on the \fCbitcoin\fR network (and use lightningd's bitcoin network
+config), but regtest may also be used.
+.PP
+Other commands include:
+.PP
+\fBreckless\fR \fBuninstall\fR \fIplugin_name\fR
+disables the plugin, removes the directory.
+.PP
+\fBreckless\fR \fBsearch\fR \fIplugin_name\fR
+looks through all available sources for a plugin matching
+this name.
+.PP
+\fBreckless\fR \fBenable\fR \fIplugin_name\fR
+dynamically enables the reckless-installed plugin and updates
+the config to match.
+.PP
+\fBreckless\fR \fBdisable\fR \fIplugin_name\fR
+dynamically disables the reckless-installed plugin and updates
+the config to match.
+.PP
+\fBreckless\fR \fBsource\fR \fBlist\fR
+list available plugin repositories.
+.PP
+\fBreckless\fR \fBsource\fR \fBadd\fR \fIrepo_url\fR
+add another plugin repo for reckless to search.
+.PP
+\fBreckless\fR \fBsource\fR \fBrm\fR \fIrepo_url\fR
+remove a plugin repo for reckless to search.
+.SH OPTIONS
+Available option flags:
+.PP
+\fB-d\fR, \fB--reckless-dir\fR \fIreckless_dir\fR
+specify an alternative data directory for reckless to use.
+Useful if your .lightning is protected from execution.
+.PP
+\fB-l\fR, \fB--lightning\fR \fIlightning\fIdata\fIdir\fR
+lightning data directory (defaults to $USER/.lightning)
+.PP
+\fB-c\fR, \fB--conf\fR \fIlightning_config\fR
+pass the config used by lightningd
+.PP
+\fB-r\fR, \fB--regtest\fR
+use the regtest network and config instead of bitcoin mainnet
+.PP
+\fB-v\fR, \fB--verbose\fR
+request additional debug output
+.SH NOTES
+Reckless currently supports python plugins only. Additional language
+support will be provided in future releases.
+.PP
+Running the first time will prompt the user that their lightningd's
+bitcoin config will be appended (or created) to inherit the reckless
+config file (this config is specific to bitcoin by default.)
+Management of plugins will subsequently modify this file.
+.PP
+Troubleshooting tips:
+.PP
+Plugins must be executable. For python plugins, the shebang is
+invoked, so \fBpython3\fR should be available in your environment. This
+can be verified with \fBwhich Python3\fR. The default reckless directory
+is $USER/.lightning/reckless and it should be possible for the
+lightningd user to execute files located here.  If this is a problem,
+the option flag \fBreckless -d=\fR may be used to
+relocate the reckless directory from its default. Consider creating a
+permanent alias in this case.
+.PP
+For Plugin Developers:
+.PP
+To make your plugin compatible with reckless install:
+- Choose a unique plugin name.
+- The plugin entrypoint is inferred.  Naming your plugin executable
+the same as your plugin name will allow reckless to identify it
+correctly (file extensions are okay.)
+- For python plugins, a requirements.txt is the preferred medium for
+python dependencies. A pyproject.toml will be used as a fallback,
+but test installation via \fCpip install -e .\fR - Poetry looks for
+additional files in the working directory, whereas with pip, any
+references to these will require something like
+\fCpackages = [{ include = \(dq*.py\(dq }]\fR under the \fC[tool.poetry]\fR
+section.
+- Additional repository sources may be added with
+\fCreckless source add https://my.repo.url/here\fR however,
+\fIhttps://github.com/lightningd/plugins\fR is included by default.
+Consider adding your plugin lightningd/plugins to make
+installation simpler.
+- If your plugin is located in a subdirectory of your repo with a
+different name than your plugin, it will likely be overlooked.
+.SH AUTHOR
+Antoine Poinsot wrote the original reckless plugin on which this is
+based.
+.PP
+Rusty Russell wrote the outline for the reckless utility's function
+.PP
+Alex Myers <\fIalex@endothermic.dev\fR> is mostly responsible for the
+reckless code and this man page, with thanks to Christian Decker for
+extensive review.
+.SH SEE ALSO
+Core-Lightning plugins repo: \fIhttps://github.com/lightningd/plugins\fR
+.SH RESOURCES
+Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
+\" SHA256STAMP:11acafdd233a13cd1c8b10c1d61d3cda204a66eed9a5940420f4bcec0097bad0

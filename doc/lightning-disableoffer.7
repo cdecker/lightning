@@ -1,26 +1,19 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-DISABLEOFFER" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-DISABLEOFFER" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-disableoffer -- Command for removing an offer
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB(WARNING: experimental-offers only)\fR
 .PP
 \fBdisableoffer\fR \fIoffer_id\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBdisableoffer\fR RPC command disables an offer, so that no further
 invoices will be given out (if made with lightning-offer(7)) or
 invoices accepted  (if made with lightning-offerout(7)).
 .PP
 We currently don't support deletion of offers, so offers are not
 forgotten entirely (there may be invoices which refer to this offer).
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -31,9 +24,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 Note: the returned object is the same format as \fBlistoffers\fR.
 .PP
 On success, an object is returned, containing:
@@ -62,12 +53,6 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBbolt12_unsigned\fR (string): The bolt12 string representing this offer, without signature
-.if n \
-.sp -1
-.if t \
-.sp -0.25v
-.IP "\(bu" 2
 \fBused\fR (boolean): Whether the offer has had an invoice paid / payment made
 .if n \
 .sp -1
@@ -75,8 +60,7 @@ On success, an object is returned, containing:
 .sp -0.25v
 .IP "\(bu" 2
 \fBlabel\fR (string, optional): The label provided when offer was created
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -88,16 +72,10 @@ EXAMPLE JSON RESPONSE
 }
 
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-offer(7), lightning-offerout(7), lightning-listoffers(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:124ade9515fde1919c7a16d08551cc813b9c0087548e5942010137fe5a7912fc
+\" SHA256STAMP:88466018979468da8743b2ecb6f12b22e74f979604efcca924fe041023cafb2f

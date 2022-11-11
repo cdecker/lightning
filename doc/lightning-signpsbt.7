@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-SIGNPSBT" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-SIGNPSBT" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-signpsbt -- Command to sign a wallet's inputs on a provided bitcoin transaction (PSBT).
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBsignpsbt\fR \fIpsbt\fR [\fIsignonly\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fBsignpsbt\fR is a low-level RPC command which signs a PSBT as defined by
 BIP-174.
 .IP "\(bu" 2
@@ -28,8 +22,7 @@ one of them cannot be signed.
 .PP
 Note that the command will fail if there are no inputs to sign, or
 if the inputs to be signed were not previously reserved.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -40,9 +33,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBsigned_psbt\fR (string): The fully signed PSBT
@@ -50,24 +41,17 @@ On success, an object is returned, containing:
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters, or there aren't wallet's inputs to sign, or we couldn't sign all of \fIsignonly\fR, or inputs are not reserved.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
     \(dqpsbt\(dq: \(dqsome_psbt\(dq
 }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-fundpsbt(7), lightning-sendpsbt(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:ce60439d685fa996ed4f131fef1b19c2466d61b85cbc8f28336f2e62316e0ae6
+\" SHA256STAMP:2894c207bc111f0036bda3fdf93859e9604e5dee9b8f8b8a68826019f59b2d0f

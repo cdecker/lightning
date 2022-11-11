@@ -1,6 +1,6 @@
 #! /usr/bin/make
-VERSION_NAME="Web-8 init"
-VERSION=0.12.1
+VERSION_NAME=""
+VERSION=22.11rc1
 
 # --quiet / -s means quiet, dammit!
 ifeq ($(findstring s,$(word 1, $(MAKEFLAGS))),s)

@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-ADDGOSSIP" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-ADDGOSSIP" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-addgossip -- Command for injecting a gossip message (low-level)
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBaddgossip\fR \fImessage\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBaddgossip\fR RPC command injects a hex-encoded gossip message into
 the gossip daemon.  It may return an error if it is malformed, or may
 update its internal state using the gossip message.
@@ -20,20 +14,12 @@ is best effort.
 .PP
 This is particularly used by plugins which may receive channel_update
 messages within error replies.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an empty object is returned.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-pay(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:99820e53f1c3d252137c73f3cc3379211a4a7e44e60323185ba4af1d9392f5fc
+\" SHA256STAMP:c4122741702cf08faac182bcbe267ad6b46243e25737cf87cab7ec27832ad5fd

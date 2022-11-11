@@ -1,0 +1,38 @@
+.\" -*- mode: troff; coding: utf-8 -*-
+.TH "LIGHTNING-BATCHING" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
+lightning-batching -- Command to allow database batching.
+.SH SYNOPSIS
+\fBbatching\fR \fIenable\fR
+.SH DESCRIPTION
+The \fBbatching\fR RPC command allows (but does not guarantee!) database
+commitments to be deferred when multiple commands are issued on this RPC
+connection.  This is only useful if many commands are being given at once, in
+which case it can offer a performance improvement (the cost being that if
+there is a crash, it's unclear how many of the commands will have been
+persisted).
+.PP
+\fIenable\fR is \fItrue\fR to enable batching, \fIfalse\fR to disable it (the
+default).
+.SH EXAMPLE JSON REQUEST
+.LP
+.EX
+{
+  \(dqid\(dq: 82,
+  \(dqmethod\(dq: \(dqbatching\(dq,
+  \(dqparams\(dq: {
+    \(dqenable\(dq: true
+  }
+}
+.EE
+.SH RETURN VALUE
+On success, an empty object is returned.
+.PP
+On failure, one of the following error codes may be returned:
+.IP "\(bu" 2
+-32602: Error in given parameters.
+.SH AUTHOR
+Rusty Russell <\fIrusty@blockstream.com\fR> wrote the initial version of this man page.
+.SH RESOURCES
+Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
+\" SHA256STAMP:6a279eadc1004fc420a8dbc1a8f857d6a3ea0e1ca272eb1b2dc083cef945243d

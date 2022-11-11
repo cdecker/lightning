@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTPEERS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTPEERS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listpeers -- Command returning data on connected lightning nodes
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlistpeers\fR [\fIid\fR] [\fIlevel\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlistpeers\fR RPC command returns data on nodes that are connected
 or are not connected but have open channels with this node.
 .PP
@@ -36,9 +30,7 @@ the \fIconnected\fR attribute of the node will be \(dqfalse\(dq.
 The channel will remain open for a set blocktime, after which if the
 connection has not been re-established, the channel will close and the
 node will no longer appear in the command output.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBpeers\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBid\fR (pubkey): the public key of the peer
@@ -110,7 +102,7 @@ BOLT #9 features which apply to this channel (one of \(dqoption\fIstatic\fRremot
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid, optional): The short\fIchannel\fRid (once locked in)
+\fBshort_channel_id\fR (short_channel_id, optional): The short\fIchannel\fRid (once locked in)
 .if n \
 .sp -1
 .if t \
@@ -380,13 +372,13 @@ BOLT #9 features which apply to this channel (one of \(dqoption\fIstatic\fRremot
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBlocal\fR (short\fIchannel\fRid, optional): An alias assigned by this node to this channel, used for outgoing payments
+\fBlocal\fR (short_channel_id, optional): An alias assigned by this node to this channel, used for outgoing payments
 .if n \
 .sp -1
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBremote\fR (short\fIchannel\fRid, optional): An alias assigned by the remote node to this channel, usable in routehints and invoices
+\fBremote\fR (short_channel_id, optional): An alias assigned by the remote node to this channel, usable in routehints and invoices
 .if n \
 .sp -1
 .if t \
@@ -1139,19 +1131,13 @@ On error the returned object will contain \fCcode\fR and \fCmessage\fR propertie
 with \fCcode\fR being one of the following:
 .IP "\(bu" 2
 -32602: If the given parameters are wrong.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Michael Hawkins <\fImichael.hawkins@protonmail.com\fR>.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-fundchannel_start(7),
 lightning-setchannel(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR Lightning
 RFC site (BOLT #9):
-\fIhttps://github.com/lightningnetwork/lightning-rfc/blob/master/09-features.md\fR
-\" SHA256STAMP:1e8779f818e1b11ac729486df14c814a970f36b03e7b3269556e517ff098852e
+\fIhttps://github.com/lightning/bolts/blob/master/09-features.md\fR
+\" SHA256STAMP:ca266fd9172f8c29c93e11dd3c433da5e960d85d8b2234afd4d0e0e1b31144b2

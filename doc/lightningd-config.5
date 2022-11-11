@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNINGD-CONFIG" "5" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNINGD-CONFIG" "5" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightningd-config -- Lightning daemon configuration file
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB\(ti/.lightning/config\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 When lightningd(8) starts up it usually reads a general configuration
 file (default: \fB$HOME/.lightning/config\fR) then a network-specific
 configuration file (default: \fB$HOME/.lightning/testnet/config\fR).  This can
@@ -29,19 +23,15 @@ lightningd(8), so \fC--foo\fR becomes simply \fCfoo\fR in the configuration
 file, and \fC--foo=bar\fR becomes \fCfoo=bar\fR in the configuration file.
 .PP
 Blank lines and lines beginning with \fC#\fR are ignored.
-.SH
-DEBUGGING
-.LP
+.SH DEBUGGING
 \fI--help\fR will show you the defaults for many options; they vary with
 network settings so you can specify \fI--network\fR before \fI--help\fR to see
 the defaults for that network.
 .PP
 The lightning-listconfigs(7) command will output a valid configuration
 file using the current settings.
-.SH
-OPTIONS
-.SS
-General options
+.SH OPTIONS
+.SS General options
 .IP "\(bu" 2
 \fBallow-deprecated-apis\fR=\fIBOOL\fR
 .IP
@@ -59,7 +49,15 @@ fun to put in other's config files while their computer is unattended.
 Print version and exit. Also useless inside a configuration file, but
 putting this in someone's config file may convince them to read this man
 page.
-.SS
+.IP "\(bu" 2
+\fBdatabase-upgrade\fR=\fIBOOL\fR
+.IP
+Upgrades to Core Lightning often change the database: once this is done,
+downgrades are not generally possible.  By default, Core Lightning will
+exit with an error rather than upgrade, unless this is an official released
+version.  If you really want to upgrade to a non-release version, you can
+set this to \fItrue\fR (or \fIfalse\fR to never allow a non-reversible upgrade!).
+.SS Bitcoin control options:
 Bitcoin control options:
 .IP "\(bu" 2
 \fBnetwork\fR=\fINETWORK\fR
@@ -113,8 +111,7 @@ command keeps failing after this time, exit with a fatal error.
 Number of blocks to rescan from the current head, or absolute
 blockheight if negative. This is only needed if something goes badly
 wrong.
-.SS
-Lightning daemon options
+.SS Lightning daemon options
 .IP "\(bu" 2
 \fBlightning-dir\fR=\fIDIR\fR
 .IP
@@ -274,8 +271,7 @@ see lightning-hsmtool(8).
 .IP
 The port number for the GRPC plugin to listen for incoming
 connections; default is not to activate the plugin at all.
-.SS
-Lightning node customization options
+.SS Lightning node customization options
 .IP "\(bu" 2
 \fBalias\fR=\fINAME\fR
 .IP
@@ -360,8 +356,7 @@ the discovered IP with TCP port 9735 as announced address. If unset and you
 open TCP port 9735 on your router towords your node, your node will remain
 connectable on changing IP addresses.  Note: Will always be disabled if you use
 \&'always-use-proxy'.
-.SS
-Lightning channel and HTLC options
+.SS Lightning channel and HTLC options
 .IP "\(bu" 2
 \fBlarge-channels\fR
 .IP
@@ -415,21 +410,48 @@ the outgoing is redeemed.
 The number of blocks to allow for payments we receive: if we have to, we
 might need to redeem this on-chain, so this is the number of blocks we
 have to do that.
-.SS
-Invoice control options:
 .IP "\(bu" 2
-\fBautocleaninvoice-cycle\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+\fBaccept-htlc-tlv-types\fR=\fItypes\fR
 .IP
-Perform cleanup of expired invoices every \fISECONDS\fR seconds, or disable
-if 0. Usually unpaid expired invoices are uninteresting, and just take
-up space in the database.
+Normally HTLC onions which contain unknown even fields are rejected.
+This option specifies that these (comma-separated) types are to be
+accepted, and ignored.
+.SS Cleanup control options:
 .IP "\(bu" 2
-\fBautocleaninvoice-expired-by\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+\fBautoclean-cycle\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
 .IP
-Control how long invoices must have been expired before they are cleaned
-(if \fIautocleaninvoice-cycle\fR is non-zero).
-.SS
-Payment control options:
+Perform search for things to clean every \fISECONDS\fR seconds (default
+3600, or 1 hour, which is usually sufficient).
+.IP "\(bu" 2
+\fBautoclean-succeededforwards-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old successful forwards (\fCsettled\fR in listforwards \fCstatus\fR) have to be before deletion (default 0, meaning never).
+.IP "\(bu" 2
+\fBautoclean-failedforwards-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old failed forwards (\fCfailed\fR or \fClocal_failed\fR in listforwards \fCstatus\fR) have to be before deletion (default 0, meaning never).
+.IP "\(bu" 2
+\fBautoclean-succeededpays-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old successful payments (\fCcomplete\fR in listpays \fCstatus\fR) have to be before deletion (default 0, meaning never).
+.IP "\(bu" 2
+\fBautoclean-failedpays-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old failed payment attempts (\fCfailed\fR in listpays \fCstatus\fR) have to be before deletion (default 0, meaning never).
+.IP "\(bu" 2
+\fBautoclean-paidinvoices-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old invoices which were paid (\fCpaid\fR in listinvoices \fCstatus\fR) have to be before deletion (default 0, meaning never).
+.IP "\(bu" 2
+\fBautoclean-expiredinvoices-age\fR=\fISECONDS\fR [plugin \fCautoclean\fR]
+.IP
+How old invoices which were not paid (and cannot be) (\fCexpired\fR in listinvoices \fCstatus\fR) before deletion (default 0, meaning never).
+.LP
+Note: prior to v22.11, forwards for channels which were closed were
+not easily distinguishable.  As a result, autoclean may delete more
+than one of these at once, and then suffer failures when it fails to
+delete the others.
+.SS Payment control options:
 .IP "\(bu" 2
 \fBdisable-mpp\fR [plugin \fCpay\fR]
 .IP
@@ -437,9 +459,7 @@ Disable the multi-part payment sending support in the \fCpay\fR plugin. By defau
 the MPP support is enabled, but it can be desirable to disable in situations
 in which each payment should result in a single HTLC being forwarded in the
 network.
-.SS
-Networking options
-.LP
+.SS Networking options
 Note that for simple setups, the implicit \fIautolisten\fR option does the
 right thing: for the mainnet (bitcoin) network it will try to bind to
 port 9735 on IPv4 and IPv6, and will announce it to peers if it seems
@@ -557,9 +577,7 @@ Disable the DNS bootstrapping mechanism to find a node by its node ID.
 .IP
 Set a Tor control password, which may be needed for \fIautotor:\fR to
 authenticate to the Tor control port.
-.SS
-Lightning Plugins
-.LP
+.SS Lightning Plugins
 lightningd(8) supports plugins, which offer additional configuration
 options and JSON-RPC methods, depending on the plugin. Some are supplied
 by default (usually located in \fBlibexec/c-lightning/plugins/\fR). If a
@@ -609,9 +627,7 @@ This way, you can monitor crashes of important plugins by simply monitoring
 if Core Lightning terminates.
 Built-in plugins, which are installed with lightningd(8), are automatically
 considered important.
-.SS
-Experimental Options
-.LP
+.SS Experimental Options
 Experimental options are subject to breakage between releases: they
 are made available for advanced users who want to test proposed
 features. When the build is configured \fIwithout\fR \fC--enable-experimental-features\fR,
@@ -658,29 +674,19 @@ Specifying this enables support for accepting incoming WebSocket
 connections on that port, on any IPv4 and IPv6 addresses you listen
 to.  The normal protocol is expected to be sent over WebSocket binary
 frames once the connection is upgraded.
-.SH
-BUGS
-.LP
+.SH BUGS
 You should report bugs on our github issues page, and maybe submit a fix
 to gain our eternal gratitude!
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> wrote this man page, and
 much of the configuration language, but many others did the hard work of
 actually implementing these options.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listconfigs(7) lightning-setchannel(7) lightningd(8)
 lightning-hsmtool(8)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-.SH
-COPYING
-.LP
+.SH COPYING
 Note: the modules in the ccan/ directory have their own licenses, but
 the rest of the code is covered by the BSD-style MIT license.
-\" SHA256STAMP:4af2466c8b65b3a2750ace95e12c8c76ba1826994d1e4a08746d9d00e850cb26
+\" SHA256STAMP:dce6b8b98368e7b1ccefa6eec1fd23f2d5dfb4ef31a81ecd2940fe18b7ca9886

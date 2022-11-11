@@ -1,23 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTOFFERS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTOFFERS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listoffers -- Command for listing offers
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB(WARNING: experimental-offers only)\fR
 .PP
 \fBlistoffers\fR [\fIoffer_id\fR] [\fIactive_only\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlistoffers\fR RPC command list all offers, or with \fCoffer_id\fR,
 only the offer with that offer_id (if it exists).  If \fCactive_only\fR is
 set and is true, only offers with \fCactive\fR true are returned.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -28,9 +21,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBoffers\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBoffer_id\fR (hex): the id of this offer (merkle hash of non-signature fields) (always 64 characters)
@@ -57,12 +48,6 @@ On success, an object containing \fBoffers\fR is returned.  It is an array of ob
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBbolt12_unsigned\fR (string): the bolt12 encoding of the offer, without signature
-.if n \
-.sp -1
-.if t \
-.sp -0.25v
-.IP "\(bu" 2
 \fBused\fR (boolean): True if an associated invoice has been paid
 .if n \
 .sp -1
@@ -70,8 +55,7 @@ On success, an object containing \fBoffers\fR is returned.  It is an array of ob
 .sp -0.25v
 .IP "\(bu" 2
 \fBlabel\fR (string, optional): the (optional) user-specified label
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -94,16 +78,10 @@ EXAMPLE JSON RESPONSE
 }
 
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-offer(7), lightning-offerout(7), lightning-listoffers(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:3ce4cf3ee717d9e8c3f4175365ef26b8ae190c03675e9aca4b2f43227c1aea68
+\" SHA256STAMP:3ca87920c577fef152ff044f4c768c6208dab898b0075274c3188950bc9c39a5

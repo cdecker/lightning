@@ -1,17 +1,11 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-FUNDCHANNEL" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-FUNDCHANNEL" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-fundchannel -- Command for establishing a lightning channel
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBfundchannel\fR \fIid\fR \fIamount\fR [\fIfeerate\fR] [\fIannounce\fR] [\fIminconf\fR]
 [\fIutxos\fR] [\fIpush_msat\fR] [\fIclose_to\fR] [\fIrequest_amt\fR] [\fIcompact_lease\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBfundchannel\fR RPC command opens a payment channel with a peer by
 committing a funding transaction to the blockchain as defined in BOLT
 #2.
@@ -80,9 +74,7 @@ This example shows how to use lightning-cli to open new channel with peer 03f...
 .EX
 lightning-cli -k fundchannel id=03f...fc1 amount=all feerate=normal utxos='[\(dqbcc1...39c:0\(dq]'
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBtx\fR (hex): The raw transaction which funded the channel
@@ -126,13 +118,9 @@ The following error codes may occur:
 .PP
 Failure may also occur if \fBlightningd\fR and the peer cannot agree on
 channel parameters (funding limits, channel reserves, fees, etc.).
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-listfunds(), lightning-listpeers(7),
 lightning-feerates(7), lightning-multifundchannel(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:9f9563dfbd851f913358450870286d2413578f75e76ac764143e8f6e88fd02ea
+\" SHA256STAMP:16dff960b8da26184273eccdca63351c549ee97805f1481198bf7ec2634e4f31

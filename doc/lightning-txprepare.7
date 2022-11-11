@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-TXPREPARE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-TXPREPARE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-txprepare -- Command to prepare to withdraw funds from the internal wallet
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBtxprepare\fR \fIoutputs\fR [\fIfeerate\fR] [\fIminconf\fR] [\fIutxos\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBtxprepare\fR RPC command creates an unsigned transaction which
 spends funds from Core Lightning's internal wallet to the outputs specified
 in \fIoutputs\fR.
@@ -50,9 +44,7 @@ of \(dqtxid:vout\(dq. These must be drawn from the node's available UTXO set.
 \fBtxprepare\fR is similar to the first part of a \fBwithdraw\fR command, but
 supports multiple outputs and uses \fIoutputs\fR as parameter. The second part
 is provided by \fBtxsend\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBpsbt\fR (string): the PSBT representing the unsigned transaction
@@ -76,17 +68,11 @@ The following error codes may occur:
 - 301: There are not enough funds in the internal wallet (including
 fees) to create the transaction.
 - 302: The dust limit is not met.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-withdraw(7), lightning-txsend(7), lightning-txdiscard(7),
 lightning-feerates(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:d2da6898ef7c56f3762b26bac95ec40fe20b5d2d06779d7dfcd796d0384bde1a
+\" SHA256STAMP:719661fe492dffa0ced598f26b06847d625e8ab2da7ee4019cae3eacd8976063

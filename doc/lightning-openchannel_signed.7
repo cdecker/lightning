@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-OPENCHANNEL_SIGNED" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-OPENCHANNEL_SIGNED" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-openchannel_signed -- Command to conclude a channel open
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBopenchannel_signed\fR \fIchannel_id\fR \fIsigned_psbt\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCopenchannel_signed\fR is a low level RPC command which concludes a channel
 open with the specified peer. It uses the v2 openchannel protocol, which
 allows for interactive transaction construction.
@@ -27,9 +21,7 @@ if we receive valid signatures from the peer.
 \fIcommitments_secured\fR was true) with partial signatures or finalized
 witness stacks included for every input that we contributed to the
 PSBT.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBchannel_id\fR (hex): the channel id of the channel (always 64 characters)
@@ -86,20 +78,14 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 312: Channel in an invalid state
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-openchannel_init(7), lightning-openchannel_update(7),
 lightning-openchannel_abort(7), lightning-openchannel_bump(7),
 lightning-fundchannel_start(7), lightning-fundchannel_complete(7),
 lightning-fundchannel(7), lightning-fundpsbt(7),
 lightning-utxopsbt(7), lightning-multifundchannel(7)
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 @niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:069b8465af7cb9439d0e5439d161be9ff7676a74d84d425b3f9ec84fe720321d
+\" SHA256STAMP:4a9b04c9ab09853d9bce32a7af5617caecd1b2410ed44b0e7d2947b3f0eb2d23

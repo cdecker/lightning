@@ -1,24 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-BKPR-LISTBALANCES" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-BKPR-LISTBALANCES" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-bkpr-listbalances -- Command for listing current channel + wallet balances
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBbkpr-listbalances\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBbkpr-listbalances\fR RPC command is a list of all current and historical account balances. An account is either the on-chain \fIwallet\fR or a channel balance.
 Any funds sent to an \fIexternal\fR account will not be accounted for here.
 .PP
 Note that any channel that was recorded will be listed. Closed channel balances
 will be 0msat.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBaccounts\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBaccount\fR (string): The account name. If the account is a channel, the channel_id
@@ -66,18 +58,12 @@ If \fBpeer_id\fR is present:
 .sp -0.25v
 .IP "\(bu" 2
 \fBresolved_at_block\fR (u32, optional): Blockheight account resolved on chain
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei \fIniftynei@gmail.com\fR is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-bkpr-listincome(7), lightning-listfunds(7),
 lightning-bkpr-listaccountevents(7),
 lightning-bkpr-channelsapy(7), lightning-listpeers(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:5f79ae95f2e096c4158b1f0635b0705c3112374c06f5c4cba72c19feaf5fffff
+\" SHA256STAMP:7ba36454fc0789ed43455dec980fa51bf3809f3b5cea622b97341bd9495c1745

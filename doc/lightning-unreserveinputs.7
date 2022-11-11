@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-UNRESERVEINPUTS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-UNRESERVEINPUTS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-unreserveinputs -- Release reserved UTXOs
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBunreserveinputs\fR \fIpsbt\fR [\fIreserve\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBunreserveinputs\fR RPC command releases (or reduces reservation)
 on UTXOs which were previously marked as reserved, generally by
 lightning-reserveinputs(7).
@@ -19,9 +13,7 @@ The inputs to unreserve are the inputs specified in the passed-in \fIpsbt\fR.
 .PP
 If \fIreserve\fR is specified, it is the number of blocks to decrease
 reservation by; default is 72.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBreservations\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBtxid\fR (txid): the transaction id
@@ -52,16 +44,10 @@ On failure, an error is reported and no UTXOs are unreserved.
 .PP
 The following error codes may occur:
 - -32602: Invalid parameter, i.e. an unparseable PSBT.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-unreserveinputs(7), lightning-signpsbt(7), lightning-sendpsbt(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:710650b18b537dc9c92f1ff42d38f60d39e3e6620b0cdae9dcaa059d37ffead9
+\" SHA256STAMP:b9cbd68e13388c6b92d11f24cbd0850e273718f6725ea30c82b6989985e5c23b

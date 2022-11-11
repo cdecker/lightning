@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTINVOICES" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTINVOICES" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listinvoices -- Command for querying invoice status
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlistinvoices\fR [\fIlabel\fR] [\fIinvstring\fR] [\fIpayment_hash\fR] [\fIoffer_id\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlistinvoices\fR RPC command gets the status of a specific invoice,
 if it exists, or the status of all invoices if given no argument.
 .PP
@@ -18,9 +12,7 @@ A specific invoice can be queried by providing either the \fClabel\fR
 provided when creating the invoice, the \fCinvstring\fR string representing
 the invoice, the \fCpayment_hash\fR of the invoice, or the local \fCoffer_id\fR
 this invoice was issued for. Only one of the query parameters can be used at once.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBinvoices\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBlabel\fR (string): unique label supplied at invoice creation
@@ -77,7 +69,7 @@ On success, an object containing \fBinvoices\fR is returned.  It is an array of 
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBpayer_note\fR (string, optional): the optional \fIpayer_note\fR from invoice_request which created this invoice (\fBexperimental-offers\fR only).
+\fBinvreq_payer_note\fR (string, optional): the optional \fIinvreq\fIpayer\fInote\fR from invoice_request which created this invoice (\fBexperimental-offers\fR only).
 .LP
 If \fBstatus\fR is \(dqpaid\(dq:
 .IP "\(bu" 2
@@ -100,16 +92,10 @@ If \fBstatus\fR is \(dqpaid\(dq:
 .sp -0.25v
 .IP "\(bu" 2
 \fBpayment_preimage\fR (secret): proof of payment (always 64 characters)
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-waitinvoice(7), lightning-delinvoice(7), lightning-invoice(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:34dbe0f4c392634bf9c36553c17b2f088d7d9ea702f3f714c5fb5a156b8262c3
+\" SHA256STAMP:1e34305ec2a41d550d3260217fe68532520e4dc0b0336db8dc90103841a1b1e3

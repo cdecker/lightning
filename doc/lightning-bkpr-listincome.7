@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-BKPR-LISTINCOME" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-BKPR-LISTINCOME" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-bkpr-listincome -- Command for listing all income impacting events
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBbkpr-listincome\fR [\fIconsolidate_fees\fR] [\fIstart_time\fR] [\fIend_time\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBbkpr-listincome\fR RPC command is a list of all income impacting events that the bookkeeper plugin has recorded for this node.
 .PP
 If \fBconsolidate_fees\fR is true, we emit a single, consolidated event for
@@ -23,9 +17,7 @@ transaction.
 The \fBstart_time\fR is a UNIX timestamp (in seconds) that filters events after the provided timestamp. Defaults to zero.
 .PP
 The \fBend_time\fR is a UNIX timestamp (in seconds) that filters events up to and at the provided timestamp. Defaults to max-int.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBincome_events\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBaccount\fR (string): The account name. If the account is a channel, the channel_id
@@ -83,17 +75,11 @@ On success, an object containing \fBincome_events\fR is returned.  It is an arra
 .sp -0.25v
 .IP "\(bu" 2
 \fBpayment_id\fR (hex, optional): lightning payment identifier. For an htlc, this will be the preimage.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei \fIniftynei@gmail.com\fR is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-bkpr-listaccountevents(7), lightning-listfunds(7),
 lightning-bkpr-listbalances(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:a35ed9e760079938608780cff57d923bec804334a0ddbebc58657afe261ed82f
+\" SHA256STAMP:9b48b5d2ef1a493d30d6f9c19967981b77e5e2926a790c1c94d792cd7096f3ff

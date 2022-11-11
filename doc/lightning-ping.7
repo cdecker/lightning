@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-PING" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-PING" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-ping -- Command to check if a node is up.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBping\fR \fIid\fR [\fIlen\fR] [\fIpongbytes\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBping\fR command checks if the node with \fIid\fR is ready to talk. 
 It currently only works for peers we have a channel with.
 .PP
@@ -30,8 +24,7 @@ It accepts the following parameters:
 .IP "\(bu" 2
 \fIpongbytes\fR: An integer that represents the length of the reply (default 128).
 A value of 65532 to 65535 means \(dqdon't reply\(dq.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -43,9 +36,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBtotlen\fR (u16): the answer length of the reply message (including header: 0 means no reply expected)
@@ -53,8 +44,7 @@ On success, an object is returned, containing:
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters or we're already waiting for a ping response from peer.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -62,16 +52,10 @@ EXAMPLE JSON RESPONSE
 }
 
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:2f4d736230f69facc3793b735ab337a71dc6c18a9fdf4ad1341b68410d75365b
+\" SHA256STAMP:fe1e86f6bd8cf3b349e57e417fd21fec0d005d73daf7e21d37d7ea344d92a9f1

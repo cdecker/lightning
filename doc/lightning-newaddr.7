@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-NEWADDR" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-NEWADDR" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-newaddr -- Command for generating a new address to be used by Core Lightning
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBnewaddr\fR [ \fIaddresstype\fR ]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBnewaddr\fR RPC command generates a new address which can
 subsequently be used to fund channels managed by the Core Lightning node.
 .PP
@@ -27,9 +21,7 @@ for the same underlying key.
 If no \fIaddresstype\fR is specified the address generated is a \fIbech32\fR address.
 .PP
 To send an on-chain payment \fIfrom\fR the Core Lightning node wallet, use \fCwithdraw\fR. 
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBbech32\fR (string, optional): The bech32 (native segwit) address
@@ -39,21 +31,13 @@ On success, an object is returned, containing:
 .sp -0.25v
 .IP "\(bu" 2
 \fBp2sh-segwit\fR (string, optional): The p2sh-wrapped address
-.SH
-ERRORS
-.LP
+.SH ERRORS
 If an unrecognized address type is requested an error message will be
 returned.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Felix <\fIfixone@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listfunds(7), lightning-fundchannel(7), lightning-withdraw(7), lightning-listtransactions(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:90440fe48b6d132f1d92b9b0c42d2b1b1b65666c2a43a47c1d3abe6bf688a49c
+\" SHA256STAMP:ef9a22d6bc88f7fef431810b36bb9cf2eeee43a589b951ecd07d3891c96ac29e

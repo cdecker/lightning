@@ -1,0 +1,346 @@
+.\" -*- mode: troff; coding: utf-8 -*-
+.TH "LIGHTNINGD-RPC" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
+lightningd-rpc -- Lightning Daemon RPC Protocols
+.SH SYNOPSIS
+\fB\(ti/.lightning/bitcoin/lightning-rpc\fR
+.SH DESCRIPTION
+lightningd(8) communicates via RPC, especially JSONRPC over the UNIX
+domain socket (by default \fB$HOME/.lightning/bitcoin/lightning-rpc\fR,
+but configuable with lightningd-config(5)).
+.SH JSON WIRE FORMAT
+JSON RPC is defined at \fIhttps://www.jsonrpc.org/specification\fR and
+generally involves writing a JSON request with a unique ID, and
+receiving a response containing that ID.
+.PP
+Every response given by lightningd(8) is followed by two '\en'
+characters, which should not appear in normal JSON (though plugins may
+produce them).  This means efficient code can simply read until it
+sees two '\en' characters, and then attempt to parse the JSON (if the
+JSON is incomplete, it should continue reading and file a bug).
+.SH JSON COMMANDS
+We support \(dqparams\(dq as an array (ordered parameters) or a dictionary
+(named parameters).  In the array case, JSON \(dqnull\(dq is treated as if
+the parameter was not specified (if that is allowed).
+.PP
+You should probably prefer named parameters if possible, as they have
+generally been shown to be less confusing for complex commands and
+more robust when fields are deprecated.
+.PP
+The lightning-cli(1) tool uses ordered parameters by default, but
+named parameters if explicitly specified or the first parameter
+contains an '='.
+.SH JSON REPLIES
+All JSON replies are wrapped in an object; this allows fields to
+be added in future.  You should safely ignore any unknown fields.
+.PP
+Any field name which starts with \(dqwarning\(dq is a specific warning, and
+should be documented in the commands' manual page.  Each warning field
+has an associated human-readable string, but it's redudant, as each
+separate warning should have a distinct field name
+(e.g. \fBwarning\f(BIoffer\fBunknown_currency\fR and
+\fBwarning\f(BIoffer\fBmissing_description\fR).
+.SH JSON TYPES
+The exact specification for (most!) commands is specified in
+\fCdoc/schemas/\fR in the source directory.  This is also used to generate
+part of the documentation for each command; the following types are
+referred to in addition to simple JSON types:
+.IP "\(bu" 2
+\fChex\fR: an even-length string of hexidecimal digits.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fChash\fR: a 64-character \fChex\fR which is a sha256 hash.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCsecret\fR: a 64-character \fChex\fR which is a secret of some kind.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCu64\fR: a JSON number without decimal point in the range 0 to 18446744073709551615 inclusive.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCu32\fR: a JSON number without decimal point in the range 0 to 4294967295 inclusive.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCu16\fR: a JSON number without decimal point in the range 0 to 65535 inclusive.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCu16\fR: a JSON number without decimal point in the range 0 to 255 inclusive.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCpubkey\fR: a 66-character \fChex\fR which is an SEC-1 encoded secp256k1 point (usually used as a public key).
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCmsat\fR: a \fCu64\fR which indicates an amount of millisatoshis.  Deprecated: may also be a string of the number, with \(dqmsat\(dq appended.  As an input parameter, lightningd(8) will accept strings with suffixes (see below).
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCtxid\fR: a 64-character \fChex\fR Bitcoin transaction identifier.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCsignature\fR: a \fChex\fR (144 bytes or less), which is a DER-encoded Bitcoin signature (without any sighash flags appended), 
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCbip340sig\fR: a 128-character \fChex\fR which is a BIP-340 (Schnorr) signature.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCpoint32\fR: a 64-character \fChex\fR which represents an x-only pubkey.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCshort_channel_id\fR: a string of form BLOCK \(dqx\(dq TXNUM \(dqx\(dq OUTNUM.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCshort_channel_id_dir\fR: a \fCshort_channel_id\fR with \(dq/0\(dq or \(dq/1\(dq appended, indicating the direction between peers.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCoutpoint\fR: a string containing a \fCtxid\fR followed by a \(dq:\(dq and an output number (bitcoind uses this form).
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCfeerate\fR: an integer, or a string consisting of a number followed by \(dqperkw\(dq or \(dqperkb\(dq.
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fCoutputdesc\fR: an object containing onchain addresses as keys, and \(dqall\(dq or a valid \fCmsat\fR field as values.
+.LP
+The following forms of \fCmsat\fR are supported as parameters:
+.IP "\(bu" 2
+An integer (representing that many millisatoshis), e.g. \fC10000\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of an integer N and the suffix \fImsat\fR (representing N millisatoshis) e.g. \fC\(dq10000msat\(dq\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of an integer N and the suffix \fIsat\fR (representing N times 1000 millisatoshis ) e.g. \fC\(dq10sat\(dq\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of a number N.M (where M is exactly three digits) and the suffix \fIsat\fR (representing N times 1000 plus M millisatoshis) e.g. \fC\(dq10.000sat\(dq\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of an integer N and the suffix \fIbtc\fR (representing N times 100000000000 millisatoshis) e.g. \fC\(dq1btc\(dq\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of a number N.M (where M is exactly eight digits) and the suffix \fIbtc\fR (representing N times 100000000000 plus M times 1000 millisatoshis) e.g \fC\(dq0.00000010btc\(dq\fR
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+A string of a number N.M (where M is exactly elevent digits) and the suffix \fIbtc\fR (representing N times 100000000000 plus M millisatoshis) e.g \fC\(dq0.00000010000btc\(dq\fR
+.SH JSON NOTIFICATIONS
+Notifications are (per JSONRPC spec) JSON commands without an \(dqid\(dq
+field.  They give information about ongoing commands, but you
+need to enable them.  See lightning-notifications(7).
+.SH FIELD FILTERING
+You can restrict what fields are in the output of any command, by
+including a \fC\(dqfilter\(dq\fR member in your request, alongside the standard
+\fC\(dqmethod\(dq\fR and \fC\(dqparams\(dq\fR fields.
+.PP
+\fCfilter\fR is a template, with keys indicating what fields are to be
+output (values must be \fCtrue\fR).  Only fields which appear in the
+template will be output.  For example, here is a normal \fCresult\fR of
+\fClisttransactions\fR:
+.LP
+.EX
+\(dqresult\(dq: {
+  \(dqtransactions\(dq: [
+    {
+      \(dqhash\(dq: \(dq3b15dbc81d6a70abe1e75c1796c3eeba71c3954b7a90dfa67d55c1e989e20dbb\(dq,
+      \(dqrawtx\(dq: \(dq020000000001019db609b099735fada240b82cec9da880b35d7a944065c280b8534cb4e2f5a7e90000000000feffffff0240420f000000000017a914d8b7ebd0ccc80266a97d9a828baf1877032ac6648731aff6290100000017a9142cb0814338091a73b388579b025c34f328dfb7898702473044022060a7ede98390111bc33bb12b09b38ad8e31b2a6fd62e9ce39a165b4c15ed39f8022040537219d42af28be18fd223af7cb2367f2300c9f0eb20dcaf677a96cd23efc7012102b2e79c36f2173bc24754214b6eeecd8dc753afda44f606d6f8c55c60c4d614ac65000000\(dq,
+      \(dqblockheight\(dq: 102,
+      \(dqtxindex\(dq: 1,
+      \(dqlocktime\(dq: 101,
+      \(dqversion\(dq: 2,
+      \(dqinputs\(dq: [
+        {
+          \(dqtxid\(dq: \(dqe9a7f5e2b44c53b880c26540947a5db380a89dec2cb840a2ad5f7399b009b69d\(dq,
+          \(dqindex\(dq: 0,
+          \(dqsequence\(dq: 4294967294
+        }
+      ],
+      \(dqoutputs\(dq: [
+        {
+          \(dqindex\(dq: 0,
+          \(dqamount_msat\(dq: \(dq1000000000msat\(dq,
+          \(dqtype\(dq: \(dqdeposit\(dq,
+          \(dqscriptPubKey\(dq: \(dqa914d8b7ebd0ccc80266a97d9a828baf1877032ac66487\(dq
+        },
+        {
+          \(dqindex\(dq: 1,
+          \(dqamount_msat\(dq: \(dq4998999857000msat\(dq,
+          \(dqscriptPubKey\(dq: \(dqa9142cb0814338091a73b388579b025c34f328dfb78987\(dq
+        }
+      ]
+    },
+    {
+      \(dqhash\(dq: \(dq3a5ebaae466a9cb69c59553a3100ed545523e7450c32684cbc6bf0b305a6c448\(dq,
+      \(dqrawtx\(dq: \(dq02000000000101bb0de289e9c1557da6df907a4b95c371baeec396175ce7e1ab706a1dc8db153b000000001716001401fad90abcd66697e2592164722de4a95ebee165fdffffff0217a70d0000000000160014c2ccab171c2a5be9dab52ec41b825863024c5466a0860100000000002200205b8cd3b914cf67cdd8fa6273c930353dd36476734fbd962102c2df53b90880cd0247304402201ce0fef95f6aa0e04a87bdc3083259a8aa7212568f672962d1c3da968daf4f72022041ff4e4e255757c12335e67acde8cf4528c60d4afee45d3f891c81b3a0218c75012103d745445c9362665f22e0d96e9e766f273f3260dea39c8a76bfa05dd2684ddccf66000000\(dq,
+      \(dqblockheight\(dq: 103,
+      \(dqtxindex\(dq: 1,
+      \(dqlocktime\(dq: 102,
+      \(dqversion\(dq: 2,
+      \(dqinputs\(dq: [
+        {
+          \(dqtxid\(dq: \(dq3b15dbc81d6a70abe1e75c1796c3eeba71c3954b7a90dfa67d55c1e989e20dbb\(dq,
+          \(dqindex\(dq: 0,
+          \(dqsequence\(dq: 4294967293
+        }
+      ],
+      \(dqoutputs\(dq: [
+        {
+          \(dqindex\(dq: 0,
+          \(dqamount_msat\(dq: \(dq894743000msat\(dq,
+          \(dqtype\(dq: \(dqdeposit\(dq,
+          \(dqscriptPubKey\(dq: \(dq0014c2ccab171c2a5be9dab52ec41b825863024c5466\(dq
+        },
+        {
+          \(dqindex\(dq: 1,
+          \(dqamount_msat\(dq: \(dq100000000msat\(dq,
+          \(dqtype\(dq: \(dqchannel_funding\(dq,
+          \(dqchannel\(dq: \(dq103x1x1\(dq,
+          \(dqscriptPubKey\(dq: \(dq00205b8cd3b914cf67cdd8fa6273c930353dd36476734fbd962102c2df53b90880cd\(dq
+        }
+      ]
+    }
+  ]
+}
+.EE
+.PP
+If we only wanted the output amounts and types, we would create a filter like so:
+.LP
+.EX
+\(dqfilter\(dq: {\(dqtransactions\(dq: [{\(dqoutputs\(dq: [{\(dqamount_msat\(dq: true, \(dqtype\(dq: true}]}]}
+.EE
+.PP
+The result would be:
+.LP
+.EX
+\(dqresult\(dq: {
+  \(dqtransactions\(dq: [
+    {
+      \(dqoutputs\(dq: [
+        {
+          \(dqamount_msat\(dq: \(dq1000000000msat\(dq,
+          \(dqtype\(dq: \(dqdeposit\(dq,
+        },
+        {
+          \(dqamount_msat\(dq: \(dq4998999857000msat\(dq,
+        }
+      ]
+    },
+    {
+      \(dqoutputs\(dq: [
+        {
+          \(dqamount_msat\(dq: \(dq894743000msat\(dq,
+          \(dqtype\(dq: \(dqdeposit\(dq,
+        },
+        {
+          \(dqamount_msat\(dq: \(dq100000000msat\(dq,
+          \(dqtype\(dq: \(dqchannel_funding\(dq,
+        }
+      ]
+    }
+  ]
+}
+.EE
+.PP
+Note: \fC\(dqfilter\(dq\fR doesn't change the order, just which fields are
+printed.  Any fields not explictly mentioned are omitted from the
+output, but plugins which don't support filter (and some routines
+doing simple JSON transfers) may ignore \fC\(dqfilter\(dq\fR, so you should treat
+it as an optimazation only).
+.PP
+Note: if you specify an array where an object is specified or vice
+versa, the response may include a \fCwarning_parameter_filter\fR field
+which describes the problem.
+.SH DEALING WITH FORMAT CHANGES
+Fields can be added to the JSON output at any time, but to remove (or,
+very rarely) change a field requires a minimum deprecation period of 6
+months and two releases.  Usually a new field will be added if one is
+deprecated, so both will be present in transition.
+.PP
+To test that you're not using deprecated fields, you can use the
+lightningd-config(5) option \fCallow-deprecated-apis=false\fR.  You should
+only use this in internal tests: it is not recommended that users use
+this directly.
+.PP
+The documentation tends to only refer to non-deprecated items, so if
+you seen an output field which is not documented, its either a bug
+(like that ever happens!) or a deprecated field you should ignore.
+.SH DEBUGGING
+You can use \fClog-level=io\fR to see much of the JSON conversation (in
+hex) that occurs.  It's extremely noisy though!
+.SH AUTHOR
+Rusty Russell <\fIrusty@rustcorp.com.au\fR> wrote this man page, and
+much of the configuration language, but many others did the hard work of
+actually implementing these options.
+.SH SEE ALSO
+lightningd-config(5), lightning-notifications(7), lightningd(8)
+.SH RESOURCES
+Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
+.SH COPYING
+Note: the modules in the ccan/ directory have their own licenses, but
+the rest of the code is covered by the BSD-style MIT license.
+\" SHA256STAMP:4667b3b3d5eac5ddb758812e546f15c5e1c29d2f1f2066aeeb663006b858814d

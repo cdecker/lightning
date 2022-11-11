@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-BKPR-LISTACCOUNTEVENTS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-BKPR-LISTACCOUNTEVENTS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-bkpr-listaccountevents -- Command for listing recorded bookkeeping events
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBbkpr-listaccountevents\fR [*account*]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBbkpr-listaccountevents\fR RPC command is a list of all bookkeeping events that have been recorded for this node.
 .PP
 If the optional parameter \fBaccount\fR is set, we only emit events for the
@@ -19,9 +13,7 @@ specified account, if exists.
 Note that the type \fBonchain_fees\fR that are emitted are of opposite credit/debit than as they appear in \fBlistincome\fR, as \fBlistincome\fR shows all events from the perspective of the node, whereas \fBlistaccountevents\fR just dumps the event data as we've got it. Onchain fees are updated/recorded as we get more information about input and output spends -- the total onchain fees that were recorded for a transaction for an account can be found by summing all onchain fee events and taking the difference between the \fBcredit_msat\fR and \fBdebit_msat\fR for these events. We do this so that successive calls to \fBlistaccountevents\fR always
 produce the same list of events -- no previously emitted event will be
 subsequently updated, rather we add a new event to the list.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBevents\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBaccount\fR (string): The account name. If the account is a channel, the channel_id
@@ -121,17 +113,11 @@ If \fBtype\fR is \(dqchannel\(dq:
 .sp -0.25v
 .IP "\(bu" 2
 \fBpart_id\fR (u32, optional): Counter for multi-part payments
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei \fIniftynei@gmail.com\fR is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-bkpr-listincome(7), lightning-listfunds(7),
 lightning-bkpr-listbalances(7), lightning-bkpr-channelsapy(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:bba7edcbc0773c035a039af45ba40d94cb3e80448c72ef1ca9cd0bb992db0e98
+\" SHA256STAMP:d6832641cc93e157c735a2923a14a088aaee389be1004be8dc3e314aed5afe45

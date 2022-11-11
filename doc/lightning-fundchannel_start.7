@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-FUNDCHANNEL_START" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-FUNDCHANNEL_START" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-fundchannel_start -- Command for initiating channel establishment for a lightning channel
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBfundchannel_start\fR \fIid\fR \fIamount\fR [\fIfeerate\fR \fIannounce\fR \fIclose_to\fR \fIpush_msat\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCfundchannel_start\fR is a lower level RPC command. It allows a user to
 initiate channel establishment with a connected peer.
 .PP
@@ -39,9 +33,7 @@ channel establishment has been successfully completed by running
 \fCfundchannel_complete\fR, as the commitment transactions for this channel
 are not secured until the complete command succeeds. Broadcasting
 transaction before that can lead to unrecoverable loss of funds.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBfunding_address\fR (string): The address to send funding to for the channel. DO NOT SEND COINS TO THIS ADDRESS YET.
@@ -108,20 +100,14 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 306: Unknown peer id.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Lisa Neigut <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-fundchannel(7), lightning-multifundchannel(7),
 lightning-fundchannel_complete(7), lightning-fundchannel_cancel(7)
 lightning-openchannel_init(7), lightning-openchannel_update(7),
 lightning-openchannel_signed(7), lightning-openchannel_bump(7),
 lightning-openchannel_abort(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:6cb14a22ca1fcd6eec9ec4b730f45139ca4ac7cfec055ae905a9d3bcb481dc99
+\" SHA256STAMP:0de5f4b91deb60e4ee8b3312180d8d378262ea0d11bd5f02cc45b6b4cb46517b

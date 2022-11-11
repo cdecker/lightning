@@ -1,24 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-COMMANDO" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-COMMANDO" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-commando -- Command to Send a Command to a Remote Peer
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBcommando\fR \fIpeer_id\fR \fImethod\fR [\fIparams\fR] [\fIrune\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBcommando\fR RPC command is a homage to bad 80s movies.  It also
 sends a directly-connected \fIpeer_id\fR a custom message, containing a
 request to run \fImethod\fR (with an optional dictionary of \fIparams\fR);
 generally the peer will only allow you to run a command if it has
 provided you with a \fIrune\fR which allows it.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, the return depends on the \fImethod\fR invoked.
 .PP
 On failure, one of the following error codes may be returned:
@@ -45,20 +37,14 @@ On failure, one of the following error codes may be returned:
 .LP
 It can also fail if the peer does not respond, in which case it will simply
 hang awaiting a response.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> wrote the original Python
 commando.py plugin, the in-tree commando plugin, and this manual page.
 .PP
 Christian Decker came up with the name \(dqcommando\(dq, which almost
 excuses his previous adoption of the name \(dqEltoo\(dq.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-commando-rune(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:a2b8b47c646eb206e61c53632e412eba9dfe4c63a712f64cc8d1bde21c741c83
+\" SHA256STAMP:c22cb10876005660447a178261a700940c95089f5f2297c3c28cde8d38894dbb

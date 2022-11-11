@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-OPENCHANNEL_BUMP" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-OPENCHANNEL_BUMP" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-openchannel_bump -- Command to initiate a channel RBF
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBopenchannel_bump\fR \fIchannel_id\fR \fIamount\fR \fIinitalpsbt\fR [\fIfunding_feerate\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCopenchannel_bump\fR is a RPC command which initiates a channel
 RBF (Replace-By-Fee) for the specified channel. It uses the openchannel protocol
 which allows for interactive transaction construction.
@@ -33,9 +27,7 @@ funding transaction. Defaults to 1/64th greater than the last
 feerate used for this channel.
 .PP
 Warning: bumping a leased channel will lose the lease.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBchannel_id\fR (hex): the channel id of the channel (always 64 characters)
@@ -110,20 +102,14 @@ with \fCcode\fR being one of the following:
 .sp -0.25v
 .IP "\(bu" 2
 312: Channel in an invalid state
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-openchannel_init(7), lightning-openchannel_update(7),
 lightning-openchannel_signed(7), lightning-openchannel_abort(7),
 lightning-fundchannel_start(7), lightning-fundchannel_complete(7),
 lightning-fundchannel(7), lightning-fundpsbt(7), lightning-utxopsbt(7),
 lightning-multifundchannel(7)
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 @niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:a1aedc32d7cabe788a0dc00227dcab70a43eb48ab6aee8dc3eb150726cc84e64
+\" SHA256STAMP:d71082d18ea8be8af551927a78ee6722724798aaff158c07fbfe4f34a55f590d

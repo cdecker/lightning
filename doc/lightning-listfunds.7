@@ -1,25 +1,17 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTFUNDS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTFUNDS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listfunds -- Command showing all funds currently managed by the Core Lightning node
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlistfunds\fR [\fIspent\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlistfunds\fR RPC command displays all funds available, either in
 unspent outputs (UTXOs) in the internal wallet or funds locked in
 currently open channels.
 .PP
 \fIspent\fR is a boolean: if true, then the \fIoutputs\fR will include spent outputs
 in addition to the unspent ones. Default is false.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBoutputs\fR (array of objects):
@@ -49,7 +41,7 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBstatus\fR (string) (one of \(dqunconfirmed\(dq, \(dqconfirmed\(dq, \(dqspent\(dq)
+\fBstatus\fR (string) (one of \(dqunconfirmed\(dq, \(dqconfirmed\(dq, \(dqspent\(dq, \(dqimmature\(dq)
 .if n \
 .sp -1
 .if t \
@@ -127,24 +119,18 @@ If \fBreserved\fR is \(dqtrue\(dq:
 If \fBstate\fR is \(dqCHANNELD_NORMAL\(dq:
 .RS
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid): short channel id of channel
+\fBshort_channel_id\fR (short_channel_id): short channel id of channel
 .RE
 .IP
 If \fBstate\fR is \(dqCHANNELD\fISHUTTING\fRDOWN\(dq, \(dqCLOSINGD\fISIGEXCHANGE\(dq, \(dqCLOSINGD\fRCOMPLETE\(dq, \(dqAWAITING\fIUNILATERAL\(dq, \(dqFUNDING\fRSPEND_SEEN\(dq or \(dqONCHAIN\(dq:
 .RS
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid, optional): short channel id of channel (only if funding reached lockin depth before closing)
+\fBshort_channel_id\fR (short_channel_id, optional): short channel id of channel (only if funding reached lockin depth before closing)
 .RE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Felix <\fIfixone@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-newaddr(7), lightning-fundchannel(7), lightning-withdraw(7), lightning-listtransactions(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:cde31ea5e4029d91395e30fc24a7bbaefc3d4445a3f9f64e1c259349d20d72f4
+\" SHA256STAMP:72810d0cce897b5e08811270b399c8c318ef1b73f1f970ad87b1bd9615ba1732

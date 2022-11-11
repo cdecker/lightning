@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-RESERVEINPUTS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-RESERVEINPUTS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-reserveinputs -- Construct a transaction and reserve the UTXOs it spends
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBreserveinputs\fR \fIpsbt\fR [\fIexclusive\fR] [\fIreserve\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBreserveinputs\fR RPC command places (or increases) reservations on any
 inputs specified in \fIpsbt\fR which are known to lightningd.  It will fail
 with an error if any of the inputs are known to be spent, and ignore inputs
@@ -22,9 +16,7 @@ reservations are simply extended, rather than causing failure.
 .PP
 By default, reservations are for the next 72 blocks (approximately 6
 hours), but this can be changed by setting \fIreserve\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBreservations\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBtxid\fR (txid): the transaction id
@@ -86,16 +78,10 @@ On failure, an error is reported and no UTXOs are reserved.
 .PP
 The following error codes may occur:
 - -32602: Invalid parameter, such as specifying a spent/reserved input in \fIpsbt\fR.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 niftynei <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-unreserveinputs(7), lightning-signpsbt(7), lightning-sendpsbt(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:25a76e5426233dc10b06d8cf7ee8245c44b33719fbc537f0933fd39c7e19c47f
+\" SHA256STAMP:e9f317a1b135b1a92f2eeff90e9d0886fe039d455a6eaf21528f136240864a6b

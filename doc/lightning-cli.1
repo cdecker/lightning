@@ -1,19 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-CLI" "1" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-CLI" "1" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-cli -- Control lightning daemon
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlightning-cli\fR [\fIOPTIONS\fR] \fIcommand\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fBlightning-cli\fR sends commands to the lightning daemon.
-.SH
-OPTIONS
+.SH OPTIONS
 .IP "\(bu" 2
 \fB--lightning-dir\fR=\fIDIR\fR
 .IP
@@ -75,6 +68,10 @@ print out notifications of \fILEVEL\fR or above (one of \fCio\fR, \fCdebug\fR,
 \fCinfo\fR (the default), \fCunusual\fR or \fCbroken\fR: they are prefixed with \fC#
 \fR.
 .IP "\(bu" 2
+\fB--filter\fR/\fB-l\fR=\fIJSON\fR
+.IP
+This hands lightningd \fIJSON\fR as a filter, which controls what will be output, e.g. \fC'--filter={\(dqhelp\(dq:[{\(dqcommand\(dq:true}]}'\fR.  See lightningd-rpc(7) for more details on how to specify filters.
+.IP "\(bu" 2
 \fB--help\fR/\fB-h\fR
 .IP
 Pretty-print summary of options to standard output and exit.  The format can
@@ -89,15 +86,11 @@ Print version number to standard output and exit.
 Enable deprecated options. It defaults to \fItrue\fR, but you should set
 it to \fIfalse\fR when testing to ensure that an upgrade won't break your
 configuration.
-.SH
-COMMANDS
-.LP
+.SH COMMANDS
 \fIlightning-cli\fR simply uses the JSON RPC interface to talk to
 \fIlightningd\fR, and prints the results. Thus the commands available depend
 entirely on the lightning daemon itself.
-.SH
-ARGUMENTS
-.LP
+.SH ARGUMENTS
 Arguments may be provided positionally or using \fIkey\fR=\fIvalue\fR after the
 command name, based on either \fB-o\fR or \fB-k\fR option. When using \fB-k\fR 
 consider prefixing all arguments of the command with their respective keyword, 
@@ -110,8 +103,7 @@ raw JSON and are passed through.  Other arguments are treated as strings.
 .PP
 Some commands have optional arguments. You may use \fInull\fR to skip
 optional arguments to provide later arguments, although this is not encouraged.
-.SH
-EXAMPLES
+.SH EXAMPLES
 .IP "1.  "
 List commands:
 .RS
@@ -124,22 +116,14 @@ Fund a 10k sat channel using uncomfirmed outputs:
 .IP "\(bu" 2
 \fClightning-cli --keywords fundchannel id=028f...ae7d amount=10000sat minconf=0\fR
 .RE
-.SH
-BUGS
-.LP
+.SH BUGS
 This manpage documents how it should work, not how it does work. The
 pretty printing of results isn't pretty.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly to blame.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-.SH
-COPYING
-.LP
+.SH COPYING
 Note: the modules in the ccan/ directory have their own licenses, but
 the rest of the code is covered by the BSD-style MIT license.
-\" SHA256STAMP:7ecc4f3f8cb6c690a72e5df3ae933b40010c7b9a064bb7d064547868d95bbec3
+\" SHA256STAMP:d8622752c1848a375ff6aaaaf9e5a971ee350a0ffa5be827d67b02ba55085a07

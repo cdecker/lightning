@@ -1,18 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-SENDPAY" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-SENDPAY" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-sendpay -- Low-level command for sending a payment via a route
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBsendpay\fR \fIroute\fR \fIpayment_hash\fR [\fIlabel\fR] [\fImsatoshi\fR]
-[\fIbolt11\fR] [\fIpayment_secret\fR] [\fIpartid\fR] [\fIlocalofferid\fR] [\fIgroupid\fR]
+[\fIbolt11\fR] [\fIpayment_secret\fR] [\fIpartid\fR] [\fIlocalinvreqid\fR] [\fIgroupid\fR]
 [\fIpayment_metadata\fR] [\fIdescription\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBsendpay\fR RPC command attempts to send funds associated with the
 given \fIpayment_hash\fR, along a route to the final destination in the
 route.
@@ -47,9 +41,9 @@ partial payments with the same \fIpayment_hash\fR.  The \fImsatoshi\fR amount
 \fIpayment_hash\fR must be equal, and \fBsendpay\fR will fail if there are
 already \fImsatoshi\fR worth of payments pending.
 .PP
-The \fIlocalofferid\fR value indicates that this payment is being made for a local
-send_invoice offer: this ensures that we only send a payment for a single-use
-offer once.
+The \fIlocalinvreqid\fR value indicates that this payment is being made for a local
+invoice\fIrequest: this ensures that we only send a payment for a single-use
+invoice\fRrequest once.
 .PP
 \fIgroupid\fR allows you to attach a number which appears in \fBlistsendpays\fR so
 payments can be identified as part of a logical group.  The \fIpay\fR plugin uses
@@ -63,9 +57,7 @@ this prevents accidental multiple payments. Calls to \fBsendpay\fR with
 the same \fIpayment_hash\fR, \fImsatoshi\fR, and destination as a previous
 successful payment (even if a different route or \fIpartid\fR) will return immediately
 with success.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBid\fR (u64): unique ID for this payment attempt
@@ -116,6 +108,12 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
+\fBcompleted_at\fR (u64, optional): the UNIX timestamp showing when this payment was completed
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
 \fBlabel\fR (string, optional): the \fIlabel\fR, if given to sendpay
 .if n \
 .sp -1
@@ -161,7 +159,7 @@ onion reply.
 will be routing failure object.
 -   204: Failure along route; retry a different route. The \fIdata\fR field
 of the error will be routing failure object.
--   212: \fIlocalofferid\fR refers to an invalid, or used, local offer.
+-   212: \fIlocalinvreqid\fR refers to an invalid, or used, local invoice_request.
 .PP
 A routing failure object has the fields below:
 -   \fIerring_index\fR. The index of the node along the route that reported
@@ -177,18 +175,12 @@ channel caused the failure.
 received from the remote node. Only present if error is from the
 remote node and the \fIfailcode\fR has the UPDATE bit set, as per BOLT
 #4.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listinvoice(7), lightning-delinvoice(7),
 lightning-getroute(7), lightning-invoice(7), lightning-pay(7),
 lightning-waitsendpay(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:1ad9de7c01b2faf7ebfb7e31f02044663610fb8883e2c21dac398e8e090ea70f
+\" SHA256STAMP:f09bd1244cf72afaa8ef5c01b36212b288536a85df7cda7bfc0e347d1a18af44

@@ -1,24 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-DELDATASTORE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-DELDATASTORE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-deldatastore -- Command for removing (plugin) data
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBdeldatastore\fR \fIkey\fR [\fIgeneration\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBdeldatastore\fR RPC command allows plugins to delete data it has
 stored in the Core Lightning database.
 .PP
 The command fails if the \fIkey\fR isn't present, or if \fIgeneration\fR
 is specified and the generation of the data does not exactly match.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBkey\fR (array of strings):
@@ -49,16 +41,10 @@ The following error codes may occur:
 - 1200: the key does not exist
 - 1201: the key does exist, but the generation is wrong
 - -32602: invalid parameters
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listdatastore(7), lightning-datastore(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:6b2529b097de6520ccbd24053de5ebd426a231c81814ec8ec4ddb4622d9abe7f
+\" SHA256STAMP:c1af2647de7bad9d9736b575c7b7dadd5501f70d74a717963e91008b35a70720

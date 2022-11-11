@@ -1,19 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-STOP" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-STOP" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-stop -- Command to shutdown the Core Lightning node.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBstop\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBstop\fR is a RPC command to shut off the Core Lightning node.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -22,19 +15,13 @@ EXAMPLE JSON REQUEST
   \(dqparams\(dq: {}
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, returns a single element (string) (always \(dqShutdown complete\(dq)
 .PP
 Once it has returned, the daemon has cleaned up completely, and if
 desired may be restarted immediately.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:68c5ccfd22ec0ca2a5b910e03ac092d195934fa1bdfd462d77c172bbd122abb3
+\" SHA256STAMP:9c08d080928a73bd6f26e69055cef65ed32e223b79b2ec4f33a5ad2b73ad425c

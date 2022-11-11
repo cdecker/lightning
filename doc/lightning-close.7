@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-CLOSE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-CLOSE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-close -- Command for closing channels with direct peers
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBclose\fR \fIid\fR [\fIunilateraltimeout\fR] [\fIdestination\fR] [\fIfee\fInegotiation\fIstep\fR] [\fIwrong_funding\fR] [\fIforce\fIlease\fIclosed\fR] [*feerange*]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBclose\fR RPC command attempts to close the channel cooperatively
 with the peer, or unilaterally after \fIunilateraltimeout\fR, and the
 to-local output will be sent to the address specified in \fIdestination\fR.
@@ -52,7 +46,7 @@ we quickly accept the peer's proposal.
 .PP
 The default is \(dq50%\(dq.
 .PP
-\fIwrong\fIfunding\fItxid\fR can only be specified if both sides have offered
+\fIwrong_funding\fR can only be specified if both sides have offered
 the \(dqshutdown\fIwrong\fRfunding\(dq feature (enabled by the
 \fBexperimental-shutdown-wrong-funding\fR option): it must be a
 transaction id followed by a colon then the output number.  Instead of
@@ -86,22 +80,16 @@ negotiated).
 The peer needs to be live and connected in order to negotiate a mutual
 close. The default of unilaterally closing after 48 hours is usually a
 reasonable indication that you can no longer contact the peer.
-.SH
-NOTES
-.LP
+.SH NOTES
 Prior to 0.7.2, \fBclose\fR took two parameters: \fIforce\fR and \fItimeout\fR.
 \fItimeout\fR was the number of seconds before \fIforce\fR took effect (default,
 30), and \fIforce\fR determined whether the result was a unilateral close or
 an RPC error (default). Even after the timeout, the channel would be
 closed if the peer reconnected.
-.SH
-NOTIFICATIONS
-.LP
+.SH NOTIFICATIONS
 Notifications may be returned indicating what is going on, especially
 if the peer is offline and we are waiting.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBtype\fR (string): Whether we successfully negotiated a mutual close, closed without them, or discarded not-yet-opened channel (one of \(dqmutual\(dq, \(dqunilateral\(dq, \(dqunopened\(dq)
@@ -121,16 +109,10 @@ behave correctly during the close negotiation.
 .PP
 Unilateral closes will return your funds after a delay. The delay will
 vary based on the peer \fIto_self_delay\fR setting, not your own setting.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 ZmnSCPxj <\fIZmnSCPxj@protonmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-disconnect(7), lightning-fundchannel(7), lightningd-config(5).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:07b66a016b16e5a8cb070bfb75eca10a2744be1f3e3c959024b03b0682ac4e2f
+\" SHA256STAMP:d33fdf3d8ba3542a49d98b710f256958d5b46e38725df0056c2cb376b89f3b79

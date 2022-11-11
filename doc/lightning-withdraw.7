@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-WITHDRAW" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-WITHDRAW" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-withdraw -- Command for withdrawing funds from the internal wallet
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBwithdraw\fR \fIdestination\fR \fIsatoshi\fR [\fIfeerate\fR] [\fIminconf\fR] [\fIutxos\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBwithdraw\fR RPC command sends funds from Core Lightning's internal
 wallet to the address specified in \fIdestination\fR.
 .PP
@@ -38,9 +32,7 @@ outputs should have. Default is 1.
 .PP
 \fIutxos\fR specifies the utxos to be used to be withdrawn from, as an array
 of \(dqtxid:vout\(dq. These must be drawn from the node's available UTXO set.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBtx\fR (hex): the fully signed bitcoin transaction
@@ -65,17 +57,11 @@ The following error codes may occur:
 - 301: There are not enough funds in the internal wallet (including
 fees) to create the transaction.
 - 302: The dust limit is not met.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Felix <\fIfixone@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listfunds(7), lightning-fundchannel(7), lightning-newaddr(7),
 lightning-txprepare(7), lightning-feerates(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:159498b1d9fc2b66e583ee6a84b2caa2a8e38a2ccf7fd460e838167f68c4c5b9
+\" SHA256STAMP:b3263b8bb8ef4d62bed56b3e1d97d05daed3d4923f9071ba43360130f9f132f4

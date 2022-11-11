@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-CREATEONION" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-CREATEONION" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-createonion -- Low-level command to create a custom onion
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBcreateonion\fR \fIhops\fR \fIassocdata\fR [\fIsession_key\fR] [\fIonion_size\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBcreateonion\fR RPC command allows the caller to create a custom onion
 with custom payloads at each hop in the route. A custom onion can be used to
 implement protocol extensions that are not supported by Core Lightning directly.
@@ -22,14 +16,13 @@ payload destined for that node. The following is an example of a 3 hop onion:
 [
     {
         \(dqpubkey\(dq: \(dq022d223620a359a47ff7f7ac447c85c46c923da53389221a0054c11c1e3ca31d59\(dq,
-        \(dqpayload\(dq: \(dq00000067000001000100000000000003e90000007b000000000000000000000000000000000000000000000000\(dq
+        \(dqpayload\(dq: \(dq11020203e904017b06080000670000010001\(dq
     }, {
         \(dqpubkey\(dq: \(dq035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d\(dq,
-        \(dqpayload\(dq: \(dq00000067000003000100000000000003e800000075000000000000000000000000000000000000000000000000\(dq
+        \(dqpayload\(dq: \(dq11020203e804017506080000670000030001\(dq
     }, {
-        \(dqstyle\(dq: \(dqlegacy\(dq,
         \(dqpubkey\(dq: \(dq0382ce59ebf18be7d84677c2e35f23294b9992ceca95491fcf8a56c6cb2d9de199\(dq,
-        \(dqpayload\(dq: \(dq00000067000003000100000000000003e800000075000000000000000000000000000000000000000000000000\(dq
+        \(dqpayload\(dq: \(dq07020203e8040175\(dq
     }
 ]
 .EE
@@ -65,8 +58,8 @@ which the above \fIhops\fR parameter was generated:
 ]
 .EE
 .IP "\(bu" 2
-Notice that the payload in the \fIhops\fR parameter is the hex-encoded version
-of the parameters in the \fCgetroute\fR response.
+Notice that the payload in the \fIhops\fR parameter is the hex-encoded TLV
+of the parameters in the \fCgetroute\fR response, with length prepended as a \fCbigsize_t\fR.
 .if n \
 .sp -1
 .if t \
@@ -82,7 +75,7 @@ payload in \fCcreateonion\fR corresponds to the 2nd set of values from \fCgetrou
 The final payload is a copy of the last payload sans \fCchannel\fR
 .LP
 These rules are directly derived from the onion construction. Please refer
-\fBBOLT 04\fR <\fIhttps://github.com/lightning/bolts/blob/master/04-onion-routing.md\fR> for details and rationale.
+\fBBOLT 04\fR (\fIhttps://github.com/lightning/bolts/blob/master/04-onion-routing.md\fR) for details and rationale.
 .PP
 The \fIassocdata\fR parameter specifies the associated data that the onion should
 commit to. If the onion is to be used to send a payment later it MUST match
@@ -97,9 +90,7 @@ shared secrets will be returned.
 The optional \fIonion_size\fR parameter specifies a size different from the default
 payment onion (1300 bytes). May be used for custom protocols like trampoline
 routing.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBonion\fR (hex): the onion packet (\fIonion_size\fR bytes)
@@ -113,9 +104,7 @@ On success, an object is returned, containing:
 .IP "\(bu" 2
 the shared secret with this hop (always 64 characters)
 .RE
-.SH
-EXAMPLE
-.LP
+.SH EXAMPLE
 The following example is the result of calling \fIcreateonion\fR with the
 above hops parameter:
 .LP
@@ -132,16 +121,10 @@ above hops parameter:
 .PP
 The \fConion\fR corresponds to 1366 hex-encoded bytes. Each shared secret consists
 of 32 hex-encoded bytes. Both arguments can be passed on to \fBsendonion\fR.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Christian Decker <\fIdecker.christian@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-sendonion(7), lightning-getroute(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:f7738087063669cc4ec6ee03088e2d25188db3ce95bf3aed9896aae7ff658d78
+\" SHA256STAMP:37dc86837320f24a515c7d0e8af346c7f8626574f8e38db2d43c66c9c7504543

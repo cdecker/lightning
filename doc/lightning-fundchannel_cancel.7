@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-FUNDCHANNEL_CANCEL" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-FUNDCHANNEL_CANCEL" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-fundchannel_cancel -- Command for completing channel establishment
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBfundchannel_cancel\fR \fIid\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fCfundchannel_cancel\fR is a lower level RPC command. It allows channel opener
 to cancel a channel before funding broadcast with a connected peer.
 .PP
@@ -23,9 +17,7 @@ WILL lead to unrecoverable loss of funds.
 If \fCfundchannel_cancel\fR is called after \fCfundchannel_complete\fR, the remote
 peer may disconnect when command succeeds. In this case, user need to connect
 to remote peer again before opening channel.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBcancelled\fR (string): A message indicating it was cancelled by RPC
@@ -54,19 +46,13 @@ with \fCcode\fR being one of the following:
 308: It is unsafe to cancel the channel: the funding transaction
 has been broadcast, or there are HTLCs already in the channel, or
 the peer was the initiator and not us.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Lisa Neigut <\fIniftynei@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-fundchannel(7), lightning-multifundchannel(7),
 lightning-fundchannel_start(7), lightning-fundchannel_complete(7)
 lightning-openchannel_init(7), lightning-openchannel_update(7),
 lightning-openchannel_signed(7), lightning-openchannel_abort(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:2d31e978b79c353416692de9c0ea747a84a0027ac69b0d8605a6f94547e97d06
+\" SHA256STAMP:d0c169a037f31d8aa669da050c14715b10c32c38178abb5f508cb52ac8044286

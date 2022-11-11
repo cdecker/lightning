@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-DELINVOICE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-DELINVOICE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-delinvoice -- Command for removing an invoice (or just its description)
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBdelinvoice\fR \fIlabel\fR \fIstatus\fR [\fIdesconly\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBdelinvoice\fR RPC command removes an invoice with \fIstatus\fR as given
 in \fBlistinvoices\fR, or with \fIdesconly\fR set, removes its description.
 .PP
@@ -20,9 +14,7 @@ The caller should be particularly aware of the error case caused by the
 If \fIdesconly\fR is set, the invoice is not deleted, but has its
 description removed (this can save space with very large descriptions,
 as would be used with lightning-invoice(7) \fIdeschashonly\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 Note: The return is the same as an object from lightning-listinvoice(7).
 .PP
 On success, an object is returned, containing:
@@ -79,7 +71,7 @@ If \fBbolt12\fR is present:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBpayer_note\fR (string, optional): the optional \fIpayer_note\fR from invoice_request which created this invoice
+\fBinvreq_payer_note\fR (string, optional): the optional \fIinvreq\fIpayer\fInote\fR from invoice_request which created this invoice
 .LP
 If \fBstatus\fR is \(dqpaid\(dq:
 .IP "\(bu" 2
@@ -102,9 +94,7 @@ If \fBstatus\fR is \(dqpaid\(dq:
 .sp -0.25v
 .IP "\(bu" 2
 \fBpayment_preimage\fR (secret): SHA256 of this is the \fIpayment_hash\fR offered in the invoice (always 64 characters)
-.SH
-ERRORS
-.LP
+.SH ERRORS
 The following errors may be reported:
 .IP "\(bu" 2
 -1:  Database error.
@@ -130,18 +120,12 @@ changing just before this command is invoked.
 .sp -0.25v
 .IP "\(bu" 2
 908: The invoice already has no description, and \fIdesconly\fR was set.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listinvoice(7), lightning-waitinvoice(7),
 lightning-invoice(7), lightning-delexpiredinvoice(7),
-lightning-autocleaninvoice(7)
-.SH
-RESOURCES
-.LP
+lightning-autoclean-status(7)
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:331f8ccd1f6682ffc0f34b7f2aac4adc931436f719df4c7fdf7b3788175346eb
+\" SHA256STAMP:60533cb35cf89fb1c2784d308f163b585112ef38c16653f7e67a3acaa009caaa

@@ -1,21 +1,13 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-DECODEPAY" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-DECODEPAY" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-decodepay -- Command for decoding a bolt11 string (low-level)
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBdecodepay\fR \fIbolt11\fR [\fIdescription\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBdecodepay\fR RPC command checks and parses a \fIbolt11\fR string as
 specified by the BOLT 11 specification.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBcurrency\fR (string): the BIP173 name for the currency
@@ -133,7 +125,7 @@ hops in the route:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid): a channel to the next peer
+\fBshort_channel_id\fR (short_channel_id): a channel to the next peer
 .if n \
 .sp -1
 .if t \
@@ -174,19 +166,13 @@ Technically, the \fIdescription\fR field is optional if a
 \fIdescription_hash\fR field is given, but in this case \fBdecodepay\fR will
 only succeed if the optional \fIdescription\fR field is passed and matches
 the \fIdescription_hash\fR. In practice, these are currently unused.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-pay(7), lightning-getroute(7), lightning-sendpay(7).
 .PP
 \fBBOLT
-#11\fR <\fIhttps://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md\fR>.
-.SH
-RESOURCES
-.LP
+#11\fR (\fIhttps://github.com/lightning/bolts/blob/master/11-payment-encoding.md\fR).
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:4c1e8d8a1073ad32af0a7a0fdf00affef3d9451566862a81d7a620fd83df6c7a
+\" SHA256STAMP:7c58c47e23bc649c9e5c1ee7714a4f81a494ad86a0fda6b0641c45f5bbc99750

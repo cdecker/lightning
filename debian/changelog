@@ -1,3 +1,9 @@
+lightningd (22.11rc1.1ubuntu2) UNRELEASED; urgency=medium
+
+  * Updated to v22.11rc1
+
+ -- Christian Decker <decker@blockstream.com>  Fri, 11 Nov 2022 11:50:27 +0100
+
 lightningd (0.12.1ubuntu1) stable; urgency=medium
 
   * Updated to v0.12.1

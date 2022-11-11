@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-KEYSEND" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-KEYSEND" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-keysend -- Send funds to a node without an invoice
-.SH
-SYNOPSIS
-.LP
-\fBkeysend\fR \fIdestination\fR \fImsatoshi\fR [\fIlabel\fR] [\fImaxfeepercent\fR] [\fIretry_for\fR] [\fImaxdelay\fR] [\fIexemptfee\fR]
-.SH
-DESCRIPTION
-.LP
+.SH SYNOPSIS
+\fBkeysend\fR \fIdestination\fR \fImsatoshi\fR [\fIlabel\fR] [\fImaxfeepercent\fR] [\fIretry_for\fR] [\fImaxdelay\fR] [\fIexemptfee\fR] [\fIextratlvs\fR]
+.SH DESCRIPTION
 The \fBkeysend\fR RPC command attempts to find a route to the given destination,
 and send the specified amount to it. Unlike the \fCpay\fR RPC command the
 \fCkeysend\fR command does not require an invoice, instead it uses the
@@ -38,11 +32,11 @@ Unlike lightning-pay(7), issuing the same \fCkeysend\fR commands multiple times 
 Until \fIretry_for\fR seconds passes (default: 60), the command will keep finding routes and retrying the payment.
 However, a payment may be delayed for up to \fCmaxdelay\fR blocks by another node; clients should be prepared for this worst case.
 .PP
+\fIextratlvs\fR is an optional dictionary of additional fields to insert into the final tlv.  The format is 'fieldnumber': 'hexstring'.
+.PP
 When using \fIlightning-cli\fR, you may skip optional parameters by using
 \fInull\fR. Alternatively, use \fB-k\fR option to provide parameters by name.
-.SH
-RANDOMIZATION
-.LP
+.SH RANDOMIZATION
 To protect user privacy, the payment algorithm performs some randomization.
 .PP
 1: Route Randomization
@@ -62,9 +56,7 @@ nodes from reliably guessing their distance from the payee.
 Route randomization will never exceed \fImaxfeepercent\fR of the payment.
 Route randomization and shadow routing will not take routes that would
 exceed \fImaxdelay\fR.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBpayment_preimage\fR (secret): the proof of payment: SHA256 of this \fBpayment_hash\fR (always 64 characters)
@@ -130,17 +122,11 @@ A routing failure object has the fields below:
 - \fCerring_channel\fR: The short channel ID of the channel that has the error, or \fI0:0:0\fR if the destination node raised the error.
 - \fCfailcode\fR: The failure code, as per BOLT #4.
 - \fCchannel_update\fR. The hex string of the \fIchannel_update\fR message received from the remote node. Only present if error is from the remote node and the \fIfailcode\fR has the \fCUPDATE\fR bit set, as per BOLT #4.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Christian Decker <\fIdecker@blockstream.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-listpays(7), lightning-decodepay(7), lightning-listinvoice(7),
 lightning-delinvoice(7), lightning-getroute(7), lightning-invoice(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:2fdb0ada7454c4912781732e4555dab83865c96e3448756b014ffb8d06786c1b
+\" SHA256STAMP:c5870bec8a4f74ec917f39fabc6a7715b4c47364546a94889cca80166b401721

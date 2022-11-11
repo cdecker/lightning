@@ -1,23 +1,16 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-HELP" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-HELP" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-help -- Command to return all information about RPC commands.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBhelp\fR [\fIcommand\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBhelp\fR is a RPC command which is possible consult all information about the RPC commands, or a specific command if \fIcommand\fR is given.
 .PP
 Note that the lightning-cli(1) tool will prefer to list a man page when a
 specific \fIcommand\fR is specified, and will only return the JSON if the man
 page is not found.
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -26,9 +19,7 @@ EXAMPLE JSON REQUEST
   \(dqparams\(dq: {}
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBhelp\fR (array of objects):
@@ -58,8 +49,7 @@ On success, an object is returned, containing:
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -73,12 +63,8 @@ EXAMPLE JSON RESPONSE
     ]
 }
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:adc770dc744fce7bef2d18a9c693fa7a2380cf1458b00ed816e1608dc22e7c0e
+\" SHA256STAMP:33f32e3b514da0e714325fdf39d9cf2a346e1ae35a1a0cc1e09993ac1582f1ef

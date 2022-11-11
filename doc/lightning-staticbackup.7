@@ -1,33 +1,19 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-STATICBACKUP" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-STATICBACKUP" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-staticbackup -- Command for deriving getting SCB of all the existing channels
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBstaticbackup\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBstaticbackup\fR RPC command returns an object with SCB of all the channels in an array.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 - \fBscb\fR (array of hexs):
 - Each item is SCB of a channel in TLV format
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Aditya <\fIaditya.sharma20111@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-getsharedsecret(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:fe9ab8617ee43816caa99cab4cc508c38313d5338b108d8d53bd210fc91be5fd
+\" SHA256STAMP:89a0119d1e1bc0290c2a81eddf25d293a8edbc5e1c0694cb4758f5da4e40ec03

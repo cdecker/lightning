@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-MULTIFUNDCHANNEL" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-MULTIFUNDCHANNEL" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-multifundchannel -- Command for establishing many lightning channels
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBmultifundchannel\fR \fIdestinations\fR [\fIfeerate\fR] [\fIminconf\fR] [\fIutxos\fR] [\fIminchannels\fR] [\fIcommitment_feerate\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBmultifundchannel\fR RPC command opens multiple payment channels
 with nodes by committing a single funding transaction to the blockchain
 that is shared by all channels.
@@ -118,9 +112,7 @@ the funding process.
 .PP
 \fIcommitment_feerate\fR is the initial feerate for commitment and HTLC
 transactions. See \fIfeerate\fR for valid values.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 This command opens multiple channels with a single large transaction,
 thus only one transaction is returned.
 .PP
@@ -232,17 +224,11 @@ second \fBmultifundchannel\fR to fail as well due to disconnection.
 Doing a \fBconnect\fR with the peers separately, and waiting for a
 few seconds, should help clear this hurdle;
 running \fBmultifundchannel\fR a third time would also clear this.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 ZmnSCPxj <\fIZmnSCPxj@protonmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-connect(7), lightning-listfunds(), lightning-listpeers(7),
 lightning-fundchannel(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:69dff398151295faa9a3805f941c9031c3cd2c6f66821050410a5bd3a72c57b6
+\" SHA256STAMP:bf135157ba82cab2b3bcc586c36399e48b2e1904c268100a6045c7961391d01a

@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-WAITANYINVOICE" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-WAITANYINVOICE" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-waitanyinvoice -- Command for waiting for payments
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBwaitanyinvoice\fR [\fIlastpay_index\fR] [\fItimeout\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBwaitanyinvoice\fR RPC command waits until an invoice is paid, then
 returns a single entry as per \fBlistinvoice\fR. It will not return for
 any invoices paid prior to or including the \fIlastpay_index\fR.
@@ -31,9 +25,7 @@ error.
 You can specify this to 0 so that \fBwaitanyinvoice\fR will return
 immediately with an error if no pending invoice is available yet.
 If unspecified, this command will wait indefinitely.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBlabel\fR (string): unique label supplied at invoice creation
@@ -106,17 +98,11 @@ Possible errors are:
 .IP "\(bu" 2
 904.
 The \fItimeout\fR was reached without an invoice being paid.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-waitinvoice(7), lightning-listinvoice(7),
 lightning-delinvoice(7), lightning-invoice(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:df7807a2e06377c0453470f21a3fab441e937c0c8efe51f9c226e7b74a0662c9
+\" SHA256STAMP:8027f4bec440c47562997ed62138cdc8fb45ab4fe07289eb12ce1b02ecf65422

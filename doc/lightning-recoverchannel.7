@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-RECOVERCHANNEL" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-RECOVERCHANNEL" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-recoverchannel -- Command for recovering channels bundeled in an array in the form of \fIStatic Backup\fR
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBrecoverchannel\fR \fIscb\fR
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBrecoverchannel\fR RPC command tries to force the peer (with whom you
 already had a channel) to close the channel and sweeps on-chain fund. This
 method is not spontaneous and depends on the peer, so use it in case of
@@ -19,22 +13,14 @@ severe data loss.
 The \fIscb\fR parameter is an array containing minimum required info to
 reconnect and sweep funds. You can get the scb for already stored channels
 by using the RPC command 'staticbackup'
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 - \fBstubs\fR (array of hexs):
 - Each item is the channel ID of the channel successfully inserted
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Aditya <\fIaditya.sharma20111@gmail.com\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-getsharedsecret(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:881ad28c822a20adcb5a6e01edfb090d06e968246755623307f882aa1eb777cd
+\" SHA256STAMP:578222a441890ea7df52a3e4845512d6c6b61b9c52c895d20dbeb10d7e0eb542

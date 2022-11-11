@@ -1,0 +1,59 @@
+.\" -*- mode: troff; coding: utf-8 -*-
+.TH "LIGHTNING-LISTHTLCS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
+lightning-listhtlcs -- Command for querying HTLCs
+.SH SYNOPSIS
+\fBlisthtlcs\fR [\fIid\fR]
+.SH DESCRIPTION
+The \fBlisthtlcs\fR RPC command gets all HTLCs (which, generally, we
+remember for as long as a channel is open, even if they've completed
+long ago).  If given a short channel id (e.g. 1x2x3) or full 64-byte
+hex channel id, it will only list htlcs for that channel (which
+must be known).
+.SH RETURN VALUE
+On success, an object containing \fBhtlcs\fR is returned.  It is an array of objects, where each object contains:
+.IP "\(bu" 2
+\fBshort_channel_id\fR (short_channel_id): the channel that contains/contained the HTLC
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBid\fR (u64): the unique, incrementing HTLC id the creator gave this
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBexpiry\fR (u32): the block number where this HTLC expires/expired
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBamount_msat\fR (msat): the value of the HTLC
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBdirection\fR (string): out if we offered this to the peer, in if they offered it (one of \(dqout\(dq, \(dqin\(dq)
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBpayment_hash\fR (hex): payment hash sought by HTLC (always 64 characters)
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBstate\fR (string): The first 10 states are for \fCin\fR, the next 10 are for \fCout\fR. (one of \(dqSENT\fIADD\fRHTLC\(dq, \(dqSENT\fIADD\fRCOMMIT\(dq, \(dqRCVD\fIADD\fRREVOCATION\(dq, \(dqRCVD\fIADD\fRACK\fICOMMIT\(dq, \(dqSENT\fRADD\fIACK\fRREVOCATION\(dq, \(dqRCVD\fIREMOVE\fRHTLC\(dq, \(dqRCVD\fIREMOVE\fRCOMMIT\(dq, \(dqSENT\fIREMOVE\fRREVOCATION\(dq, \(dqSENT\fIREMOVE\fRACK\fICOMMIT\(dq, \(dqRCVD\fRREMOVE\fIACK\fRREVOCATION\(dq, \(dqRCVD\fIADD\fRHTLC\(dq, \(dqRCVD\fIADD\fRCOMMIT\(dq, \(dqSENT\fIADD\fRREVOCATION\(dq, \(dqSENT\fIADD\fRACK\fICOMMIT\(dq, \(dqRCVD\fRADD\fIACK\fRREVOCATION\(dq, \(dqSENT\fIREMOVE\fRHTLC\(dq, \(dqSENT\fIREMOVE\fRCOMMIT\(dq, \(dqRCVD\fIREMOVE\fRREVOCATION\(dq, \(dqRCVD\fIREMOVE\fRACK\fICOMMIT\(dq, \(dqSENT\fRREMOVE\fIACK\fRREVOCATION\(dq)
+.SH AUTHOR
+Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
+.SH SEE ALSO
+lightning-listforwards(7)
+.SH RESOURCES
+Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
+\" SHA256STAMP:48378933a667c6e2cd8795650a591bd2db3f34e52b2e92d782371995bb16bb30

@@ -1,18 +1,12 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-OFFER" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-OFFER" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-offer -- Command for accepting payments
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fB(WARNING: experimental-offers only)\fR
 .PP
-\fBoffer\fR \fIamount\fR \fIdescription\fR [\fIissuer\fR] [\fIlabel\fR] [\fIquantity_min\fR] [\fIquantity_max\fR] [\fIabsolute_expiry\fR] [\fIrecurrence\fR] [\fIrecurrence_base\fR] [\fIrecurrence_paywindow\fR] [\fIrecurrence_limit\fR] [\fIsingle_use\fR]
-.SH
-DESCRIPTION
-.LP
+\fBoffer\fR \fIamount\fR \fIdescription\fR [\fIissuer\fR] [\fIlabel\fR] [\fIquantity_max\fR] [\fIabsolute_expiry\fR] [\fIrecurrence\fR] [\fIrecurrence_base\fR] [\fIrecurrence_paywindow\fR] [\fIrecurrence_limit\fR] [\fIsingle_use\fR]
+.SH DESCRIPTION
 The \fBoffer\fR RPC command creates an offer (or returns an existing
 one), which is a precursor to creating one or more invoices.  It
 automatically enables the processing of an incoming invoice_request,
@@ -45,10 +39,11 @@ reflects who is issuing this offer (i.e. you) if appropriate.
 The \fIlabel\fR field is an internal-use name for the offer, which can
 be any UTF-8 string.
 .PP
-The present of \fIquantity_min\fR or \fIquantity_max\fR indicates that the
-invoice can specify more than one of the items within this (inclusive)
-range.  The \fIamount\fR for the invoice will need to be multiplied
-accordingly.  These are encoded in the offer.
+The presence of \fIquantity_max\fR indicates that the
+invoice can specify more than one of the items up (and including)
+this maximum: 0 is a special value meaning \(dqno maximuim\(dq.
+The \fIamount\fR for the invoice will need to be multiplied
+accordingly.  This is encoded in the offer.
 .PP
 The \fIabsolute_expiry\fR is optionally the time the offer is valid until,
 in seconds since the first day of 1970 UTC.  If not set, the offer
@@ -92,9 +87,7 @@ offer.
 \fIsingle_use\fR (default false) indicates that the offer is only valid
 once; we may issue multiple invoices, but as soon as one is paid all other
 invoices will be expired (i.e. only one person can pay this offer).
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fBoffer_id\fR (hex): the id of this offer (merkle hash of non-signature fields) (always 64 characters)
@@ -116,12 +109,6 @@ On success, an object is returned, containing:
 .sp -0.25v
 .IP "\(bu" 2
 \fBbolt12\fR (string): the bolt12 encoding of the offer
-.if n \
-.sp -1
-.if t \
-.sp -0.25v
-.IP "\(bu" 2
-\fBbolt12_unsigned\fR (string): the bolt12 encoding of the offer, without a signature
 .if n \
 .sp -1
 .if t \
@@ -152,16 +139,10 @@ if it's not active then this call fails.
 The following error codes may occur:
 - -1: Catchall nonspecific error.
 - 1000: Offer with this offer_id already exists (but is not active).
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Rusty Russell <\fIrusty@rustcorp.com.au\fR> is mainly responsible.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-offerout(7), lightning-listoffers(7), lightning-disableoffer(7).
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:774138af7b5ab5edf762d6693da5f94032d9e5c93b9c9005809acde5d66e3f9e
+\" SHA256STAMP:f14708c8f721ffa66a54e747f25597322dab32be52d71a236fade83f9a54bbb1

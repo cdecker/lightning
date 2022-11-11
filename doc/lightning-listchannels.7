@@ -1,16 +1,10 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTCHANNELS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTCHANNELS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listchannels -- Command to query active lightning channels in the entire network
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlistchannels\fR [\fIshort_channel_id\fR] [\fIsource\fR] [\fIdestination\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 The \fBlistchannels\fR RPC command returns data on channels that are known
 to the node. Because channels may be bidirectional, up to 2 objects will
 be returned for each channel (one for each direction).
@@ -28,9 +22,7 @@ Only one of \fIshort_channel_id\fR, \fIsource\fR or \fIdestination\fR can be sup
 If nothing is supplied, data on all lightning channels known to this
 node, are returned. These can be local channels or public channels
 broadcast on the gossip network.
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object containing \fBchannels\fR is returned.  It is an array of objects, where each object contains:
 .IP "\(bu" 2
 \fBsource\fR (pubkey): the source node
@@ -45,7 +37,7 @@ On success, an object containing \fBchannels\fR is returned.  It is an array of 
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBshort_channel_id\fR (short\fIchannel\fRid): short channel id of channel
+\fBshort_channel_id\fR (short_channel_id): short channel id of channel
 .if n \
 .sp -1
 .if t \
@@ -126,21 +118,15 @@ On error the returned object will contain \fCcode\fR and \fCmessage\fR propertie
 with \fCcode\fR being one of the following:
 .IP "\(bu" 2
 -32602: If the given parameters are wrong.
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Michael Hawkins <\fImichael.hawkins@protonmail.com\fR>.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-fundchannel(7), lightning-listnodes(7)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
 .PP
 Lightning RFC site
 .IP "\(bu" 2
 BOLT #7:
-\fIhttps://github.com/lightningnetwork/lightning-rfc/blob/master/07-routing-gossip.md\fR
-\" SHA256STAMP:96c13c46348a3f11f1dc35dadf1030f4164cc3c674c1f7b294aa4997e2974a43
+\fIhttps://github.com/lightning/bolts/blob/master/07-routing-gossip.md\fR
+\" SHA256STAMP:7fc2e5ec4c4fb1fb08bfd6afc86e53b3572b79b59d59d68ecb9331c508d10666

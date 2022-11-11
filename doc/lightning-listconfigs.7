@@ -1,24 +1,17 @@
 .\" -*- mode: troff; coding: utf-8 -*-
-.TH "LIGHTNING-LISTCONFIGS" "7" "" "Core Lightning 0.12.1" ""
-.SH
-NAME
-.LP
+.TH "LIGHTNING-LISTCONFIGS" "7" "" "Core Lightning 22.11rc1" ""
+.SH NAME
 lightning-listconfigs -- Command to list all configuration options.
-.SH
-SYNOPSIS
-.LP
+.SH SYNOPSIS
 \fBlistconfigs\fR [\fIconfig\fR]
-.SH
-DESCRIPTION
-.LP
+.SH DESCRIPTION
 \fIconfig\fR (optional) is a configuration option name, or \(dqplugin\(dq to show plugin options
 .PP
 The \fBlistconfigs\fR RPC command to list all configuration options, or with \fIconfig\fR only a selection.
 .PP
 The returned values reflect the current configuration, including
 showing default values (\fCdev-\fR options are not shown).
-.SH
-EXAMPLE JSON REQUEST
+.SH EXAMPLE JSON REQUEST
 .LP
 .EX
 {
@@ -29,9 +22,7 @@ EXAMPLE JSON REQUEST
   }
 }
 .EE
-.SH
-RETURN VALUE
-.LP
+.SH RETURN VALUE
 On success, an object is returned, containing:
 .IP "\(bu" 2
 \fB# version\fR (string, optional): Special field indicating the current version
@@ -185,6 +176,12 @@ On success, an object is returned, containing:
 .sp -0.25v
 .IP "\(bu" 2
 \fBexperimental-websocket-port\fR (u16, optional): \fCexperimental-websocket-port\fR field from config or cmdline, or default
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBdatabase-upgrade\fR (boolean, optional): \fCdatabase-upgrade\fR field from config or cmdline
 .if n \
 .sp -1
 .if t \
@@ -394,19 +391,30 @@ On success, an object is returned, containing:
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
-\fBfetchinvoice-noconnect\fR (boolean, optional): \fCfeatchinvoice-noconnect\fR fileds from config or cmdline, or default
+\fBfetchinvoice-noconnect\fR (boolean, optional): \fCfetchinvoice-noconnect\fR fields from config or cmdline, or default
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBaccept-htlc-tlv-types\fR (string, optional): \fCaccept-extra-tlvs-type\fR fields from config or cmdline, or not present
 .if n \
 .sp -1
 .if t \
 .sp -0.25v
 .IP "\(bu" 2
 \fBtor-service-password\fR (string, optional): \fCtor-service-password\fR field from config or cmdline, if any
+.if n \
+.sp -1
+.if t \
+.sp -0.25v
+.IP "\(bu" 2
+\fBdev-allowdustreserve\fR (boolean, optional): Whether we allow setting dust reserves
 .LP
 On failure, one of the following error codes may be returned:
 .IP "\(bu" 2
 -32602: Error in given parameters or field with \fIconfig\fR name doesn't exist.
-.SH
-EXAMPLE JSON RESPONSE
+.SH EXAMPLE JSON RESPONSE
 .LP
 .EX
 {
@@ -499,16 +507,10 @@ EXAMPLE JSON RESPONSE
 }
 
 .EE
-.SH
-AUTHOR
-.LP
+.SH AUTHOR
 Vincenzo Palazzo <\fIvincenzo.palazzo@protonmail.com\fR> wrote the initial version of this man page, but many others did the hard work of actually implementing this rpc command.
-.SH
-SEE ALSO
-.LP
+.SH SEE ALSO
 lightning-getinfo(7), lightningd-config(5)
-.SH
-RESOURCES
-.LP
+.SH RESOURCES
 Main web site: \fIhttps://github.com/ElementsProject/lightning\fR
-\" SHA256STAMP:4c434cb1b3daf1f0f6bfd1f3f3d3e05c48520d03c07f4e0379fb84df42546666
+\" SHA256STAMP:fcf9cad9b270037d643ca883e0066fe71a607696a3d8cc875813f75201b4387e
