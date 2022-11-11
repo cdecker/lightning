@@ -7,6 +7,7 @@ rm = rm.bake("-rf")
 grm = git.bake("rm", "--cached")
 commit = git.bake("commit", "-am")
 gclone = git.bake("clone", "--recursive")
+gsubtree = git.bake('subtree')
 gadd = git.bake("add")
 # Read the gitmodules file
 submodules = {}
@@ -39,17 +40,19 @@ for module in submodules.values():
     grm(module["path"])
     rm(module["path"])
 
+    # Normalize the hashes
+    module['hash'] = module['hash'].replace('-', '').replace('+', '')
+
 commit("scripted: Remove submodules for materialization")
-mv(".gitignore", ".gitignore.bak")
+#mv(".gitignore", ".gitignore.bak")
 
 for module in submodules.values():
-    gclone(module["url"], module["path"])
-    d = os.getcwd()
-    os.chdir(module["path"])
-    git("checkout", module["hash"])
-    os.chdir(d)
-    rm(f"{module['path']}/.git")
-    gadd(module["path"])
+    print(f"Cloning {module['url']} to {module['path']}")
+    gsubtree(
+        'add',
+        f'--prefix={module["path"]}',
+        module['url'], module['hash']
+    )
 
-mv(".gitignore.bak", ".gitignore")
+#mv(".gitignore.bak", ".gitignore")
 commit("scripted: Materialize submodules")
