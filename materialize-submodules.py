@@ -50,6 +50,7 @@ for module in submodules.values():
     print(f"Cloning {module['url']} to {module['path']}")
     gsubtree(
         'add',
+        '--squash',
         f'--prefix={module["path"]}',
         module['url'],
         module['hash']
