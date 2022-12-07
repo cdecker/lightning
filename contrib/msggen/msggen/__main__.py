@@ -65,7 +65,7 @@ def run(rootdir: Path):
     write_msggen_meta(meta)
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--rootdir',
@@ -76,3 +76,7 @@ if __name__ == "__main__":
     run(
         rootdir=Path(args.rootdir)
     )
+
+
+if __name__ == "__main__":
+    main()
