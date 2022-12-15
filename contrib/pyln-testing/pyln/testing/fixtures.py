@@ -1,5 +1,6 @@
 from concurrent import futures
 from pyln.testing.db import SqliteDbProvider, PostgresDbProvider
+from pyln.testing import db
 from pyln.testing.utils import NodeFactory, BitcoinD, ElementsD, env, DEVELOPER, LightningNode, TEST_DEBUG
 from pyln.client import Millisatoshi
 from typing import Dict
@@ -418,7 +419,7 @@ def _load_schema(filename, is_request):
         return _extra_validator(is_request)(json.load(f))
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope='session')
 def jsonschemas():
     """Load schema files if they exist: returns request/response schemas by pairs"""
     try:
@@ -600,13 +601,23 @@ def checkMemleak(node):
 
 # Mapping from TEST_DB_PROVIDER env variable to class to be used
 providers = {
-    'sqlite3': SqliteDbProvider,
-    'postgres': PostgresDbProvider,
+    'sqlite3': db.SqliteDbProvider,
+    'postgres': db.PostgresDbProvider,
+    'system-postgres': db.SystemPostgresDbProvider,
 }
 
 
-@pytest.fixture
+@pytest.fixture()
 def db_provider(test_base_dir):
+    """A way for us to provision a new database for each node in a test.
+
+    The provider can be rather costly to start up, so we set a `scope`
+    of `session` so we can ammortize startup costs across all tests we
+    run. Notice that we still spawn multiple `db_provider` instances
+    if we're running multiple tests in parallel (each runner is its
+    own process, and will maintain their own instance).
+
+    """
     provider = providers[os.getenv('TEST_DB_PROVIDER', 'sqlite3')](test_base_dir)
     provider.start()
     yield provider

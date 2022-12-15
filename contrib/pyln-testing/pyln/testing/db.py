@@ -57,22 +57,20 @@ class Sqlite3Db(object):
 
 
 class PostgresDb(object):
-    def __init__(self, dbname, port):
+    def __init__(self, dbname, port=5432, user='postgres', password='postgres', host='127.0.0.1'):
         self.dbname = dbname
+        self.host = host
         self.port = port
+        self.user = user
+        self.password = password
         self.provider = None
 
-        self.conn = psycopg2.connect("dbname={dbname} user=postgres host=localhost port={port}".format(
-            dbname=dbname, port=port
-        ))
-        cur = self.conn.cursor()
-        cur.execute('SELECT 1')
-        cur.close()
+    @property
+    def conn(self):
+        return psycopg2.connect(self.get_dsn())
 
     def get_dsn(self):
-        return "postgres://postgres:password@localhost:{port}/{dbname}".format(
-            port=self.port, dbname=self.dbname
-        )
+        return f"postgres://{self.user}:{self.password}@{self.host}:{self.port}/{self.dbname}"
 
     def query(self, query):
         cur = self.conn.cursor()
@@ -96,11 +94,16 @@ class PostgresDb(object):
     def stop(self):
         """Clean up the database.
         """
-        self.conn.close()
-        conn = psycopg2.connect("dbname=postgres user=postgres host=localhost port={self.port}")
+        conn = psycopg2.connect(
+            f"dbname=postgres user={self.user} host={self.host} port={self.port}"
+        )
+        conn.set_isolation_level( psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT )
         cur = conn.cursor()
         cur.execute("DROP DATABASE {};".format(self.dbname))
         cur.close()
+
+    def __del__(self):
+        self.stop()
 
 
 class SqliteDbProvider(object):
@@ -120,6 +123,51 @@ class SqliteDbProvider(object):
     def stop(self) -> None:
         pass
 
+
+class SystemPostgresDbProvider(object):
+    """A PostgreSQL database provider that uses an existing system-wide daemon.
+
+    This uses a system-provided postgres daemon, skipping setup and
+    teardown of the daemon itself, and allocating test schemas on
+    demand in it. Notice that this is primarily for CI, as it is not
+    guaranteed schemas are going to get cleaned up after tests run!
+
+    """
+
+    def __init__(self, directory):
+        self.logger = logging.getLogger("SystemPostgresDbProvider")
+        self.user = os.environ.get('POSTGRES_USER', 'postgres')
+        self.password = os.environ.get('POSTGRES_PASSWORD', 'postgres')
+        self.host = os.environ.get('POSTGRES_HOST', '127.0.0.1')
+        self.port = int(os.environ.get('POSTGRES_PORT', 5432))
+        self.conn = None
+        self.databases = []
+
+    def start(self):
+        self.logger.info("Starting db_provider (no-op, since it is the system's DB)")
+
+
+    def stop(self):
+        self.logger.info("Stopping db_provider (not really, it's a system-wide DB)")
+
+    def get_db(self, node_directory, testname, node_id):
+        # Random suffix to avoid collisions on repeated tests
+        nonce = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
+        dbname = "{}_{}_{}".format(testname, node_id, nonce)
+
+        conn = psycopg2.connect(f"dbname=postgres user={self.user} host={self.host} port={self.port} password={self.password}")
+        conn.set_isolation_level( psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT )
+        cur = conn.cursor()
+        cur.execute("CREATE DATABASE {} TEMPLATE template0;".format(dbname))
+        cur.close()
+        conn.close()
+
+        db = PostgresDb(
+            dbname, user=self.user, password=self.password, host=self.host, port=self.port
+        )
+        self.databases.append(db)
+
+        return db
 
 class PostgresDbProvider(object):
     def __init__(self, directory):
@@ -188,13 +236,15 @@ class PostgresDbProvider(object):
         # TailableProc as well if too flaky).
         for i in range(30):
             try:
-                self.conn = psycopg2.connect("dbname=template1 user=postgres host=localhost port={}".format(self.port))
+                conn = psycopg2.connect("dbname=postgres user=postgres host=localhost port={}".format(self.port))
+                conn.close()
                 break
             except Exception:
                 time.sleep(0.5)
 
-        # Required for CREATE DATABASE to work
-        self.conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+    @property
+    def conn(self):
+        return psycopg2.connect("dbname=template1 user=postgres host=localhost port={}".format(self.port))
 
     def get_db(self, node_directory, testname, node_id):
         # Random suffix to avoid collisions on repeated tests
@@ -202,6 +252,7 @@ class PostgresDbProvider(object):
         dbname = "{}_{}_{}".format(testname, node_id, nonce)
 
         cur = self.conn.cursor()
+        conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cur.execute("CREATE DATABASE {};".format(dbname))
         cur.close()
         db = PostgresDb(dbname, self.port)
