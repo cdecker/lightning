@@ -44,6 +44,7 @@ make(
 
 bash(
     "./configure",
+    "CC=clang",
     "--enable-developer",
     "--disable-valgrind",
     "--enable-experimental-features",

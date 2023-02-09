@@ -17,6 +17,7 @@ build:
       apt-get install -qqy \
         autoconf \
         build-essential \
+        clang \
         git \
         libgmp-dev \
         libpq-dev \
