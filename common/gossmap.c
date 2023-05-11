@@ -455,7 +455,7 @@ static struct gossmap_chan *add_channel(struct gossmap *map,
 		assert(!private);
 #endif
 		gossmap_remove_chan(map, chan);
-
+	}
 	/* We carefully map pointers to indexes, since new_node can move them! */
 	n[0] = gossmap_find_node(map, &node_id[0]);
 	if (n[0])
