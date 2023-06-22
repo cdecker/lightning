@@ -4051,29 +4051,33 @@ void wallet_utxoset_add(struct wallet *w,
 			const u32 txindex, const u8 *scriptpubkey,
 			struct amount_sat sat)
 {
-#if !GREENLIGHT
-	struct db_stmt *stmt;
+	if (!getenv("GL_NODE_NOUTXOSET")) {
+		/* 	We do not write to the database if we disabled the utxoset.
+			This is as greenlight in production uses the tower service
+			to keep track of the utxoset.
+		*/
+		struct db_stmt *stmt;
 
-	stmt = db_prepare_v2(w->db, SQL("INSERT INTO utxoset ("
-					" txid,"
-					" outnum,"
-					" blockheight,"
-					" spendheight,"
-					" txindex,"
-					" scriptpubkey,"
-					" satoshis"
-					") VALUES(?, ?, ?, ?, ?, ?, ?);"));
-	db_bind_txid(stmt, &outpoint->txid);
-	db_bind_int(stmt, outpoint->n);
-	db_bind_int(stmt, blockheight);
-	db_bind_null(stmt);
-	db_bind_int(stmt, txindex);
-	db_bind_talarr(stmt, scriptpubkey);
-	db_bind_amount_sat(stmt, &sat);
-	db_exec_prepared_v2(take(stmt));
+		stmt = db_prepare_v2(w->db, SQL("INSERT INTO utxoset ("
+						" txid,"
+						" outnum,"
+						" blockheight,"
+						" spendheight,"
+						" txindex,"
+						" scriptpubkey,"
+						" satoshis"
+						") VALUES(?, ?, ?, ?, ?, ?, ?);"));
+		db_bind_txid(stmt, &outpoint->txid);
+		db_bind_int(stmt, outpoint->n);
+		db_bind_int(stmt, blockheight);
+		db_bind_null(stmt);
+		db_bind_int(stmt, txindex);
+		db_bind_talarr(stmt, scriptpubkey);
+		db_bind_amount_sat(stmt, &sat);
+		db_exec_prepared_v2(take(stmt));
 
-	outpointfilter_add(w->utxoset_outpoints, outpoint);
-#endif
+		outpointfilter_add(w->utxoset_outpoints, outpoint);
+	}
 }
 
 void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
@@ -4090,7 +4094,11 @@ void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
 	db_bind_sha256d(stmt, &fb->prev_hash.shad);
 	db_exec_prepared_v2(take(stmt));
 
-#if !GREENLIGHT
+	if(!getenv("GL_NODE_NOUTXOSET")) {
+		/* 	We do not write to the database if we disabled the utxoset.
+			This is as greenlight in production uses the tower service
+			to keep track of the utxoset.
+		*/
 	for (size_t i = 0; i < tal_count(fb->outpoints); i++) {
 		struct filteredblock_outpoint *o = fb->outpoints[i];
 		stmt =
@@ -4113,8 +4121,8 @@ void wallet_filteredblock_add(struct wallet *w, const struct filteredblock *fb)
 		db_exec_prepared_v2(take(stmt));
 
 		outpointfilter_add(w->utxoset_outpoints, &o->outpoint);
+		}
 	}
-#endif
 }
 
 bool wallet_have_block(struct wallet *w, u32 blockheight)
