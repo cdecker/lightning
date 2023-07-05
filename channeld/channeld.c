@@ -687,7 +687,8 @@ static void handle_peer_feechange(struct peer *peer, const u8 *msg)
 	 *     - MUST send a `warning` and close the connection, or send an
 	 *       `error` and fail the channel.
 	 */
-	if (!feerate_same_or_better(peer->channel, feerate,
+	/* TODO: Remove the `false` to re-enable. */
+	if (false && !feerate_same_or_better(peer->channel, feerate,
 				    peer->feerate_min, peer->feerate_max))
 		peer_failed_warn(peer->pps, &peer->channel_id,
 				 "update_fee %u outside range %u-%u"

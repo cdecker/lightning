@@ -1021,6 +1021,7 @@ static u8 *fundee_channel(struct state *state, const u8 *open_channel_msg)
 	 *  - it considers `feerate_per_kw` too small for timely processing or
 	 *    unreasonably large.
 	 */
+	/*
 	if (state->feerate_per_kw < state->min_feerate) {
 		negotiation_failed(state,
 				   "feerate_per_kw %u below minimum %u",
@@ -1034,7 +1035,7 @@ static u8 *fundee_channel(struct state *state, const u8 *open_channel_msg)
 				   state->feerate_per_kw, state->max_feerate);
 		return NULL;
 	}
-
+	*/
 	/* This reserves 1% of the channel (rounded up) */
 	set_reserve(state, state->remoteconf.dust_limit);
 
