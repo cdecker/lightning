@@ -444,24 +444,6 @@ static void adjust_feerange(struct feerange *feerange,
 			      "Overflow in updating fee range");
 }
 
-/* Do these two ranges overlap?  If so, return that range. */
-static bool get_overlap(const struct tlv_closing_signed_tlvs_fee_range *r1,
-			const struct tlv_closing_signed_tlvs_fee_range *r2,
-			struct tlv_closing_signed_tlvs_fee_range *overlap)
-{
- 	if (amount_sat_greater(r1->min_fee_satoshis, r2->min_fee_satoshis))
-		overlap->min_fee_satoshis = r1->min_fee_satoshis;
-	else
-		overlap->min_fee_satoshis = r2->min_fee_satoshis;
- 	if (amount_sat_less(r1->max_fee_satoshis, r2->max_fee_satoshis))
-		overlap->max_fee_satoshis = r1->max_fee_satoshis;
-	else
-		overlap->max_fee_satoshis = r2->max_fee_satoshis;
-
-	return amount_sat_less_eq(overlap->min_fee_satoshis,
-				  overlap->max_fee_satoshis);
-}
-
 /* Is this amount in this range? */
 static bool amount_in_range(struct amount_sat amount,
 			    const struct tlv_closing_signed_tlvs_fee_range *r)
@@ -684,35 +666,8 @@ static void do_quickclose(struct amount_sat offer[NUM_SIDES],
 			  const struct tlv_closing_signed_tlvs_fee_range *our_feerange,
 			  const struct tlv_closing_signed_tlvs_fee_range *their_feerange)
 {
-	struct tlv_closing_signed_tlvs_fee_range overlap;
-
-
-	/* BOLT #2:
-	 *   - if the message contains a `fee_range`:
-	 *     - if there is no overlap between that and its own `fee_range`:
-	 *       - SHOULD send a warning
-	 *       - MUST fail the channel if it doesn't receive a satisfying `fee_range` after a reasonable amount of time
-	 */
-	/* (Note we satisfy the "MUST fail" by our close command unilteraltimeout) */
-	if (!get_overlap(our_feerange, their_feerange, &overlap)) {
-		peer_failed_warn(pps, channel_id,
-			       "Unable to agree on a feerate."
-			       " Our range %s-%s, other range %s-%s",
-			       type_to_string(tmpctx,
-					      struct amount_sat,
-					      &our_feerange->min_fee_satoshis),
-			       type_to_string(tmpctx,
-					      struct amount_sat,
-					      &our_feerange->max_fee_satoshis),
-			       type_to_string(tmpctx,
-					      struct amount_sat,
-					      &their_feerange->min_fee_satoshis),
-			       type_to_string(tmpctx,
-					      struct amount_sat,
-					      &their_feerange->max_fee_satoshis));
-		return;
-	}
-
+	/* GL: We accept the remote fee proposal unconditionally. */
+	struct tlv_closing_signed_tlvs_fee_range overlap = *their_feerange;
 	status_info("performing quickclose in range %s-%s",
 		    type_to_string(tmpctx, struct amount_sat,
 				   &overlap.min_fee_satoshis),
