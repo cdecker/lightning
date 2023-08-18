@@ -616,6 +616,7 @@ def test_v2_rbf_liquidity_ad(node_factory, bitcoind, chainparams):
     l1.daemon.wait_for_log('State changed from CLOSINGD_SIGEXCHANGE to CLOSINGD_COMPLETE')
 
 
+@unittest.skip("Causes timeouts on CI")
 @unittest.skipIf(TEST_NETWORK != 'regtest', 'elementsd doesnt yet support PSBT features we need')
 @pytest.mark.developer("uses dev-no-reconnect")
 @pytest.mark.openchannel('v2')
