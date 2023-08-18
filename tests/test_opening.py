@@ -1545,6 +1545,91 @@ def test_zeroconf_open(bitcoind, node_factory):
     l2.rpc.pay(inv)
 
 
+def test_zeroconf_delay(bitcoind, node_factory):
+    """l1 wants to open a zeroconf channel, but l2 doesn't.
+
+    We should just wait for the first confirmation since l2 requires
+    it. Negotiation should go through ok though. Since we don't ask
+    for feature 50 we don't actually fail, instead both sides just
+    fling the `channel_ready` across when they're ready.
+
+    """
+    l1, l2 = node_factory.get_nodes(2, opts=[{
+        'experimental-anchors': None,
+    }, {
+        'experimental-anchors': None,
+    }])
+
+    # Try to open a mindepth=0 channel
+    l1.fundwallet(10**6)
+    l1.connect(l2)
+
+    # Now start the negotiation, l1 should have negotiated zeroconf,
+    # and use their own mindepth=6, while l2 uses mindepth=2 from the
+    # plugin
+    l1.rpc.fundchannel(l2.info['id'], 'all', mindepth=0)
+
+    l1.daemon.wait_for_logs([
+        r'Funding needs 0 more confirmations to be ready.',
+        r'peer_out WIRE_CHANNEL_READY',
+    ])
+
+    l2.daemon.wait_for_logs([
+        r'Funding needs 1 more confirmations to be ready.',
+    ])
+
+    state = l2.rpc.listpeerchannels()['channels'][0]['state']
+    assert(state == 'CHANNELD_AWAITING_LOCKIN')
+
+    bitcoind.generate_block(1)
+
+    l1.daemon.wait_for_logs([
+        r'peer_in WIRE_CHANNEL_READY',
+    ])
+    l2.daemon.wait_for_logs([
+        r'peer_out WIRE_CHANNEL_READY',
+    ])
+
+
+def test_zeroconf_zeroanchor(bitcoind, node_factory):
+    """Let's open a zeroconf and zero-fee anchor channel
+
+    """
+    plugin_path = Path(__file__).parent / "plugins" / "zeroconf-selective.py"
+
+    l1nodeid = '0266e4598d1d3c415f572a8488830b60f7e744ed9235eb0b1ba93283b315c03518'
+    l1, l2 = node_factory.get_nodes(2, opts=[
+        {
+            'experimental-anchors': None,
+        },
+        {
+            'experimental-anchors': None,
+            'plugin': str(plugin_path),
+            'zeroconf-allow': l1nodeid,
+        },
+    ])
+
+    # Try to open a mindepth=0 channel
+    l1.fundwallet(10**6)
+
+    l1.connect(l2)
+    assert (int(l1.rpc.listpeers()['peers'][0]['features'], 16) >> 50) & 0x02 != 0
+
+    # Now start the negotiation, l1 should have negotiated zeroconf,
+    # and use their own mindepth=6, while l2 uses mindepth=2 from the
+    # plugin
+    l1.rpc.fundchannel(l2.info['id'], 'all', mindepth=0)
+
+    l1.daemon.wait_for_logs([
+        r'peer_in WIRE_CHANNEL_READY',
+        r'Peer told us that they\'ll use alias=[0-9x]+ for this channel',
+    ])
+    l2.daemon.wait_for_logs([
+        r'peer_in WIRE_CHANNEL_READY',
+        r'Peer told us that they\'ll use alias=[0-9x]+ for this channel',
+    ])
+
+
 def test_zeroconf_public(bitcoind, node_factory, chainparams):
     """Test that we transition correctly from zeroconf to public
 
