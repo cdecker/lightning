@@ -1,3 +1,4 @@
+#include "bitcoin/short_channel_id.h"
 #include "config.h"
 #include <ccan/array_size/array_size.h>
 #include <ccan/tal/str/str.h>
@@ -402,15 +403,29 @@ static void payment_exclude_most_expensive(struct payment *p)
 	struct route_hop *e = &p->route[0];
 	struct amount_msat fee, worst = AMOUNT_MSAT(0);
 
-	for (size_t i = 0; i < tal_count(p->route)-1; i++) {
+	paymod_log(p, LOG_DBG,
+		   "Searching for most expensive channel to exclude in route");
+	for (size_t i = 0; i < tal_count(p->route) - 1; i++) {
 		if (!amount_msat_sub(&fee, p->route[i].amount, p->route[i+1].amount))
 			paymod_err(p, "Negative fee in a route.");
 
 		if (amount_msat_greater_eq(fee, worst)) {
+			paymod_log(
+			    p, LOG_DBG, "Found worse channel: %s >= %s (%s/%d)",
+			    type_to_string(tmpctx, struct amount_msat, &fee),
+			    type_to_string(tmpctx, struct amount_msat, &worst),
+			    type_to_string(tmpctx, struct short_channel_id,
+					   &p->route[i].scid),
+			    p->route[i].direction);
 			e = &p->route[i];
 			worst = fee;
 		}
 	}
+	paymod_log(p, LOG_DBG,
+		   "Excluding %s/%d as the most expensive channel in the route",
+		   type_to_string(tmpctx, struct short_channel_id, &e->scid),
+		   e->direction);
+
 	channel_hints_update(p, e->scid, e->direction, false, false,
 			     NULL, NULL);
 }
@@ -420,15 +435,29 @@ static void payment_exclude_longest_delay(struct payment *p)
 	struct route_hop *e = &p->route[0];
 	u32 delay, worst = 0;
 
-	for (size_t i = 0; i < tal_count(p->route)-1; i++) {
+	paymod_log(p, LOG_DBG,
+		   "Searching for longest delay channel to exclude in route");
+	for (size_t i = 0; i < tal_count(p->route) - 1; i++) {
 		delay = p->route[i].delay - p->route[i+1].delay;
 		if (delay >= worst) {
+			paymod_log(
+			    p, LOG_DBG, "Found worse channel: %d >= %d (%s/%d)",
+			    delay, worst,
+			    type_to_string(tmpctx, struct short_channel_id,
+					   &p->route[i].scid),
+			    p->route[i].direction);
 			e = &p->route[i];
 			worst = delay;
 		}
 	}
-	channel_hints_update(p, e->scid, e->direction, false, false,
-			     NULL, NULL);
+
+	paymod_log(p, LOG_DBG,
+		   "Excluding %s/%d as the most expensive channel in the route",
+		   type_to_string(tmpctx, struct short_channel_id, &e->scid),
+		   e->direction);
+
+	channel_hints_update(p, e->scid, e->direction, false, false, NULL,
+			     NULL);
 }
 
 static struct amount_msat payment_route_fee(struct payment *p)
