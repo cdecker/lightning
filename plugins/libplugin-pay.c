@@ -2943,7 +2943,7 @@ static struct command_result *routehint_check_reachable(struct payment *p)
 		d->destination_reachable = true;
 	}
 
-	if (d->destination_reachable) {
+	if (d->destination_reachable && tal_count(d->routehints) == 0) {
 		tal_arr_expand(&d->routehints, NULL);
 		/* The above could trigger a realloc.
 		 * However, p->routes and d->routehints are
