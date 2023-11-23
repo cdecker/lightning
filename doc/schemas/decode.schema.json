@@ -185,7 +185,7 @@
                 "description": "period starts at this UNIX timestamp"
               },
               "start_any_period": {
-                "type": "u64",
+                "type": "boolean",
                 "description": "you can start at any period (only if `basetime` present)"
               },
               "limit": {
@@ -480,7 +480,7 @@
                 "description": "period starts at this UNIX timestamp"
               },
               "start_any_period": {
-                "type": "u64",
+                "type": "boolean",
                 "description": "you can start at any period (only if `basetime` present)"
               },
               "limit": {
@@ -844,7 +844,7 @@
                 "description": "period starts at this UNIX timestamp"
               },
               "start_any_period": {
-                "type": "u64",
+                "type": "boolean",
                 "description": "you can start at any period (only if `basetime` present)"
               },
               "limit": {
