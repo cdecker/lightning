@@ -27,6 +27,7 @@ build:
         python3 \
         python3-pip \
         openssh-client \
+        systemtap-sdt-dev \
         curl \
         clang \
         libssl-dev \
