@@ -1,5 +1,6 @@
 from utils import TEST_NETWORK, VALGRIND  # noqa: F401,F403
 from pyln.testing.fixtures import directory, test_base_dir, test_name, chainparams, node_factory, bitcoind, teardown_checks, db_provider, executor, setup_logging, jsonschemas  # noqa: F401,F403
+from pyln.testing import fixtures
 from pyln.testing import utils
 from utils import COMPAT
 from pathlib import Path
@@ -10,7 +11,16 @@ import re
 
 
 @pytest.fixture
-def node_cls():
+def node_cls(test_name: str):
+    # We always set the LLVM coverage destination, just in case
+    # `lightningd` was compiled with the correct instrumentation
+    # flags. This creates a `coverage` directory in the repository
+    # and puts all the files in it.
+    repo_root = Path(__file__).parent.parent
+    os.environ['LLVM_PROFILE_FILE'] = str(
+        repo_root / "coverage" / "raw" / f"{test_name}.%p.profraw"
+    )
+
     return LightningNode
 
 

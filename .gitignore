@@ -23,7 +23,8 @@ gen_*.c
 gen_*.h
 wire/gen_*_csv
 cli/lightning-cli
-coverage
+coverage/raw
+coverage/index.html
 ccan/config.h
 __pycache__
 config.vars

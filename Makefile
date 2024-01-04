@@ -49,10 +49,6 @@ else
 DEV_CFLAGS=
 endif
 
-ifeq ($(COVERAGE),1)
-COVFLAGS = --coverage
-endif
-
 ifeq ($(CLANG_COVERAGE),1)
 COVFLAGS+=-fprofile-instr-generate -fcoverage-mapping
 endif
@@ -448,6 +444,12 @@ else
 PYTEST_OPTS += -x
 endif
 
+# No need to include the coverage Makefile if we're not going to run
+# those rules anyway.
+ifneq ($(CLANG_COVERAGE),0)
+	include coverage/Makefile
+endif
+
 check-units:
 
 check: check-units installcheck check-protos pytest
@@ -600,13 +602,6 @@ gen:  $(CHECK_GEN_ALL)
 check-gen-updated:  $(CHECK_GEN_ALL)
 	@echo "Checking for generated files being changed by make"
 	git diff --exit-code HEAD
-
-coverage/coverage.info: check pytest
-	mkdir coverage || true
-	lcov --capture --directory . --output-file coverage/coverage.info
-
-coverage: coverage/coverage.info
-	genhtml coverage/coverage.info --output-directory coverage
 
 # We make libwallycore.la a dependency, so that it gets built normally, without ncc.
 # Ncc can't handle the libwally source code (yet).
