@@ -4,7 +4,6 @@
 #include <bitcoin/script.h>
 #include <bitcoin/tx.h>
 #include <ccan/cast/cast.h>
-#include <ccan/crypto/ripemd160/ripemd160.h>
 #include <ccan/str/hex/hex.h>
 #include <ccan/tal/str/str.h>
 #include <common/type_to_string.h>
