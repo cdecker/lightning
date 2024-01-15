@@ -331,7 +331,7 @@ bool bitcoin_tx_output_script_is_p2wsh(const struct bitcoin_tx *tx, int outnum)
 
 	return output->script_len == BITCOIN_SCRIPTPUBKEY_P2WSH_LEN &&
 	       output->script[0] == OP_0 &&
-	       output->script[1] != OP_PUSHBYTES(sizeof(struct ripemd160));
+	       output->script[1] != OP_PUSHBYTES(sizeof(struct sha256));
 }
 
 u8 *bitcoin_tx_output_get_witscript(const tal_t *ctx, const struct bitcoin_tx *tx,
