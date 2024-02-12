@@ -764,22 +764,27 @@ def test_sendpay_cant_afford(node_factory, anchors):
     with pytest.raises(RpcError):
         l1.pay(l2, 10**9 + 1)
 
+    from pprint import pprint
+    pprint(l1.rpc.listpeerchannels())
+
     # Reserve is 1%.
     reserve = 10**7
+    # This is how we recalc constants (v. v. slow!)
+    minimum = 1
+    maximum = 10**9
 
-    # # This is how we recalc constants (v. v. slow!)
-    # minimum = 1
-    # maximum = 10**9
-    # while maximum - minimum > 1:
-    #     l1, l2 = node_factory.line_graph(2, fundamount=10**6,
-    #                                      opts={'feerates': (15000, 15000, 15000, 15000)})
-    #     try:
-    #         l1.pay(l2, (minimum + maximum) // 2)
-    #         minimum = (minimum + maximum) // 2
-    #     except RpcError:
-    #         maximum = (minimum + maximum) // 2
-    #     print("{} - {}".format(minimum, maximum))
-    # assert False
+    while maximum - minimum > 1:
+        l1, l2 = node_factory.line_graph(2, fundamount=10**6,
+                                         opts={'feerates': (15000, 15000, 15000, 15000)})
+        try:
+            print(f"XXX Trying {(minimum + maximum) // 2}")
+            l1.pay(l2, (minimum + maximum) // 2 * 1000)
+            minimum = (minimum + maximum) // 2
+        except RpcError:
+            maximum = (minimum + maximum) // 2
+        print("NEW BEST")
+        print("{} - {}".format(minimum, maximum))
+    assert False
 
     # This is the fee, which needs to be taken into account for l1.
     if anchors:
