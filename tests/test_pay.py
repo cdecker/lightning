@@ -5966,3 +5966,20 @@ def test_fetch_no_description_with_amount(node_factory):
     err = r'description is required for the user to know what it was they paid for'
     with pytest.raises(RpcError, match=err) as err:
         _ = l2.rpc.call('offer', {'amount': '2msat'})
+
+
+def test_pay_remember_hint(node_factory):
+    """Build a diamond, with a cheap route, that is exhausted. The
+    first payment should try that route first, learn it's exhausted,
+    and then succeed over the other leg. The second, unrelated,
+    payment should immediately skip the exhausted leg and go for the
+    more expensive one.
+
+    ```mermaid
+    graph LR
+      Sender -- "propfee=1\nexhausted" --> Forwarder1
+      Forwarder1 -- "propfee=1" --> Recipient
+      Sender -- "propfee=50" --> Forwarder2
+      Forwarder2 -- "propfee=1" --> Recipient
+    ```
+    """
