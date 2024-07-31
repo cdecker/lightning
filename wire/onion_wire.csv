@@ -92,6 +92,12 @@ msgdata,invalid_onion_payload,offset,u16,
 msgtype,mpp_timeout,23
 msgtype,invalid_onion_blinding,BADONION|PERM|24
 msgdata,invalid_onion_blinding,sha256_of_onion,sha256,
+msgtype,temporary_trampoline_failure,NODE|25
+msgtype,trampoline_fee_or_expiry_insufficient,NODE|26
+msgdata,trampoline_fee_or_expiry_insufficient,fee_base_msat,u32,
+msgdata,trampoline_fee_or_expiry_insufficient,fee_proportional_millionths,u32,
+msgdata,trampoline_fee_or_expiry_insufficient,cltv_expiry_delta,u16,
+msgtype,unknown_next_trampoline,PERM|27
 tlvtype,onionmsg_tlv,reply_path,2
 tlvdata,onionmsg_tlv,reply_path,path,blinded_path,
 tlvtype,onionmsg_tlv,encrypted_recipient_data,4
