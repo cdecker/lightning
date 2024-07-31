@@ -615,6 +615,10 @@ static void update_knowledge_from_error(struct command *aux_cmd,
 					   " but timed out before the rest arrived.",
 					   fmt_amount_msat(tmpctx, attempt->delivers));
 			return;
+		case WIRE_TEMPORARY_TRAMPOLINE_FAILURE:
+		case WIRE_TRAMPOLINE_FEE_OR_EXPIRY_INSUFFICIENT:
+		case WIRE_UNKNOWN_NEXT_TRAMPOLINE:
+			goto strange_error;
 		}
 	} else {
 		/* Non-final node */
@@ -665,6 +669,10 @@ static void update_knowledge_from_error(struct command *aux_cmd,
 					   fmt_short_channel_id_dir(tmpctx,
 								    &attempt->hops[index].scidd));
 			goto channel_capacity;
+		case WIRE_TEMPORARY_TRAMPOLINE_FAILURE:
+		case WIRE_TRAMPOLINE_FEE_OR_EXPIRY_INSUFFICIENT:
+		case WIRE_UNKNOWN_NEXT_TRAMPOLINE:
+			goto strange_error;
 		}
 	}
 

@@ -437,6 +437,13 @@ static struct command_result *handle_failure(struct routefail *r)
 		}
 
 		break;
+
+	/* Trampoline error codes, renepay doesn't need to
+	 * handle these. */
+	case WIRE_TEMPORARY_TRAMPOLINE_FAILURE:
+	case WIRE_TRAMPOLINE_FEE_OR_EXPIRY_INSUFFICIENT:
+	case WIRE_UNKNOWN_NEXT_TRAMPOLINE:
+		break;
 	}
 	return routefail_end(take(r));
 }
