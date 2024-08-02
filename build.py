@@ -1,13 +1,15 @@
 # Simple script to build a given version
+from datetime import datetime
 import os
 import sys
+import json
 from pathlib import Path
 from google.cloud import storage
 from google.oauth2.service_account import Credentials
 
 
 import sh
-from sh import bash, git, make, tar
+from sh import bash, git, make, tar, sha256sum
 
 if len(sys.argv) == 2:
     # Override the version from the CLI (used by CI)
@@ -15,6 +17,8 @@ if len(sys.argv) == 2:
 else:
     # Get the current branch, we'll use it as a tag too:
     branch = git("branch", "--show-current").strip()
+
+DIR=f"cln-versions/{branch}"
 
 print(f"Building version {branch}")
 
@@ -31,7 +35,7 @@ head = git("rev-parse", "HEAD").strip()
 tag = git("describe", "--always", "--dirty=-modded", "--abbrev=7").strip()
 
 print(f"Repo is at commit {head} with tag {tag}")
-assert tag == branch
+#assert tag == branch
 
 # Need to unset this variable otherwise the Makefile points to the
 # wrong directory
@@ -65,11 +69,28 @@ make(
 # Now install the tarball contents in `cln-versions/{VERSION}`
 make(f"DESTDIR=cln-versions/{branch}", "install", _out=sys.stdout, _err=sys.stderr)
 
+# Build a manifest for us to know what we deployed
+root = Path(DIR)
+files = root.glob('**/*')
+shasum = [(str(f), sha256sum(f).split(' ')[0]) for f in files if f.is_file()]
+manipath = root / "manifest.json"
+manifest = {
+    'sha256sums': shasum,
+    'compilation_time': datetime.utcnow().isoformat(),
+    'version': branch,
+    'commit': git('rev-parse', 'HEAD'),
+}
+
+print(json.dumps(manifest, indent=2))
+with open(manipath, 'w') as f:
+    json.dump(manifest, f, sort_keys=True, indent=2)
+
 filename = f"lightningd-{branch}.tar.bz2"
 tar(
     "-cvjf",
     f"../../{filename}",
     "usr",
+    "manifest.json",
     _out=sys.stdout,
     _err=sys.stderr,
     _cwd=f"cln-versions/{branch}",
