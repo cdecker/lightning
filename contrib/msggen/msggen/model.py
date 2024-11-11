@@ -33,14 +33,7 @@ class TypeName:
         self.name = name
 
     def __str__(self) -> str:
-        """Return the normalized typename."""
-        return (
-            self.name
-            .replace(' ', '_')
-            .replace('-', '')
-            .replace('/', '_')
-        )
-
+        return self.normalized()
     def __repr__(self) -> str:
         return f"Typename[raw={self.name}, str={self}"
 
@@ -51,10 +44,20 @@ class TypeName:
     def __lt__(self, other) -> bool:
         return str(self.name) < str(other)
 
+    def normalized(self):
+        """Return the normalized typename."""
+        return (
+            self.name
+            .replace(' ', '_')
+            .replace('-', '')
+            .replace('/', '_')
+        )
+
 
 class MethodName(TypeName):
     """A class encapsulating the naming rules for methods. """
 
+    
 
 class Field:
     def __init__(
