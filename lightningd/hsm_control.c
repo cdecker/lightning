@@ -98,7 +98,8 @@ struct ext_key *hsm_init(struct lightningd *ld)
 
 	ld->hsm_fd = fds[0];
 
-	if (ld->developer) {
+	/* Disabled temporarily because VLS does not understand preinit yet. */
+	if (false && ld->developer) {
 		struct tlv_hsmd_dev_preinit_tlvs *tlv;
 
 		tlv = tlv_hsmd_dev_preinit_tlvs_new(tmpctx);
