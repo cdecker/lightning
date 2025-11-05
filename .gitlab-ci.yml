@@ -173,5 +173,13 @@ manifest:
     curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${RUST_VERSION}
 
+    # Initialize GPG directory with proper permissions
+    mkdir -p ~/.gnupg
+    chmod 700 ~/.gnupg
+
+    # Decode and import the GPG private key from the secret variable
+    cat "$GPG_PRIVATE_KEY"
+    cat "$GPG_PRIVATE_KEY" | gpg --import
+
   script:
-    - ./build.py genmanifest
+    - PATH=$PATH:/usr/local/bin:$HOME/.cargo/bin ./build.py genmanifest

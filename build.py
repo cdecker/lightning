@@ -27,13 +27,45 @@ import logging
 import re
 
 import sh
-from sh import bash, git, make, tar, sha256sum, cargo, uv
+from sh import bash, git, make, tar, sha256sum, cargo, uv, gpg
 
 FORMAT = "%(message)s"
 logging.basicConfig(
     level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
 )
 logging.getLogger("sh").setLevel(logging.ERROR)
+
+
+def sign_file(filepath: Path) -> str:
+    """Sign a file with GPG and return the detached signature.
+
+    Args:
+        filepath: Path to the file to sign
+
+    Returns:
+        The ASCII-armored detached signature as a string
+
+    Raises:
+        RuntimeError: If signing fails
+    """
+    try:
+        sig_path = Path(f"{filepath}.asc")
+        # Remove signature file if it exists from a previous run
+        if sig_path.exists():
+            sig_path.unlink()
+
+        gpg("--detach-sign", "--armor", str(filepath))
+
+        if not sig_path.exists():
+            raise RuntimeError(f"GPG signature file was not created for {filepath}")
+
+        with open(sig_path, "r") as f:
+            signature = f.read()
+
+        sig_path.unlink()  # Clean up the temporary signature file
+        return signature
+    except Exception as e:
+        raise RuntimeError(f"Failed to sign {filepath}: {e}")
 
 
 @click.group()
@@ -195,10 +227,16 @@ def genmanifest():
             logging.warning(f"No version substring in {name}, ignoring")
             continue
         version = matches[0]
+
+        # Generate GPG signature for the file
+        signature = sign_file(dd / name)
+        logging.info(f"Generated signature for {name}")
+
         data["versions"][version] = {
             "filename": name,
             "sha256": s,
             "md5": blob.md5_hash,
+            "signature": signature,
             "size": blob.size,
             "mtime": blob.updated,
         }
