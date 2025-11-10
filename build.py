@@ -222,7 +222,7 @@ def genmanifest():
             continue
         blob.download_to_filename(dd / name)
         s = sha256sum(dd / name).strip().split(" ")[0]
-        matches = re.search(r"v\d+\.\d+\.?\d*[g]?[l]?\d*", name)
+        matches = re.search(r"(v\d+\.\d+\.?\d*[g]?[l]?\d*|main)", name)
         if not matches:
             logging.warning(f"No version substring in {name}, ignoring")
             continue
