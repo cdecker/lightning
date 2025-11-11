@@ -146,7 +146,42 @@ This will give you the funding transaction ID that can be looked up in any explo
 
 If you don't want to wait for the channel to confirm, you could forget the channel (see [How to forget about a channel?](doc:faq#how-to-forget-about-a-channel) for details), however be careful as that may be dangerous and you'll need to rescan and double-spend the outputs so the funding cannot confirm.
 
+### Why did my channel get force-closed?
+
+A force close (unilateral close) occurs when a channel is closed by one party publishing their commitment transaction on-chain rather than through a cooperative mutual close. There are three main scenarios:
+
+#### Local force close (you initiated it):
+- You called the [`close`](ref:close) command with a timeout or force flag
+- You wanted to exit the channel but your peer wasn't cooperating with a mutual close
+
+#### Remote force close (your peer initiated it):
+- Your peer called `close` on their end and published the commitment transaction on-chain
+- This could happen for various reasons: they want to rebalance, free up capital, or are exiting the Lightning network
+
+#### On-chain detection:
+- Your node detected that the funding output was spent by a commitment transaction on-chain
+- This means either you or your peer published a unilateral close transaction that was confirmed
+
+#### To understand what happened:
+1. Check your node logs around the time of the force close for any error messages or state changes
+2. Use [`listpeerchannels`](ref:listpeerchannels) to see the channel state and any closing information
+3. Look up the closing transaction on a block explorer to verify who published it and when it confirmed
+4. If you published an old state by accident, your peer may claim penalty funds from your commitment transaction
+
+#### Important note:
+A force close is not inherently a sign of trouble—it's a normal part of Lightning's operation. As long as both parties are following the protocol correctly, your funds will eventually become available (see [My funds are missing or unusable after closing a channel](doc:faq#my-funds-are-missing-or-unusable-after-closing-a-channel)).
+
 # Loss of funds
+
+### My funds are missing or unusable after closing a channel
+
+If you initiated a unilateral channel close, your funds may be encumbered by a timeout. This timeout is a security parameter that was negotiated during channel creation and serves an important purpose: it gives your counterparty time to react if you attempt to cheat by broadcasting an old channel state.
+
+The timeout can be up to two weeks long. The longer this period is, the longer you'll have to wait for your funds to be swept back into your wallet after a unilateral close, but it also gives your counterparty more time to prove you're cheating if you broadcast an old state.
+
+To monitor when your funds will become available, use the [`listpeerchannels` command](ref:listpeerchannels). Look for the timeout information in the channel state, which will show you how long until the funds are swept and become usable again.
+
+If the channel was closed by your counterparty instead, your funds should be available more quickly, depending on the confirmation status of the closing transaction.
 
 ### Rescanning the blockchain for lost utxos
 
