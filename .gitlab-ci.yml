@@ -12,7 +12,7 @@ variables:
   GIT_DEPTH: 0
   UV_PYTHON: "3.10"
   PROTOC_VERSION: 3.19.3
-  LSPS_BRANCH: "lsps2-plugin"
+  LSPS_BRANCH: "main"
   MAIN_BRANCH: "main"
 stages:
   - build
