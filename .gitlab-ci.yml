@@ -39,11 +39,13 @@ stages:
         curl \
         clang \
         tree \
+        libsodium-dev \
         jq \
         unzip \
         libssl-dev \
         wget \
         libssl-dev \
+        sudo \
         pkg-config \
         gettext \
         zlib1g-dev
@@ -59,9 +61,10 @@ stages:
     )    
     git config --global user.email "ci@blockstream.com"
     git config --global user.name "Gitlab CI"
-    
 
-  
+    wget -O /usr/local/bin/lowdown https://storage.googleapis.com/greenlight-artifacts/other/lowdown
+    chmod a+x /usr/local/bin/lowdown
+    
 build:tagged:
   stage: build
   extends: .setup
