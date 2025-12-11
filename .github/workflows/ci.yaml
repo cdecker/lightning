@@ -462,24 +462,34 @@ jobs:
         include:
           - NAME: Valgrind (01/10)
             PYTEST_OPTS: --test-group=1  --test-group-count=10
+            CFG: "01"
           - NAME: Valgrind (02/10)
             PYTEST_OPTS: --test-group=2  --test-group-count=10
+            CFG: "02"
           - NAME: Valgrind (03/10)
             PYTEST_OPTS: --test-group=3  --test-group-count=10
+            CFG: "03"
           - NAME: Valgrind (04/10)
             PYTEST_OPTS: --test-group=4  --test-group-count=10
+            CFG: "04"
           - NAME: Valgrind (05/10)
             PYTEST_OPTS: --test-group=5  --test-group-count=10
+            CFG: "05"
           - NAME: Valgrind (06/10)
             PYTEST_OPTS: --test-group=6  --test-group-count=10
+            CFG: "06"
           - NAME: Valgrind (07/10)
             PYTEST_OPTS: --test-group=7  --test-group-count=10
+            CFG: "07"
           - NAME: Valgrind (08/10)
             PYTEST_OPTS: --test-group=8  --test-group-count=10
+            CFG: "08"
           - NAME: Valgrind (09/10)
             PYTEST_OPTS: --test-group=9  --test-group-count=10
+            CFG: "09"
           - NAME: Valgrind (10/10)
             PYTEST_OPTS: --test-group=10 --test-group-count=10
+            CFG: "10"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -519,7 +529,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-results-integration-valgrind-${{ matrix.NAME }}
+          name: pytest-results-integration-valgrind-${{ matrix.CFG }}
           path: report.xml
           if-no-files-found: ignore
 
