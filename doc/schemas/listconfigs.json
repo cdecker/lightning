@@ -2471,7 +2471,11 @@
             "value_bool": true,
             "source": "default",
             "plugin": "/usr/local/libexec/plugins/cln-xpay",
-            "dynamic": true
+            "dynamic": true,
+            "deprecated": [
+              "v26.09",
+              "v27.03"
+            ]
           },
           "xpay-slow-mode": {
             "value_bool": false,
